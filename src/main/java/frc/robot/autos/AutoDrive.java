@@ -12,8 +12,8 @@ import java.util.List;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+// import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -66,7 +66,7 @@ public class AutoDrive extends SequentialCommandGroup {
 
   private void postTrajectoryToDashBoard() {
     SmartDashboard.putNumber("auto initial pose x", trajectory.getInitialPose().getX());
-    SmartDashboard.putNumber("auto initial pose x", trajectory.getInitialPose().getY());
+    SmartDashboard.putNumber("auto initial pose y", trajectory.getInitialPose().getY());
     SmartDashboard.putString("auto trajectory", trajectory.toString());
   }
 }
