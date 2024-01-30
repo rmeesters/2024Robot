@@ -146,4 +146,17 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class Limelight {
+        public static final String NAME = "lightlight2013";
+
+        // Vertical angle of camera in degrees
+        public static double CAMERA_ANGLE = 0;
+    }
+
+    public static final class Dimensions {
+        public static final double CAMERA_HEIGHT = 0.2;
+        public static final double APRILTAG_HEIGHT = 2;
+    }
+
 }

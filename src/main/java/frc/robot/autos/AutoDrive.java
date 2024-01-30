@@ -28,45 +28,45 @@ import frc.robot.RobotContainer;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoDrive extends SequentialCommandGroup {
 
-  private final Swerve s_Swerve = RobotContainer.s_Swerve;
-  private final TrajectoryConfig config;
-  private final Trajectory trajectory;
-  private final ProfiledPIDController thetaController;
+    private final Swerve s_Swerve = RobotContainer.s_Swerve;
+    private final TrajectoryConfig config;
+    private final Trajectory trajectory;
+    private final ProfiledPIDController thetaController;
 
-  public AutoDrive(List<Pose2d> points, boolean reversed) {
-    config = new TrajectoryConfig(
-        Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-        Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        .setKinematics(Constants.Swerve.swerveKinematics).setReversed(reversed);
+    public AutoDrive(List<Pose2d> points, boolean reversed) {
+        config = new TrajectoryConfig(
+                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                .setKinematics(Constants.Swerve.swerveKinematics).setReversed(reversed);
 
-    thetaController = new ProfiledPIDController(
-        Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaController = new ProfiledPIDController(
+                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    trajectory = TrajectoryGenerator.generateTrajectory(points, config);
-    postTrajectoryToDashBoard();
-    
-    // Reset odometry and follow trajectory
-    addCommands(
-        new InstantCommand(() -> s_Swerve.setPose(trajectory.getInitialPose())),
-        generateSwerveControllerCommand());
-  }
+        trajectory = TrajectoryGenerator.generateTrajectory(points, config);
+        //postTrajectoryToDashBoard();
 
-  private SwerveControllerCommand generateSwerveControllerCommand() {
-    return new SwerveControllerCommand(
-        trajectory,
-        s_Swerve::getPose,
-        Constants.Swerve.swerveKinematics,
-        new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-        new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-        thetaController,
-        s_Swerve::setModuleStates,
-        s_Swerve);
-  }
+        // Reset odometry and follow trajectory
+        addCommands(
+                new InstantCommand(() -> s_Swerve.setPose(trajectory.getInitialPose())),
+                generateSwerveControllerCommand());
+    }
 
-  private void postTrajectoryToDashBoard() {
-    SmartDashboard.putNumber("auto initial pose x", trajectory.getInitialPose().getX());
-    SmartDashboard.putNumber("auto initial pose y", trajectory.getInitialPose().getY());
-    SmartDashboard.putString("auto trajectory", trajectory.toString());
-  }
+    private SwerveControllerCommand generateSwerveControllerCommand() {
+        return new SwerveControllerCommand(
+                trajectory,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
+    }
+
+    private void postTrajectoryToDashBoard() {
+        SmartDashboard.putNumber("auto initial pose x", trajectory.getInitialPose().getX());
+        SmartDashboard.putNumber("auto initial pose y", trajectory.getInitialPose().getY());
+        SmartDashboard.putString("auto trajectory", trajectory.toString());
+    }
 }

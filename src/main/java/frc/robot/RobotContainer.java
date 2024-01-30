@@ -87,6 +87,8 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        configureLimelight("limelight");
+
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
                         s_Swerve,
@@ -99,6 +101,15 @@ public class RobotContainer {
         configureButtonBindings();
 
         configureAutoChooser();
+    }
+
+    private void configureLimelight(String limelightName) {
+        //LimelightHelpers.setLEDMode_PipelineControl(limelightName);
+        LimelightHelpers.setLEDMode_ForceOn(limelightName);
+        LimelightHelpers.setStreamMode_Standard(limelightName);
+        LimelightHelpers.setCameraMode_Processor(limelightName);
+        //LimelightHelpers.setCropWindow("",-1,1,-1,1);
+        //double tx = LimelightHelpers.getTX("");
     }
 
     /**
