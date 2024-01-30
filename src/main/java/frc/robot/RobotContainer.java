@@ -123,10 +123,12 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        testMovement.onTrue(new AutoDrive(List.of(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                new Pose2d(1, 0, new Rotation2d(0)),
-                new Pose2d(1, 2, new Rotation2d(0))), false));
+        // testMovement.onTrue(new AutoDrive(List.of(
+        //         new Pose2d(0, 0, new Rotation2d(0)),
+        //         new Pose2d(1, 0, new Rotation2d(0)),
+        //         new Pose2d(1, 2, new Rotation2d(0))), false));
+
+        testMovement.onTrue(new MoveToAprilTag());
     }
 
     private void configureAutoChooser() {

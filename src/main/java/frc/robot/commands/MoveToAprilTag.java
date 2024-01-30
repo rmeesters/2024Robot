@@ -102,11 +102,10 @@ public class MoveToAprilTag extends Command {
 
         double tx = LimelightHelpers.getTX(Constants.Limelight.NAME);
         double angled_ty = LimelightHelpers.getTY(Constants.Limelight.NAME);
+        double ty = Constants.Limelight.CAMERA_ANGLE + angled_ty;
 
-        double ty = Math.toRadians(Constants.Limelight.CAMERA_ANGLE + angled_ty);
-
-        double dx = (Constants.Dimensions.APRILTAG_HEIGHT - Constants.Dimensions.CAMERA_HEIGHT) / Math.tan(ty);
-        double dy = dx * Math.tan(tx);
+        double dx = (Constants.Dimensions.APRILTAG_HEIGHT - Constants.Dimensions.CAMERA_HEIGHT) / Math.tan(Math.toRadians(ty));
+        double dy = dx * Math.tan(Math.toRadians(tx));
 
         double hyp = Math.sqrt( dx*dx + dy*dy );
 
