@@ -28,7 +28,8 @@ import frc.robot.subsystems.*;
  * very little robot logic should actually be handled in
  * the {@link Robot} periodic methods (other than the scheduler calls).
  * 
- * Instead, the structure of the robot (subsystems, commands, and button mappings) should be declared here.
+ * Instead, the structure of the robot (subsystems, commands, and button
+ * mappings) should be declared here.
  */
 public class RobotContainer {
     /* Controllers */
@@ -87,7 +88,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        configureLimelight("limelight");
+        configureLimelight(Constants.Limelight.NAME);
 
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
@@ -104,20 +105,22 @@ public class RobotContainer {
     }
 
     private void configureLimelight(String limelightName) {
-        //LimelightHelpers.setLEDMode_PipelineControl(limelightName);
+        // LimelightHelpers.setLEDMode_PipelineControl(limelightName);
         LimelightHelpers.setLEDMode_ForceOn(limelightName);
         LimelightHelpers.setStreamMode_Standard(limelightName);
         LimelightHelpers.setCameraMode_Processor(limelightName);
-        //LimelightHelpers.setCropWindow("",-1,1,-1,1);
-        //double tx = LimelightHelpers.getTX("");
+        // LimelightHelpers.setCropWindow("",-1,1,-1,1);
+        // double tx = LimelightHelpers.getTX("");
     }
 
     /**
      * Use this method to define your button mappings.
      * 
      * Buttons can be created by instantiating a {@link GenericHID}
-     * or one of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}),
-     * and then passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     * or one of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or
+     * {@link XboxController}),
+     * and then passing it to a
+     * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
@@ -128,7 +131,8 @@ public class RobotContainer {
         //         new Pose2d(1, 0, new Rotation2d(0)),
         //         new Pose2d(1, 2, new Rotation2d(0))), false));
 
-        testMovement.onTrue(new MoveToAprilTag());
+        testMovement.onTrue(new SequentialCommandGroup(
+                new DriveToAprilTag()));
     }
 
     private void configureAutoChooser() {
@@ -147,6 +151,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        return new SequentialCommandGroup(autoChooser.getSelected());
+        // return autoChooser.getSelected();
     }
 }

@@ -21,29 +21,27 @@ import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class MoveToAprilTag extends Command {
+public class oldMoveToAprilTag extends Command {
 
     private final Swerve s_Swerve = RobotContainer.s_Swerve;
 
-    private final TrajectoryConfig config = new TrajectoryConfig(
-            Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-            Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            .setKinematics(Constants.Swerve.swerveKinematics);
-    private final ProfiledPIDController thetaController = new ProfiledPIDController(
-                    Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+    private final Timer m_timer = new Timer();
 
+    // Poses in trajectory
     private List<Pose2d> points;
 
-    private Timer m_timer;
-    private Trajectory m_trajectory;
-    private Supplier<Pose2d> m_pose;
-    private SwerveDriveKinematics m_kinematics;
-    private HolonomicDriveController m_controller;
-    private Consumer<SwerveModuleState[]> m_outputModuleStates;
-    private Supplier<Rotation2d> m_desiredRotation;
+    // Movement variables
+    private Trajectory trajectory;
+    private Supplier<Pose2d> pose;
+    private SwerveDriveKinematics kinematics;
+    private HolonomicDriveController controller;
+    private Consumer<SwerveModuleState[]> outputModuleStates;
+    private Supplier<Rotation2d> desiredRotation;
 
-    public MoveToAprilTag() {
+    public oldMoveToAprilTag() {
+        
     }
 
     /**
@@ -57,13 +55,19 @@ public class MoveToAprilTag extends Command {
         if (!APRILTAG_IS_VISIBLE) {
             cancel();
         }
-        
+
         // Create trajectory
         calculatePoints();
         setupSwerveController();
 
-        m_timer = new Timer();
+        SmartDashboard.putNumber("Limelight X Dest", points.get(1).getX());
+        SmartDashboard.putNumber("Limelight Y Dest", points.get(1).getY());
+
         m_timer.restart();
+
+        SmartDashboard.putBoolean("Limelight Running", true);
+
+        s_Swerve.setPose(points.get(0));
     }
 
     /**
@@ -71,12 +75,12 @@ public class MoveToAprilTag extends Command {
      */
     @Override
     public void execute() {
-        var desiredState = m_trajectory.sample(m_timer.get());
-    
-        var targetChassisSpeeds = m_controller.calculate(m_pose.get(), desiredState, m_desiredRotation.get());
-        var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
-    
-        m_outputModuleStates.accept(targetModuleStates);
+        var desiredState = trajectory.sample(m_timer.get());
+
+        var targetChassisSpeeds = controller.calculate(pose.get(), desiredState, desiredRotation.get());
+        var targetModuleStates = kinematics.toSwerveModuleStates(targetChassisSpeeds);
+
+        outputModuleStates.accept(targetModuleStates);
     }
 
     /**
@@ -91,11 +95,12 @@ public class MoveToAprilTag extends Command {
     @Override
     public void end(boolean interrupted) {
         m_timer.stop();
+        SmartDashboard.putBoolean("Limelight Running", false);
     }
 
     @Override
     public boolean isFinished() {
-      return m_timer.hasElapsed(m_trajectory.getTotalTimeSeconds());
+        return m_timer.hasElapsed(trajectory.getTotalTimeSeconds());
     }
 
     private void calculatePoints() {
@@ -104,10 +109,11 @@ public class MoveToAprilTag extends Command {
         double angled_ty = LimelightHelpers.getTY(Constants.Limelight.NAME);
         double ty = Constants.Limelight.CAMERA_ANGLE + angled_ty;
 
-        double dx = (Constants.Dimensions.APRILTAG_HEIGHT - Constants.Dimensions.CAMERA_HEIGHT) / Math.tan(Math.toRadians(ty));
+        double dx = (Constants.Dimensions.APRILTAG_HEIGHT - Constants.Dimensions.CAMERA_HEIGHT)
+                / Math.tan(Math.toRadians(ty));
         double dy = dx * Math.tan(Math.toRadians(tx));
 
-        double hyp = Math.sqrt( dx*dx + dy*dy );
+        double hyp = Math.sqrt(dx * dx + dy * dy);
 
         double ratio = (hyp - 1) / hyp;
 
@@ -115,20 +121,28 @@ public class MoveToAprilTag extends Command {
         dy *= ratio;
 
         points = List.of(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            new Pose2d(dx, dy, new Rotation2d(0)));
+                new Pose2d(0, 0, new Rotation2d(0)),
+                new Pose2d(dx, dy, new Rotation2d(0)));
     }
 
     private void setupSwerveController() {
-        m_trajectory = TrajectoryGenerator.generateTrajectory(points, config);
-        m_pose = s_Swerve::getPose;
-        m_kinematics = Constants.Swerve.swerveKinematics;
-        m_controller = new HolonomicDriveController(
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            thetaController);
-        m_desiredRotation = () -> m_trajectory.getStates().get(m_trajectory.getStates().size() - 1).poseMeters.getRotation();
-        m_outputModuleStates = s_Swerve::setModuleStates;
+        TrajectoryConfig config = new TrajectoryConfig(
+                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                .setKinematics(Constants.Swerve.swerveKinematics);
+        ProfiledPIDController thetaController = new ProfiledPIDController(
+                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+
+        trajectory = TrajectoryGenerator.generateTrajectory(points, config);
+        pose = s_Swerve::getPose;
+        kinematics = Constants.Swerve.swerveKinematics;
+        controller = new HolonomicDriveController(
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController);
+        desiredRotation = () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters
+                .getRotation();
+        outputModuleStates = s_Swerve::setModuleStates;
         addRequirements(s_Swerve);
     }
 }
