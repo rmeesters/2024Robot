@@ -58,14 +58,24 @@ public class RobotContainer {
      * 2. wait 1 second
      * 3. move back 1 meter
      */
+//     private final Command test1_auto = new SequentialCommandGroup(
+//             new AutoDrive(List.of(
+//                     new Pose2d(0, 0, new Rotation2d(0)),
+//                     new Pose2d(1, 0, new Rotation2d(0))), false),
+//             new WaitCommand(1),
+//             new AutoDrive(List.of(
+//                     new Pose2d(1, 0, new Rotation2d(0)),
+//                     new Pose2d(0, 0, new Rotation2d(0))), true));
+
     private final Command test1_auto = new SequentialCommandGroup(
             new AutoDrive(List.of(
                     new Pose2d(0, 0, new Rotation2d(0)),
-                    new Pose2d(1, 0, new Rotation2d(0))), false),
-            new WaitCommand(1),
+                    new Pose2d(1, 0, new Rotation2d(0))), false));
+
+    private final Command test3_auto = new SequentialCommandGroup(
             new AutoDrive(List.of(
-                    new Pose2d(1, 0, new Rotation2d(0)),
-                    new Pose2d(0, 0, new Rotation2d(0))), false));
+                    new Pose2d(0, 0, new Rotation2d(0)),
+                    new Pose2d(-1, 0, new Rotation2d(0))), true));
 
     /**
      * Second Test Auto
@@ -82,7 +92,7 @@ public class RobotContainer {
                     new Pose2d(2, 1, new Rotation2d(0))), false),
             new AutoDrive(List.of(
                     new Pose2d(2, 1, new Rotation2d(0)),
-                    new Pose2d(0, 0, new Rotation2d(0))), false));
+                    new Pose2d(0, 0, new Rotation2d(0))), true));
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -138,7 +148,8 @@ public class RobotContainer {
     private void configureAutoChooser() {
         // Autonomous Sendable Chooser
         autoChooser = new SendableChooser<Command>();
-        autoChooser.addOption("X Auto", test1_auto);
+        autoChooser.setDefaultOption("X Auto", test1_auto);
+        autoChooser.addOption("-X Auto", test3_auto);
         autoChooser.addOption("XY Auto", test2_auto);
 
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -151,7 +162,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new SequentialCommandGroup(autoChooser.getSelected());
+        return autoChooser.getSelected();
         // return autoChooser.getSelected();
     }
 }

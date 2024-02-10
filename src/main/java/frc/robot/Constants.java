@@ -24,8 +24,8 @@ public final class Constants {
         COTSTalonFXSwerveConstants.SDS.MK4.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4.driveRatios.L2);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(21); //TODO: This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(23.56); //TODO: This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(22.5); //TODO: This must be tuned to specific robot
+        public static final double wheelBase = Units.inchesToMeters(23.6); //TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /* Swerve Kinematics 
@@ -69,7 +69,7 @@ public final class Constants {
         public static final double angleKD = chosenModule.angleKD;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.12; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 2.0; //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
@@ -83,7 +83,7 @@ public final class Constants {
         /** Meters per Second */
         public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
         /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = 3.0; //TODO: This must be tuned to specific robot // was 10
 
         /* Neutral Modes */
         public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;
@@ -148,15 +148,18 @@ public final class Constants {
     }
 
     public static final class Limelight {
-        public static final String NAME = "lightlight2013";
+        public static final String NAME = "limelight-gnomes";
 
-        // Vertical angle of camera in degrees
-        public static double CAMERA_ANGLE = 0;
+        // Vertical angle of camera in degrees (positive means pointing up)
+        public static double CAMERA_ANGLE = 1;
+
+
+        public static final int TARGET_DISTANCE_AWAY = 0;
     }
 
     public static final class Dimensions {
-        public static final double CAMERA_HEIGHT = 0.2;
-        public static final double APRILTAG_HEIGHT = 2;
+        public static final double CAMERA_HEIGHT = 0.38;
+        public static final double APRILTAG_HEIGHT = 0.22;
     }
 
 }

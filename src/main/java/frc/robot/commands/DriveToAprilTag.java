@@ -128,9 +128,9 @@ public class DriveToAprilTag extends Command {
 
         double hyp = Math.sqrt(dx * dx + dy * dy);
 
-        double ratio = (hyp - 1) / hyp;
+        double ratio = (hyp - Constants.Limelight.TARGET_DISTANCE_AWAY) / hyp;
 
-        dx *= ratio;
+        dx *= -ratio;
         dy *= ratio;
 
         points = List.of(
@@ -142,7 +142,7 @@ public class DriveToAprilTag extends Command {
         TrajectoryConfig config = new TrajectoryConfig(
                 Constants.AutoConstants.kMaxSpeedMetersPerSecond,
                 Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                .setKinematics(Constants.Swerve.swerveKinematics);
+                .setKinematics(Constants.Swerve.swerveKinematics).setReversed(true);
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
 
