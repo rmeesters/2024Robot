@@ -48,6 +48,9 @@ public class RobotContainer {
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
+    public static final Shooter s_Shooter = new Shooter();
+    public static final Intake s_Intake = new Intake();
+    public static final Climber s_Climber = new Climber();
 
     /* Sendable Chooser and Autonomus Commands */
     private static SendableChooser<Command> autoChooser;

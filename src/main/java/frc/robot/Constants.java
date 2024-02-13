@@ -95,7 +95,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 21;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-67.94);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -105,29 +105,65 @@ public final class Constants {
             public static final int driveMotorID = 2;
             public static final int angleMotorID = 12;
             public static final int canCoderID = 22;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-116.19);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
         
         /* Back Left Module - Module 2 */
         public static final class Mod2 { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 4;
-            public static final int angleMotorID = 14;
-            public static final int canCoderID = 24;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(38.85);
+            public static final int driveMotorID = 3;
+            public static final int angleMotorID = 13;
+            public static final int canCoderID = 23; //TODO Apply to Robot
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 3;
-            public static final int angleMotorID = 13;
-            public static final int canCoderID = 23;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(93.08);
+            public static final int driveMotorID = 4;
+            public static final int angleMotorID = 14;
+            public static final int canCoderID = 24;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+        }
+    }
+
+    public static final class Climber {
+        /* Module Specific Constants */
+        /* Single falcon500 motor */
+        public static final class Motor { //TODO: This must be tuned to specific robot
+            public static final int driveMotorID = 31;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+        }
+    }
+
+    public static final class Shooter {
+        /* Module Specific Constants */
+        /* Shooter Left motor */
+        public static final class LeftMotor { //TODO: This must be tuned to specific robot
+            public static final int driveMotorID = 41;
+        }
+        /* Shooter Right motor */
+        public static final class RightMotor { //TODO: This must be tuned to specific robot
+            public static final int driveMotorID = 43;
+            //public static final int canCoderID = 44;
+        }
+        /* Shooter Angle motor */
+        public static final class AngleMotor { //TODO: This must be tuned to specific robot
+            public static final int driveMotorID = 40;
+            public static final int canCoderID = 42;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+        }
+    }
+
+    public static final class Intake {
+        /* Module Specific Constants */
+        /* Single falcon500 motor */
+        public static final class Motor { //TODO: This must be tuned to specific robot
+            public static final int driveMotorID = 51;
         }
     }
 
