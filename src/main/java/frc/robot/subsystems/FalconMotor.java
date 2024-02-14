@@ -35,9 +35,9 @@ public class FalconMotor {
         mCanCoder = new CANcoder(mCanCoderId);
         mCanCoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
 
-        /* Angle Motor Config */
+        /* Motor Config */
         mMotor = new TalonFX(mMotorId);
-        mMotor.getConfigurator().apply(Robot.ctreConfigs.swerveAngleFXConfig);
+        mMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         resetToAbsolute();
     }
 

@@ -9,7 +9,7 @@ public class Shooter extends SubsystemBase {
     public FalconMotor mRightShooterMotor;
     public FalconMotor mAngleMotor;
 
-    private double boltPosition;
+    public double boltPosition;
 
     /**
      * Shooter consists of 3 falcon500 motors, 2 to accellerate the projectile, and 1 to angle the shooter.
@@ -24,41 +24,33 @@ public class Shooter extends SubsystemBase {
         boltPosition = Constants.Shooter.ArmRange;
     }
 
-    public void spinToRPM(double targetRPM) {
-        setSpeed(targetRPM * Constants.Swerve.wheelCircumference / 60, false);
-    }
+    // public void spinToRPM(double targetRPM) {
+    //     setSpeed(targetRPM * Constants.Swerve.wheelCircumference / 60, false);
+    // }
 
-    public void setSpeed(double speed, boolean isOpenLoop) {
+    public void setShooterSpeed(double speed, boolean isOpenLoop) {
         mLeftShooterMotor.setSpeed(speed, isOpenLoop);
         mRightShooterMotor.setSpeed(-speed, isOpenLoop);
     }
 
-    public void setAngle(double degrees) {
-        double changeInDistance = getBoltAdjustment(degrees);
-        double rotations = Constants.Shooter.boltGrovesPerInch * changeInDistance;
-        // double speed = Constants.Shooter.shaftCircumference * Constants.Shooter.boltGrovesPerInch;
-        // mAngleMotor.setSpeed(speed, false);
+    public void stopShooter() {
+        mLeftShooterMotor.setSpeed(0, true);
+        mRightShooterMotor.setSpeed(0, true);
     }
 
-    /**
-     * Get the distance the base of the arm must travel
-     * @param degrees angle starting from the horizontal facing the back
-     * @return The adjustment in inches
-     */
-    private double getBoltAdjustment(double degrees) {
-        final double A = -0.0156853;
-        final double B = 0.166208;
-        final double C = -6.04656;
-        final double D = 97.6943;
+    // public void setAngle(double degrees) {
+    //     double changeInDistance = getBoltAdjustment(degrees);
+    //     double rotations = Constants.Shooter.boltGrovesPerInch * changeInDistance;
+    //     // double speed = Constants.Shooter.shaftCircumference * Constants.Shooter.boltGrovesPerInch;
+    //     // mAngleMotor.setSpeed(speed, false);
+    // }
 
-        double position = A*Math.pow(degrees, 3) + B*Math.pow(degrees, 2) + C*degrees + D;
-
-        return position - boltPosition;
+    public void setAngleSpeed(double speed, boolean isOpenLoop) {
+        mAngleMotor.setSpeed(speed, isOpenLoop);
     }
 
-    //TEST METHOD
-    public void test() {
-        setSpeed(1.0 * Constants.Swerve.wheelCircumference / 60, false);
+    public void stopAngleAdjustment() {
+        mAngleMotor.setSpeed(0, false);
     }
 
 }
