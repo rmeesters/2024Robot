@@ -45,24 +45,24 @@ public class FalconMotor {
         this(motor_id, -1, new Rotation2d(0));
     }
 
-    public void setSpeed(double metersPerSecond, boolean isOpenLoop){
+    public void setSpeed(double speed, boolean isOpenLoop) {
         if(isOpenLoop){
-            driveDutyCycle.Output = metersPerSecond / Constants.Swerve.maxSpeed;
+            driveDutyCycle.Output = speed / Constants.Swerve.maxSpeed;
             mMotor.setControl(driveDutyCycle);
         }
         else {
-            driveVelocity.Velocity = Conversions.MPSToRPS(metersPerSecond, Constants.Swerve.wheelCircumference);
-            driveVelocity.FeedForward = driveFeedForward.calculate(metersPerSecond);
+            driveVelocity.Velocity = Conversions.MPSToRPS(speed, Constants.Swerve.wheelCircumference);
+            driveVelocity.FeedForward = driveFeedForward.calculate(speed);
             mMotor.setControl(driveVelocity);
         }
     }
 
-    public void resetToAbsolute(){
+    public void resetToAbsolute() {
         double absolutePosition = getCANcoder().getRotations() - mAngleOffset.getRotations();
         mMotor.setPosition(absolutePosition);
     }
 
-    public Rotation2d getCANcoder(){
+    public Rotation2d getCANcoder() {
         return Rotation2d.fromRotations(mCanCoder.getAbsolutePosition().getValue());
     }
 

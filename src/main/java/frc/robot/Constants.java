@@ -160,6 +160,9 @@ public final class Constants {
 
         public static final double boltGrovesPerInch = 5;
 
+        // Circumference of shaft (inches)
+        public static final double shaftCircumference = 1;
+
         //TODO Adjust these based on robot measurements
         public static final double ArmDistanceX = 7; // Horizontal distance to bolt
         public static final double ArmDistanceY = 3; // Vertical distance to bolt

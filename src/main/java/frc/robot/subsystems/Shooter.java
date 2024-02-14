@@ -28,19 +28,32 @@ public class Shooter extends SubsystemBase {
         setSpeed(targetRPM * Constants.Swerve.wheelCircumference / 60, false);
     }
 
-    public void setSpeed(double metersPerSecond, boolean isOpenLoop) {
-        mLeftShooterMotor.setSpeed(metersPerSecond, isOpenLoop);
-        mRightShooterMotor.setSpeed(-metersPerSecond, isOpenLoop);
+    public void setSpeed(double speed, boolean isOpenLoop) {
+        mLeftShooterMotor.setSpeed(speed, isOpenLoop);
+        mRightShooterMotor.setSpeed(-speed, isOpenLoop);
     }
 
     public void setAngle(double degrees) {
-        double horizontal_distance = getBoltAdjustment(degrees);
-        double metersPerSecond = Constants.Swerve.wheelCircumference * Constants.Shooter.boltGrovesPerInch * horizontal_distance;
-        mAngleMotor.setSpeed(metersPerSecond, false);
+        double changeInDistance = getBoltAdjustment(degrees);
+        double rotations = Constants.Shooter.boltGrovesPerInch * changeInDistance;
+        // double speed = Constants.Shooter.shaftCircumference * Constants.Shooter.boltGrovesPerInch;
+        // mAngleMotor.setSpeed(speed, false);
     }
 
+    /**
+     * Get the distance the base of the arm must travel
+     * @param degrees angle starting from the horizontal facing the back
+     * @return The adjustment in inches
+     */
     private double getBoltAdjustment(double degrees) {
-        return 0;
+        final double A = -0.0156853;
+        final double B = 0.166208;
+        final double C = -6.04656;
+        final double D = 97.6943;
+
+        double position = A*Math.pow(degrees, 3) + B*Math.pow(degrees, 2) + C*degrees + D;
+
+        return position - boltPosition;
     }
 
     //TEST METHOD
