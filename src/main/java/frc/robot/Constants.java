@@ -143,19 +143,25 @@ public final class Constants {
     public static final class Shooter {
         /* Module Specific Constants */
         /* Shooter Left motor */
-        public static final class LeftMotor { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 41;
+        public static final class ShooterMotor { //TODO: This must be tuned to specific robot
+            public static final int leftMotorID = 41;
+            public static final int rightMotorID = 43;
+
+            public static final double maxSpeed = 5;
         }
-        /* Shooter Right motor */
-        public static final class RightMotor { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 43;
-            //public static final int canCoderID = 44;
-        }
+        
         /* Shooter Angle motor */
         public static final class AngleMotor { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 40;
             public static final int canCoderID = 42;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+        
+            public static final double shaftAcceleration = 0.5;
+            public static final double shaftMaxSpeed = 3;
+
+            public static final double KP = 1;
+            public static final double KI = 0;
+            public static final double KD = 0;
         }
 
         public static final double boltGrovesPerInch = 5;
@@ -177,6 +183,8 @@ public final class Constants {
         /* Single falcon500 motor */
         public static final class Motor { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 51;
+
+            public static final double maxSpeed = 5;
         }
     }
 

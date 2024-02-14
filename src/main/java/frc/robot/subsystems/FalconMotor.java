@@ -20,7 +20,10 @@ public class FalconMotor {
     private TalonFX mMotor;
     private CANcoder mCanCoder;
 
-    private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
+    private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(
+            Constants.Swerve.driveKS,
+            Constants.Swerve.driveKV,
+            Constants.Swerve.driveKA);
 
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
@@ -31,14 +34,15 @@ public class FalconMotor {
         mCanCoderId = cancoder_id;
         mAngleOffset = angle_offset;
 
-        /* Angle Encoder Config */
-        mCanCoder = new CANcoder(mCanCoderId);
-        mCanCoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
+        if (mCanCoderId != -1) {
+            /* Angle Encoder Config */
+            mCanCoder = new CANcoder(mCanCoderId);
+            mCanCoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
+        }
 
         /* Motor Config */
         mMotor = new TalonFX(mMotorId);
         mMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
-        resetToAbsolute();
     }
 
     public FalconMotor(int motor_id) {
@@ -46,11 +50,10 @@ public class FalconMotor {
     }
 
     public void setSpeed(double speed, boolean isOpenLoop) {
-        if(isOpenLoop){
+        if (isOpenLoop) {
             driveDutyCycle.Output = speed / Constants.Swerve.maxSpeed;
             mMotor.setControl(driveDutyCycle);
-        }
-        else {
+        } else {
             driveVelocity.Velocity = Conversions.MPSToRPS(speed, Constants.Swerve.wheelCircumference);
             driveVelocity.FeedForward = driveFeedForward.calculate(speed);
             mMotor.setControl(driveVelocity);

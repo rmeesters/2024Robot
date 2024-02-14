@@ -45,6 +45,8 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     private final JoystickButton testMovement = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    
+    private final JoystickButton testAngle = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -146,6 +148,8 @@ public class RobotContainer {
 
         testMovement.onTrue(new SequentialCommandGroup(
                 new DriveToAprilTag()));
+
+        testAngle.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(0)));
     }
 
     private void configureAutoChooser() {

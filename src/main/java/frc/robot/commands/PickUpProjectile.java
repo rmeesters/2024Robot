@@ -7,6 +7,6 @@ public class PickUpProjectile {
     // Rotate front to note
     // Start intake
     // Sense for note
-    // Stop after detected
+    // Stop after loaded
     
 }

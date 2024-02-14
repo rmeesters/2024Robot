@@ -1,56 +1,83 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
     
-    public FalconMotor mLeftShooterMotor;
-    public FalconMotor mRightShooterMotor;
-    public FalconMotor mAngleMotor;
+    private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
+    
+    private TalonFX fxLeftMotor;
+    private TalonFX fxRightMotor;
+    private TalonFXConfiguration fxShooterConfig;
 
-    public double boltPosition;
+    private TalonFX fxAngleMotor;
+    private TalonFXConfiguration fxAngleConfig;
+
+    private CANcoder angleCanCoder;
 
     /**
      * Shooter consists of 3 falcon500 motors, 2 to accellerate the projectile, and 1 to angle the shooter.
      */
     public Shooter() {
-        mLeftShooterMotor = new FalconMotor(Constants.Shooter.LeftMotor.driveMotorID);
-        mRightShooterMotor = new FalconMotor(Constants.Shooter.RightMotor.driveMotorID);
-        mAngleMotor = new FalconMotor(
-                Constants.Shooter.AngleMotor.driveMotorID,
-                Constants.Shooter.AngleMotor.canCoderID,
-                Constants.Shooter.AngleMotor.angleOffset);
-        boltPosition = Constants.Shooter.ArmRange;
+        fxLeftMotor = new TalonFX(Constants.Shooter.ShooterMotor.leftMotorID);
+        fxRightMotor = new TalonFX(Constants.Shooter.ShooterMotor.rightMotorID);
+        fxAngleMotor = new TalonFX(Constants.Shooter.AngleMotor.driveMotorID);
+        
+        fxShooterConfig = new TalonFXConfiguration();
+        fxAngleConfig = new TalonFXConfiguration();
+
+        MotionMagicConfigs angleMotionMagic = fxAngleConfig.MotionMagic;
+        angleMotionMagic.MotionMagicCruiseVelocity = Constants.Shooter.AngleMotor.shaftAcceleration;
+        angleMotionMagic.MotionMagicCruiseVelocity = Constants.Shooter.AngleMotor.shaftMaxSpeed;
+
+        Slot0Configs slot0 = fxAngleConfig.Slot0;
+        slot0.kP = Constants.Shooter.AngleMotor.KP;
+        slot0.kI = Constants.Shooter.AngleMotor.KI;
+        slot0.kD = Constants.Shooter.AngleMotor.KD;
+
+        angleCanCoder = new CANcoder(Constants.Shooter.AngleMotor.canCoderID);
+        
+        fxLeftMotor.getConfigurator().apply(fxShooterConfig);
+        fxRightMotor.getConfigurator().apply(fxShooterConfig);
+        fxAngleMotor.getConfigurator().apply(fxAngleConfig);
     }
 
-    // public void spinToRPM(double targetRPM) {
-    //     setSpeed(targetRPM * Constants.Swerve.wheelCircumference / 60, false);
-    // }
-
-    public void setShooterSpeed(double speed, boolean isOpenLoop) {
-        mLeftShooterMotor.setSpeed(speed, isOpenLoop);
-        mRightShooterMotor.setSpeed(-speed, isOpenLoop);
+    public void setShooterSpeed(double speed) {
+        fxLeftMotor.set(speed / Constants.Shooter.ShooterMotor.maxSpeed);
+        fxRightMotor.set(-speed / Constants.Shooter.ShooterMotor.maxSpeed);
     }
 
     public void stopShooter() {
-        mLeftShooterMotor.setSpeed(0, true);
-        mRightShooterMotor.setSpeed(0, true);
+        setShooterSpeed(0);
     }
 
-    // public void setAngle(double degrees) {
-    //     double changeInDistance = getBoltAdjustment(degrees);
-    //     double rotations = Constants.Shooter.boltGrovesPerInch * changeInDistance;
-    //     // double speed = Constants.Shooter.shaftCircumference * Constants.Shooter.boltGrovesPerInch;
-    //     // mAngleMotor.setSpeed(speed, false);
+    public void setAngleAdjustmentSpeed(double speed) {
+        fxAngleMotor.set(speed / Constants.Shooter.AngleMotor.shaftMaxSpeed);
+    }
+
+    public void setArmPosition(double position) {
+        fxAngleMotor.setControl(m_mmReq.withPosition(position).withSlot(0));
+    }
+
+    public double getArmPosition() {
+        return 0;
+    }
+
+    // public void setAngleAdjustmentSpeed(double speed) {
+    //     fxAngleMotor.set(speed);
     // }
 
-    public void setAngleSpeed(double speed, boolean isOpenLoop) {
-        mAngleMotor.setSpeed(speed, isOpenLoop);
-    }
-
-    public void stopAngleAdjustment() {
-        mAngleMotor.setSpeed(0, false);
-    }
+    // public void stopAngleAdjustment() {
+    //     setAngleAdjustmentSpeed(0);
+    // }
 
 }
