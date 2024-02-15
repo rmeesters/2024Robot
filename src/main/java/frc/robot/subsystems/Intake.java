@@ -3,19 +3,27 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-//import edu.wpi.first.wpilibj.I2C.Port; //TODO This Crashes the Robot
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-//import com.revrobotics.*;
+import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor.Port;
+import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 
 public class Intake extends SubsystemBase {
+
+    private static final String profileDefault = "Default";
+    private static final String highSpeed = "High Speed";
+    private static final String highAccuracy = "High Accuracy";
+    private static final String longRange = "Long Range";
+    private final SendableChooser<String> profileChooser = new SendableChooser<>();
     
     private TalonFX fxIntakeMotor;
     private TalonFXConfiguration fxConfig;
 
-    //private ColorSensorV3 distanceSensor;
+    private Rev2mDistanceSensor distanceSensor;
 
     /**
      * Intake consists of 1 falcon500 motor to move the conveyer belt and the intake wheels.
@@ -25,7 +33,30 @@ public class Intake extends SubsystemBase {
         fxConfig = new TalonFXConfiguration();
         fxIntakeMotor.getConfigurator().apply(fxConfig);
 
-        //distanceSensor = new ColorSensorV3(Port.kOnboard);
+        setUpProfileChooser();
+        setUpDistanceSensor();
+    }
+
+    private void setUpProfileChooser() {
+        profileChooser.setDefaultOption("Default", profileDefault);
+        profileChooser.addOption("High Speed", highSpeed);
+        profileChooser.addOption("High Accuracy", highAccuracy);
+        profileChooser.addOption("Long Range", longRange);
+        SmartDashboard.putData("Profile", profileChooser);
+    }
+
+    private void setUpDistanceSensor() {
+        distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
+
+        distanceSensor.setAutomaticMode(true);
+        distanceSensor.setEnabled(true);
+        
+        switch (profileChooser.getSelected()) {
+            case highSpeed -> distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
+            case highAccuracy -> distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
+            case longRange -> distanceSensor.setRangeProfile(RangeProfile.kLongRange);
+            default -> distanceSensor.setRangeProfile(RangeProfile.kDefault);
+        }
     }
 
     public void setSpeed(double speed) {
@@ -33,8 +64,8 @@ public class Intake extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
-        //SmartDashboard.putNumber("REV Distance Sensor", distanceSensor.getProximity());
+    public void periodic() {
+        SmartDashboard.putNumber("Range", distanceSensor.getRange());
     }
     
 }
