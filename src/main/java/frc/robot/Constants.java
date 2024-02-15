@@ -137,6 +137,8 @@ public final class Constants {
         public static final class Motor { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 31;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+
+            public static final double maxSpeed = 10;
         }
     }
 
@@ -156,10 +158,10 @@ public final class Constants {
             public static final int canCoderID = 42;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
         
-            public static final double shaftAcceleration = 0.5;
-            public static final double shaftMaxSpeed = 3;
+            public static final double shaftAcceleration = 1;
+            public static final double shaftMaxSpeed = 10;
 
-            public static final double KP = 1;
+            public static final double KP = 60;
             public static final double KI = 0;
             public static final double KD = 0;
         }

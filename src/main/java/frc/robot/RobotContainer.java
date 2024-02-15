@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -34,6 +34,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final GenericHID pov = new GenericHID(0);
 
     /* Drive Controls */
     private final int translationAxis = PS4Controller.Axis.kLeftY.value;
@@ -44,9 +45,21 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
-    private final JoystickButton testMovement = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    //private final JoystickButton testMovement = new JoystickButton(driver, PS4Controller.Button.kCross.value);
     
-    private final JoystickButton testAngle = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton angleDown = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton angleUp = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+
+
+    private final JoystickButton setAngle = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+
+    private final JoystickButton spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
+
+    private final JoystickButton spinIntake = new JoystickButton(driver, PS4Controller.Button.kL2.value);
+
+    private final POVButton climbUp = new POVButton(pov, 0);
+
+    private final POVButton climbDown = new POVButton(pov, 180);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -56,6 +69,14 @@ public class RobotContainer {
 
     /* Sendable Chooser and Autonomus Commands */
     private static SendableChooser<Command> autoChooser;
+
+    // motor angle
+    //1770.598
+    //-416.902 at 0
+
+    // cancoder angle
+    // -8.6084 at 0
+    // 36.0359
 
     /**
      * Test Auto
@@ -146,10 +167,28 @@ public class RobotContainer {
         //         new Pose2d(1, 0, new Rotation2d(0)),
         //         new Pose2d(1, 2, new Rotation2d(0))), false));
 
-        testMovement.onTrue(new SequentialCommandGroup(
-                new DriveToAprilTag()));
+        //testMovement.onTrue(new SequentialCommandGroup(new DriveToAprilTag()));
 
-        testAngle.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(0)));
+        //testAngle.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(0)));
+        angleDown.onTrue(new InstantCommand( () -> s_Shooter.setAngleAdjustmentSpeed(10)));
+        angleDown.onFalse(new InstantCommand( () -> s_Shooter.setAngleAdjustmentSpeed(0)));
+
+        angleUp.onTrue(new InstantCommand( () -> s_Shooter.setAngleAdjustmentSpeed(-10)));
+        angleUp.onFalse(new InstantCommand( () -> s_Shooter.setAngleAdjustmentSpeed(0)));
+
+        spinShooter.onTrue(new InstantCommand( () -> s_Shooter.setShooterSpeed(10)));
+        spinShooter.onFalse(new InstantCommand( () -> s_Shooter.setShooterSpeed(0)));
+
+        spinIntake.onTrue(new InstantCommand( () -> s_Intake.setSpeed(3)));
+        spinIntake.onFalse(new InstantCommand( () -> s_Intake.setSpeed(0)));
+
+        setAngle.onTrue(new InstantCommand( () -> s_Shooter.setArmPosition(100) ));
+
+        climbUp.onTrue(new InstantCommand( () -> s_Climber.setSpeed(10)));
+        climbUp.onFalse(new InstantCommand( () -> s_Climber.setSpeed(0)));
+
+        climbDown.onTrue(new InstantCommand( () -> s_Climber.setSpeed(-10)));
+        climbDown.onFalse(new InstantCommand( () -> s_Climber.setSpeed(0)));
     }
 
     private void configureAutoChooser() {

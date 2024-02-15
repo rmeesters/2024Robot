@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -52,8 +53,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setShooterSpeed(double speed) {
-        fxLeftMotor.set(speed / Constants.Shooter.ShooterMotor.maxSpeed);
-        fxRightMotor.set(-speed / Constants.Shooter.ShooterMotor.maxSpeed);
+        fxLeftMotor.set(-speed / Constants.Shooter.ShooterMotor.maxSpeed);
+        fxRightMotor.set(speed / Constants.Shooter.ShooterMotor.maxSpeed);
     }
 
     public void stopShooter() {
@@ -79,5 +80,11 @@ public class Shooter extends SubsystemBase {
     // public void stopAngleAdjustment() {
     //     setAngleAdjustmentSpeed(0);
     // }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
+        SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
+    }
 
 }
