@@ -126,12 +126,14 @@ public class DriveToAprilTag extends Command {
                 / Math.tan(Math.toRadians(ty));
         double dy = dx * Math.tan(Math.toRadians(tx));
 
-        double hyp = Math.sqrt(dx * dx + dy * dy);
+        // double hyp = Math.sqrt(dx * dx + dy * dy);
 
-        double ratio = (hyp - Constants.Limelight.TARGET_DISTANCE_AWAY) / hyp;
+        // double ratio = (hyp - Constants.Limelight.TARGET_DISTANCE_AWAY) / hyp;
 
-        dx *= -ratio;
-        dy *= ratio;
+        // dx *= -ratio;
+        // dy *= ratio;
+
+        dy -= Constants.Limelight.TARGET_DISTANCE_AWAY;
 
         points = List.of(
                 new Pose2d(0, 0, new Rotation2d(0)),

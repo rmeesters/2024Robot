@@ -42,23 +42,22 @@ public class RobotContainer {
     private final int rotationAxis = PS4Controller.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
-    //private final JoystickButton testMovement = new JoystickButton(driver, PS4Controller.Button.kCross.value);
-    
-    private final JoystickButton angleDown = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    private final JoystickButton angleUp = new JoystickButton(driver, PS4Controller.Button.kCross.value);
-
-
-    private final JoystickButton setAngle = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
-
-    private final JoystickButton spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
-
+    /* Intake */
     private final JoystickButton spinIntake = new JoystickButton(driver, PS4Controller.Button.kL2.value);
 
-    private final POVButton climbUp = new POVButton(pov, 0);
+    /* Shooter */
+    private final JoystickButton spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
+    private final JoystickButton angleDown = new JoystickButton(driver, PS4Controller.Button.kL1.value);
+    private final JoystickButton angleUp = new JoystickButton(driver, PS4Controller.Button.kR1.value);
 
+    private final JoystickButton test_setAngle100 = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    private final JoystickButton test_setAngle800 = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+
+    /* Climber */
+    private final POVButton climbUp = new POVButton(pov, 0);
     private final POVButton climbDown = new POVButton(pov, 180);
 
     /* Subsystems */
@@ -71,53 +70,26 @@ public class RobotContainer {
     private static SendableChooser<Command> autoChooser;
 
     // motor angle
-    //1770.598
-    //-416.902 at 0
+    // 1770.598
+    // -416.902 at 0
 
     // cancoder angle
     // -8.6084 at 0
     // 36.0359
 
     /**
-     * Test Auto
+     * Example Auto
      * 1. move forward 1 meter
      * 2. wait 1 second
      * 3. move back 1 meter
      */
-//     private final Command test1_auto = new SequentialCommandGroup(
-//             new AutoDrive(List.of(
-//                     new Pose2d(0, 0, new Rotation2d(0)),
-//                     new Pose2d(1, 0, new Rotation2d(0))), false),
-//             new WaitCommand(1),
-//             new AutoDrive(List.of(
-//                     new Pose2d(1, 0, new Rotation2d(0)),
-//                     new Pose2d(0, 0, new Rotation2d(0))), true));
-
-    private final Command test1_auto = new SequentialCommandGroup(
+    private final Command exampleAuto = new SequentialCommandGroup(
             new AutoDrive(List.of(
                     new Pose2d(0, 0, new Rotation2d(0)),
-                    new Pose2d(1, 0, new Rotation2d(0))), false));
-
-    private final Command test3_auto = new SequentialCommandGroup(
+                    new Pose2d(1, 0, new Rotation2d(0))), false),
+            new WaitCommand(3),
             new AutoDrive(List.of(
-                    new Pose2d(0, 0, new Rotation2d(0)),
-                    new Pose2d(-1, 0, new Rotation2d(0))), true));
-
-    /**
-     * Second Test Auto
-     * 1. move forward and right 1 meter
-     * 2. move forward 1 meter
-     * 3. move back to start
-     */
-    private final Command test2_auto = new SequentialCommandGroup(
-            new AutoDrive(List.of(
-                    new Pose2d(0, 0, new Rotation2d(0)),
-                    new Pose2d(1, 1, new Rotation2d(0))), false),
-            new AutoDrive(List.of(
-                    new Pose2d(1, 1, new Rotation2d(0)),
-                    new Pose2d(2, 1, new Rotation2d(0))), false),
-            new AutoDrive(List.of(
-                    new Pose2d(2, 1, new Rotation2d(0)),
+                    new Pose2d(1, 0, new Rotation2d(0)),
                     new Pose2d(0, 0, new Rotation2d(0))), true));
 
     /**
@@ -145,8 +117,6 @@ public class RobotContainer {
         LimelightHelpers.setLEDMode_ForceOn(limelightName);
         LimelightHelpers.setStreamMode_Standard(limelightName);
         LimelightHelpers.setCameraMode_Processor(limelightName);
-        // LimelightHelpers.setCropWindow("",-1,1,-1,1);
-        // double tx = LimelightHelpers.getTX("");
     }
 
     /**
@@ -161,42 +131,33 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        
+        angleDown.onTrue(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(10)));
+        angleDown.onFalse(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(0)));
 
-        // testMovement.onTrue(new AutoDrive(List.of(
-        //         new Pose2d(0, 0, new Rotation2d(0)),
-        //         new Pose2d(1, 0, new Rotation2d(0)),
-        //         new Pose2d(1, 2, new Rotation2d(0))), false));
+        angleUp.onTrue(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(-10)));
+        angleUp.onFalse(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(0)));
 
-        //testMovement.onTrue(new SequentialCommandGroup(new DriveToAprilTag()));
+        spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setShooterSpeed(10)));
+        spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setShooterSpeed(0)));
 
-        //testAngle.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(0)));
-        angleDown.onTrue(new InstantCommand( () -> s_Shooter.setAngleAdjustmentSpeed(10)));
-        angleDown.onFalse(new InstantCommand( () -> s_Shooter.setAngleAdjustmentSpeed(0)));
+        spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(3)));
+        spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
-        angleUp.onTrue(new InstantCommand( () -> s_Shooter.setAngleAdjustmentSpeed(-10)));
-        angleUp.onFalse(new InstantCommand( () -> s_Shooter.setAngleAdjustmentSpeed(0)));
+        test_setAngle100.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(100)));
+        test_setAngle800.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(800)));
 
-        spinShooter.onTrue(new InstantCommand( () -> s_Shooter.setShooterSpeed(10)));
-        spinShooter.onFalse(new InstantCommand( () -> s_Shooter.setShooterSpeed(0)));
+        climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(10)));
+        climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
 
-        spinIntake.onTrue(new InstantCommand( () -> s_Intake.setSpeed(3)));
-        spinIntake.onFalse(new InstantCommand( () -> s_Intake.setSpeed(0)));
-
-        setAngle.onTrue(new InstantCommand( () -> s_Shooter.setArmPosition(100) ));
-
-        climbUp.onTrue(new InstantCommand( () -> s_Climber.setSpeed(10)));
-        climbUp.onFalse(new InstantCommand( () -> s_Climber.setSpeed(0)));
-
-        climbDown.onTrue(new InstantCommand( () -> s_Climber.setSpeed(-10)));
-        climbDown.onFalse(new InstantCommand( () -> s_Climber.setSpeed(0)));
+        climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-10)));
+        climbDown.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
     }
 
     private void configureAutoChooser() {
         // Autonomous Sendable Chooser
         autoChooser = new SendableChooser<Command>();
-        autoChooser.setDefaultOption("X Auto", test1_auto);
-        autoChooser.addOption("-X Auto", test3_auto);
-        autoChooser.addOption("XY Auto", test2_auto);
+        autoChooser.setDefaultOption("Move Auto", exampleAuto);
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
@@ -207,8 +168,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
         return autoChooser.getSelected();
-        // return autoChooser.getSelected();
     }
 }

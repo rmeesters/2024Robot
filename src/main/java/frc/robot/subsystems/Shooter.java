@@ -67,6 +67,7 @@ public class Shooter extends SubsystemBase {
 
     public void setArmPosition(double position) {
         fxAngleMotor.setControl(m_mmReq.withPosition(position).withSlot(0));
+        fxAngleMotor.setPosition(position);
     }
 
     public double getArmPosition() {

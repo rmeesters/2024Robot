@@ -65,7 +65,11 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Range", distanceSensor.getRange());
+        SmartDashboard.putNumber("Range", getSensorValue());
+    }
+
+    public double getSensorValue() {
+        return distanceSensor.getRange();
     }
     
 }

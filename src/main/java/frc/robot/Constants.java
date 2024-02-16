@@ -217,6 +217,7 @@ public final class Constants {
     }
 
     public static final class Dimensions {
+        public static final double NOTE_HEIGHT = 0.05;
         public static final double CAMERA_HEIGHT = 0.38;
         public static final double APRILTAG_HEIGHT = 0.22;
     }
