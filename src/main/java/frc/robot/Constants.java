@@ -158,10 +158,10 @@ public final class Constants {
             public static final int canCoderID = 42;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
         
-            public static final double shaftAcceleration = 1;
-            public static final double shaftMaxSpeed = 10;
+            public static final double shaftAcceleration = 2000;
+            public static final double shaftMaxSpeed = 2000;
 
-            public static final double KP = 60;
+            public static final double KP = 1;
             public static final double KI = 0;
             public static final double KD = 0;
         }

@@ -56,6 +56,7 @@ public class DriveToAprilTag extends Command {
         APRILTAG_IS_VISIBLE = LimelightHelpers.getTV(Constants.Limelight.NAME);
         if (!APRILTAG_IS_VISIBLE) {
             System.out.println("No apriltag visible");
+            cancel();
             return;
         }
 
@@ -79,11 +80,6 @@ public class DriveToAprilTag extends Command {
      */
     @Override
     public void execute() {
-        if (!APRILTAG_IS_VISIBLE) {
-            System.out.println("Caught by execute");
-            return;
-        }
-
         var desiredState = trajectory.sample(timer.get());
 
         var targetChassisSpeeds = controller.calculate(pose.get(), desiredState, desiredRotation.get());
@@ -104,7 +100,6 @@ public class DriveToAprilTag extends Command {
     @Override
     public void end(boolean interrupted) {
         if (!APRILTAG_IS_VISIBLE) {
-            System.out.println("Caught by end");
             return;
         }
 

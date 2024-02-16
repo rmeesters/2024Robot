@@ -53,8 +53,8 @@ public class RobotContainer {
     private final JoystickButton angleDown = new JoystickButton(driver, PS4Controller.Button.kL1.value);
     private final JoystickButton angleUp = new JoystickButton(driver, PS4Controller.Button.kR1.value);
 
-    private final JoystickButton test_setAngle100 = new JoystickButton(driver, PS4Controller.Button.kCross.value);
-    private final JoystickButton test_setAngle800 = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton test_setAngleHigh = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    private final JoystickButton test_setAngleLow = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
 
     /* Climber */
     private final POVButton climbUp = new POVButton(pov, 0);
@@ -132,10 +132,10 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         
-        angleDown.onTrue(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(10)));
+        angleDown.onTrue(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(Constants.Shooter.AngleMotor.shaftMaxSpeed)));
         angleDown.onFalse(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(0)));
 
-        angleUp.onTrue(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(-10)));
+        angleUp.onTrue(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(-Constants.Shooter.AngleMotor.shaftMaxSpeed)));
         angleUp.onFalse(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(0)));
 
         spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setShooterSpeed(10)));
@@ -144,8 +144,8 @@ public class RobotContainer {
         spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(3)));
         spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
-        test_setAngle100.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(100)));
-        test_setAngle800.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(800)));
+        test_setAngleHigh.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(-1110)));
+        test_setAngleLow.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(1025)));
 
         climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(10)));
         climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
@@ -158,6 +158,9 @@ public class RobotContainer {
         // Autonomous Sendable Chooser
         autoChooser = new SendableChooser<Command>();
         autoChooser.setDefaultOption("Move Auto", exampleAuto);
+        autoChooser.addOption("Load Note", new IntakeNote());
+        autoChooser.addOption("Drive to april tag", new DriveToAprilTag());
+        autoChooser.addOption("Move to april tag", new DriveWithLimelight(true));
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }

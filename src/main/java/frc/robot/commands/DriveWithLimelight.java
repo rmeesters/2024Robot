@@ -1,21 +1,9 @@
 package frc.robot.commands;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
@@ -27,19 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveWithLimelight extends Command {
 
     private final Swerve s_Swerve = RobotContainer.s_Swerve;
-
-    private final Timer timer = new Timer();
-
-    // Poses in trajectory
-    private List<Pose2d> points;
-
-    // Movement variables
-    private Trajectory trajectory;
-    private Supplier<Pose2d> pose;
-    private SwerveDriveKinematics kinematics;
-    private HolonomicDriveController controller;
-    private Consumer<SwerveModuleState[]> outputModuleStates;
-    private Supplier<Rotation2d> desiredRotation;
 
     private boolean TARGET_IS_VISIBLE;
 
@@ -65,7 +40,7 @@ public class DriveWithLimelight extends Command {
         TARGET_IS_VISIBLE = LimelightHelpers.getTV(Constants.Limelight.NAME);
         if (!TARGET_IS_VISIBLE) {
             System.out.println("No target visible");
-            //cancel(); //TODO Test this
+            cancel();
             return;
         }
 
@@ -79,11 +54,6 @@ public class DriveWithLimelight extends Command {
      */
     @Override
     public void execute() {
-        if (!TARGET_IS_VISIBLE) {
-            System.out.println("Caught by execute");
-            return;
-        }
-
         auto.execute();
     }
 
@@ -99,7 +69,6 @@ public class DriveWithLimelight extends Command {
     @Override
     public void end(boolean interrupted) {
         if (!TARGET_IS_VISIBLE) {
-            System.out.println("Caught by end");
             return;
         }
 

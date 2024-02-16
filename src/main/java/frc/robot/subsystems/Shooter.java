@@ -6,7 +6,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,7 +37,7 @@ public class Shooter extends SubsystemBase {
         fxAngleConfig = new TalonFXConfiguration();
 
         MotionMagicConfigs angleMotionMagic = fxAngleConfig.MotionMagic;
-        angleMotionMagic.MotionMagicCruiseVelocity = Constants.Shooter.AngleMotor.shaftAcceleration;
+        angleMotionMagic.MotionMagicAcceleration = Constants.Shooter.AngleMotor.shaftAcceleration;
         angleMotionMagic.MotionMagicCruiseVelocity = Constants.Shooter.AngleMotor.shaftMaxSpeed;
 
         Slot0Configs slot0 = fxAngleConfig.Slot0;
@@ -50,6 +50,8 @@ public class Shooter extends SubsystemBase {
         fxLeftMotor.getConfigurator().apply(fxShooterConfig);
         fxRightMotor.getConfigurator().apply(fxShooterConfig);
         fxAngleMotor.getConfigurator().apply(fxAngleConfig);
+
+        fxAngleMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 
     public void setShooterSpeed(double speed) {
@@ -67,7 +69,6 @@ public class Shooter extends SubsystemBase {
 
     public void setArmPosition(double position) {
         fxAngleMotor.setControl(m_mmReq.withPosition(position).withSlot(0));
-        fxAngleMotor.setPosition(position);
     }
 
     public double getArmPosition() {
@@ -83,7 +84,7 @@ public class Shooter extends SubsystemBase {
     // }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
         SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
     }

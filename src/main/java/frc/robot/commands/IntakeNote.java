@@ -34,7 +34,7 @@ public class IntakeNote extends Command {
      */
     @Override
     public void execute() {
-        s_Intake.setSpeed(3);
+        s_Intake.setSpeed(1);
     }
 
     /**
@@ -54,6 +54,6 @@ public class IntakeNote extends Command {
 
     @Override
     public boolean isFinished() {
-        return s_Intake.getSensorValue() < 1 || timer.hasElapsed(TIME_LIMIT);
+        return s_Intake.inRange(2) || timer.hasElapsed(TIME_LIMIT);
     }
 }
