@@ -53,8 +53,10 @@ public class RobotContainer {
     private final JoystickButton angleDown = new JoystickButton(driver, PS4Controller.Button.kL1.value);
     private final JoystickButton angleUp = new JoystickButton(driver, PS4Controller.Button.kR1.value);
 
-    private final JoystickButton test_setAngleHigh = new JoystickButton(driver, PS4Controller.Button.kCross.value);
-    private final JoystickButton test_setAngleLow = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton test_setAngleHigh = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    private final JoystickButton test_setAngleLow = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
+    private final JoystickButton intakeNote = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton fireNote = new JoystickButton(driver, PS4Controller.Button.kCross.value);
 
     /* Climber */
     private final POVButton climbUp = new POVButton(pov, 0);
@@ -144,8 +146,11 @@ public class RobotContainer {
         spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(3)));
         spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
-        test_setAngleHigh.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(-1110)));
-        test_setAngleLow.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(1025)));
+        test_setAngleHigh.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(0)));
+        test_setAngleLow.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(-40)));
+
+        intakeNote.onTrue(new IntakeNote());
+        fireNote.onTrue(new FireNote());
 
         climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(10)));
         climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));

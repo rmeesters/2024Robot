@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +26,11 @@ public class Shooter extends SubsystemBase {
     private TalonFXConfiguration fxAngleConfig;
 
     private CANcoder angleCanCoder;
+
+    // Max Cancoder: 27.8
+    // Min Cancoder: -13.9
+
+    // 4.22 CANCODER -208 MOTOR
 
     /**
      * Shooter consists of 3 falcon500 motors, 2 to accellerate the projectile, and 1 to angle the shooter.
@@ -44,6 +51,9 @@ public class Shooter extends SubsystemBase {
         slot0.kP = Constants.Shooter.AngleMotor.KP;
         slot0.kI = Constants.Shooter.AngleMotor.KI;
         slot0.kD = Constants.Shooter.AngleMotor.KD;
+
+        fxAngleConfig.Feedback.FeedbackRemoteSensorID = Constants.Shooter.AngleMotor.canCoderID;
+        fxAngleConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
 
         angleCanCoder = new CANcoder(Constants.Shooter.AngleMotor.canCoderID);
         
