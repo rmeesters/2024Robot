@@ -117,7 +117,7 @@ public class oldDriveToAprilTag extends Command {
         double angled_ty = LimelightHelpers.getTY(Constants.Limelight.Back.NAME);
         double ty = Constants.Limelight.Back.CAMERA_ANGLE + angled_ty;
 
-        double dx = (Constants.Dimensions.APRILTAG_HEIGHT - Constants.Dimensions.CAMERA_HEIGHT)
+        double dx = (Constants.Dimensions.APRILTAG_HEIGHT - Constants.Limelight.Back.CAMERA_HEIGHT)
                 / Math.tan(Math.toRadians(ty));
         double dy = dx * Math.tan(Math.toRadians(tx));
 

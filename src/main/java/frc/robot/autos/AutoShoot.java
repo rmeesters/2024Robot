@@ -1,37 +1,31 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
-import frc.robot.commands.DriveToNote;
-import frc.robot.commands.IntakeNote;
+import frc.robot.commands.DriveToTag;
+import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Swerve;
 
 public class AutoShoot extends SequentialCommandGroup {
-
-    private final Intake s_Intake = RobotContainer.s_Intake;
-
+    
     /**
      * Auto for finding and loading a note into the robot.
      * <hr>
      * 
      * <h3>Instructions:</h3>
      * <ol>
-     * <li>Locate note
-     * <li>Go to note
-     * <li>Rotate front to note
-     * <li>Start intake
-     * <li>Sense for note
-     * <li>Stop after detected
+     * <li>TODO
      */
     public AutoShoot() {
         // Reset odometry and follow trajectory
-        // TODO make IntakeNote start 1 second before DriveWithLimelight ends
+        //TODO automatically decide and give priority to what pipeline to use
         addCommands(
-                new DriveToNote(),
-                new IntakeNote());
+                new DriveToTag(Constants.Limelight.Pipelines.SPEAKER),
+                new ShootNote());
 
     }
-    
+
 }

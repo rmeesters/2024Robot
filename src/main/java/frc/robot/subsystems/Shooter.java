@@ -90,9 +90,14 @@ public class Shooter extends SubsystemBase {
      * the ramp all the way down.
      * 
      * @param rotation 0 - Constants.Shooter.canCoderLimit
+     * @return Time to complete
      */
-    public void setShaftRotation(double rotation) {
+    public double setShaftRotation(double rotation) {
         fxAngleMotor.setControl(m_mmReq.withPosition(rotation).withSlot(0));
+
+        //TODO Tune this
+        double travelTime = 0.2 + Math.abs( angleCanCoder.getPosition().getValue() - rotation );
+        return travelTime;
     }
 
     /**
@@ -101,7 +106,7 @@ public class Shooter extends SubsystemBase {
      * 
      * @param degrees
      */
-    public void setAngle(double degrees) {
+    public double setAngle(double degrees) {
         // 0 is down, 1 is up
         double positionOnShaftPercentage = 1 - targetPositionInInches(degrees) / Constants.Shooter.ArmRange;
 
@@ -110,7 +115,7 @@ public class Shooter extends SubsystemBase {
 
         // Rotate sahft to calculated position
         SmartDashboard.putNumber("Target Encoder Value (Shaft)", targetEncoderValue);
-        setShaftRotation(targetEncoderValue);
+        return setShaftRotation(targetEncoderValue);
     }
 
     /**

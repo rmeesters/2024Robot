@@ -214,13 +214,14 @@ public final class Constants {
             public static final String NAME = "limelight-gnomes-front";
 
             // Vertical angle of camera in degrees (positive means pointing up)
-            
+
             // TODO Set height of camera
             public static double CAMERA_ANGLE = 0;
 
             // TODO Set height of camera
             public static double CAMERA_HEIGHT = 0.15;
         }
+
         public static final class Back {
             public static final String NAME = "limelight-gnomes-back";
 
@@ -233,15 +234,16 @@ public final class Constants {
             public static double CAMERA_HEIGHT = 0.15;
         }
 
-        public static final int TARGET_TAG_DISTANCE = 0;
+        public static final class Pipelines {
+            public static int SPEAKER = 0;
+        }
 
-            public static double CAMERA_HEIGHT = 0.15;
+        public static final int TARGET_TAG_DISTANCE = 0;
     }
 
     public static final class Dimensions {
         public static final double NOTE_HEIGHT = 0.05;
-        public static final double CAMERA_HEIGHT = 0.38;
-        public static final double APRILTAG_HEIGHT = 0.22;
+        public static final double APRILTAG_HEIGHT = 1.356;
     }
 
 }
