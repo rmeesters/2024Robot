@@ -36,8 +36,8 @@ public class FireNote extends Command {
      */
     @Override
     public void execute() {
-        s_Intake.setSpeed(1);
-        s_Shooter.setShooterSpeed(10);
+        s_Intake.setSpeed(0.2);
+        s_Shooter.setSpeed(1);
     }
 
     /**
@@ -52,7 +52,7 @@ public class FireNote extends Command {
     @Override
     public void end(boolean interrupted) {
         s_Intake.setSpeed(0);
-        s_Shooter.setShooterSpeed(0);
+        s_Shooter.setSpeed(0);
         timer.stop();
     }
 

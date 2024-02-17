@@ -166,6 +166,8 @@ public final class Constants {
             public static final double KD = 0;
         }
 
+        public static final double canCoderLimit = -40;
+
         public static final double boltGrovesPerInch = 5;
 
         // Circumference of shaft (inches)

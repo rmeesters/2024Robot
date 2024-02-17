@@ -32,7 +32,7 @@ public class IntakeNote extends Command {
      */
     @Override
     public void execute() {
-        s_Intake.setSpeed(2);
+        s_Intake.setSpeed(0.2);
     }
 
     /**

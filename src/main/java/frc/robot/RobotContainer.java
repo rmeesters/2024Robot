@@ -134,20 +134,20 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         
-        angleDown.onTrue(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(Constants.Shooter.AngleMotor.shaftMaxSpeed)));
-        angleDown.onFalse(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(0)));
+        angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
+        angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        angleUp.onTrue(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(-Constants.Shooter.AngleMotor.shaftMaxSpeed)));
-        angleUp.onFalse(new InstantCommand(() -> s_Shooter.setAngleAdjustmentSpeed(0)));
+        angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
+        angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setShooterSpeed(10)));
-        spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setShooterSpeed(0)));
+        spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1)));
+        spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0)));
 
-        spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(3)));
+        spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(0.3)));
         spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
-        test_setAngleHigh.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(0)));
-        test_setAngleLow.onTrue(new InstantCommand(() -> s_Shooter.setArmPosition(-40)));
+        test_setAngleHigh.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        test_setAngleLow.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.canCoderLimit)));
 
         intakeNote.onTrue(new IntakeNote());
         fireNote.onTrue(new FireNote());

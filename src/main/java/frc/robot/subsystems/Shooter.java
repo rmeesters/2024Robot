@@ -27,22 +27,24 @@ public class Shooter extends SubsystemBase {
 
     private CANcoder angleCanCoder;
 
-    // Max Cancoder: 27.8
-    // Min Cancoder: -13.9
-
-    // 4.22 CANCODER -208 MOTOR
-
     /**
      * Shooter consists of 3 falcon500 motors, 2 to accellerate the projectile, and 1 to angle the shooter.
      */
     public Shooter() {
+        // Define motors
         fxLeftMotor = new TalonFX(Constants.Shooter.ShooterMotor.leftMotorID);
         fxRightMotor = new TalonFX(Constants.Shooter.ShooterMotor.rightMotorID);
         fxAngleMotor = new TalonFX(Constants.Shooter.AngleMotor.driveMotorID);
         
+        // Configure motors
         fxShooterConfig = new TalonFXConfiguration();
         fxAngleConfig = new TalonFXConfiguration();
 
+        // Make shaft listen to canCoder
+        fxAngleConfig.Feedback.FeedbackRemoteSensorID = Constants.Shooter.AngleMotor.canCoderID;
+        fxAngleConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+
+        // Acceleration and decceleration of shaft
         MotionMagicConfigs angleMotionMagic = fxAngleConfig.MotionMagic;
         angleMotionMagic.MotionMagicAcceleration = Constants.Shooter.AngleMotor.shaftAcceleration;
         angleMotionMagic.MotionMagicCruiseVelocity = Constants.Shooter.AngleMotor.shaftMaxSpeed;
@@ -51,48 +53,96 @@ public class Shooter extends SubsystemBase {
         slot0.kP = Constants.Shooter.AngleMotor.KP;
         slot0.kI = Constants.Shooter.AngleMotor.KI;
         slot0.kD = Constants.Shooter.AngleMotor.KD;
-
-        fxAngleConfig.Feedback.FeedbackRemoteSensorID = Constants.Shooter.AngleMotor.canCoderID;
-        fxAngleConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-
-        angleCanCoder = new CANcoder(Constants.Shooter.AngleMotor.canCoderID);
         
+        // Apply configurations
         fxLeftMotor.getConfigurator().apply(fxShooterConfig);
         fxRightMotor.getConfigurator().apply(fxShooterConfig);
         fxAngleMotor.getConfigurator().apply(fxAngleConfig);
 
+        // Make angle motor stop when not accelerating
         fxAngleMotor.setNeutralMode(NeutralModeValue.Brake);
+
+        // Define canCoder for printing angle to the dashboard
+        angleCanCoder = new CANcoder(Constants.Shooter.AngleMotor.canCoderID);
     }
 
-    public void setShooterSpeed(double speed) {
-        fxLeftMotor.set(-speed / Constants.Shooter.ShooterMotor.maxSpeed);
-        fxRightMotor.set(speed / Constants.Shooter.ShooterMotor.maxSpeed);
+    /**
+     * Set the speed of the 2 talonfx shooter motors.
+     * @param speedPercent Percent of max speed (-1 - 1)
+     */
+    public void setSpeed(double speedPercent) {
+        fxLeftMotor.set(-speedPercent);
+        fxRightMotor.set(speedPercent);
     }
 
-    public void stopShooter() {
-        setShooterSpeed(0);
+    /**
+     * Set the speed of the talonfx shaft motor.
+     * @param speedPercent Percent of max speed (-1 - 1)
+     */
+    public void setShaftSpeed(double speedPercent) {
+        fxAngleMotor.set(speedPercent);
     }
 
-    public void setAngleAdjustmentSpeed(double speed) {
-        fxAngleMotor.set(speed / Constants.Shooter.AngleMotor.shaftMaxSpeed);
+    /**
+     * Set the position of the shaft assuming the robot started with the ramp all the way down.
+     * @param rotation 0 - Constants.Shooter.canCoderLimit
+     */
+    public void setShaftRotation(double rotation) {
+        fxAngleMotor.setControl(m_mmReq.withPosition(rotation).withSlot(0));
     }
 
-    public void setArmPosition(double position) {
-        fxAngleMotor.setControl(m_mmReq.withPosition(position).withSlot(0));
+    /**
+     * Set the position of the shaft based on angle assuming the robot started with the ramp all the way down
+     * @param degrees
+     */
+    public void setAngle(double degrees) {
+        // 0 is down, 1 is up
+        double positionOnShaftPercentage = 1 - targetPositionInInches(degrees) / Constants.Shooter.ArmRange;
+
+        // Range of 0 to cancoder limit
+        double targetEncoderValue = Constants.Shooter.canCoderLimit * positionOnShaftPercentage;
+
+        // Rotate sahft to calculated position
+        SmartDashboard.putNumber("Target Encoder Value (Shaft)", targetEncoderValue);
+        setShaftRotation(targetEncoderValue);
     }
 
-    public double getArmPosition() {
-        return 0;
+    /**
+     * Set position of shaft based on inches from the canCoder zero (lowest angle of shooter).
+     * @param distanceInInches Distance in inches
+     */
+    public void setShaftPosition(double distanceInInches) {
+        // 0 is down, 1 is up
+        double positionOnShaftPercentage = distanceInInches / Constants.Shooter.ArmRange;
+
+        if (positionOnShaftPercentage > 1 || positionOnShaftPercentage < 0) {
+            System.err.println("Invalid shaft position of " + distanceInInches + " inches");
+        }
+
+        // Range of 0 to cancoder limit
+        double targetEncoderValue = Constants.Shooter.canCoderLimit * positionOnShaftPercentage;
+
+        // Rotate sahft to calculated position
+        SmartDashboard.putNumber("Target Encoder Value (Shaft)", targetEncoderValue);
+        setShaftRotation(targetEncoderValue);
     }
 
-    // public void setAngleAdjustmentSpeed(double speed) {
-    //     fxAngleMotor.set(speed);
-    // }
+    private double targetPositionInInches(double degrees) {
+        // Do NOT change these constants
+        final double A = -0.0156853;
+        final double B = 0.166208;
+        final double C = -6.04656;
+        final double D = 97.6943;
 
-    // public void stopAngleAdjustment() {
-    //     setAngleAdjustmentSpeed(0);
-    // }
+        return A * Math.pow(degrees, 3) 
+             + B * Math.pow(degrees, 2)
+             + C * degrees
+             + D;
+    }
 
+    /**
+     * Update dashboard with rotation values
+     */
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
