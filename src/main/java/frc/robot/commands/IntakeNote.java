@@ -1,11 +1,10 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Swerve;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeNote extends Command {
 
@@ -13,6 +12,12 @@ public class IntakeNote extends Command {
 
     private final Timer timer = new Timer();
 
+    private boolean active = false;
+
+    /**
+     * Intake note starts the intake motors, including the conveyer,
+     * and runs them until a note is loaded or the command is run a second time.
+     */
     public IntakeNote() {
 
     }
@@ -23,8 +28,12 @@ public class IntakeNote extends Command {
      */
     @Override
     public void initialize() {
-        // Start timer to start time limit
         timer.restart();
+
+        // Toggle whether command will run or stop
+        active = !active;
+        if (!active)
+            cancel();
     }
 
     /**
@@ -46,12 +55,15 @@ public class IntakeNote extends Command {
      */
     @Override
     public void end(boolean interrupted) {
+        active = false;
+
         s_Intake.setSpeed(0);
         timer.stop();
     }
 
     @Override
     public boolean isFinished() {
+        // Return true if note is visible
         return s_Intake.inRange(2);
     }
 }

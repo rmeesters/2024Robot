@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -15,9 +14,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-    
+
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
-    
+
     private TalonFX fxLeftMotor;
     private TalonFX fxRightMotor;
     private TalonFXConfiguration fxShooterConfig;
@@ -28,14 +27,15 @@ public class Shooter extends SubsystemBase {
     private CANcoder angleCanCoder;
 
     /**
-     * Shooter consists of 3 falcon500 motors, 2 to accellerate the projectile, and 1 to angle the shooter.
+     * Shooter consists of 3 falcon500 motors, 2 to accellerate the projectile, and
+     * 1 to angle the shooter.
      */
     public Shooter() {
         // Define motors
         fxLeftMotor = new TalonFX(Constants.Shooter.ShooterMotor.leftMotorID);
         fxRightMotor = new TalonFX(Constants.Shooter.ShooterMotor.rightMotorID);
         fxAngleMotor = new TalonFX(Constants.Shooter.AngleMotor.driveMotorID);
-        
+
         // Configure motors
         fxShooterConfig = new TalonFXConfiguration();
         fxAngleConfig = new TalonFXConfiguration();
@@ -53,7 +53,7 @@ public class Shooter extends SubsystemBase {
         slot0.kP = Constants.Shooter.AngleMotor.KP;
         slot0.kI = Constants.Shooter.AngleMotor.KI;
         slot0.kD = Constants.Shooter.AngleMotor.KD;
-        
+
         // Apply configurations
         fxLeftMotor.getConfigurator().apply(fxShooterConfig);
         fxRightMotor.getConfigurator().apply(fxShooterConfig);
@@ -68,6 +68,7 @@ public class Shooter extends SubsystemBase {
 
     /**
      * Set the speed of the 2 talonfx shooter motors.
+     * 
      * @param speedPercent Percent of max speed (-1 - 1)
      */
     public void setSpeed(double speedPercent) {
@@ -77,6 +78,7 @@ public class Shooter extends SubsystemBase {
 
     /**
      * Set the speed of the talonfx shaft motor.
+     * 
      * @param speedPercent Percent of max speed (-1 - 1)
      */
     public void setShaftSpeed(double speedPercent) {
@@ -84,7 +86,9 @@ public class Shooter extends SubsystemBase {
     }
 
     /**
-     * Set the position of the shaft assuming the robot started with the ramp all the way down.
+     * Set the position of the shaft assuming the robot started with 
+     * the ramp all the way down.
+     * 
      * @param rotation 0 - Constants.Shooter.canCoderLimit
      */
     public void setShaftRotation(double rotation) {
@@ -92,7 +96,9 @@ public class Shooter extends SubsystemBase {
     }
 
     /**
-     * Set the position of the shaft based on angle assuming the robot started with the ramp all the way down
+     * Set the position of the shaft based on angle assuming the
+     * robot started with the ramp all the way down
+     * 
      * @param degrees
      */
     public void setAngle(double degrees) {
@@ -108,7 +114,9 @@ public class Shooter extends SubsystemBase {
     }
 
     /**
-     * Set position of shaft based on inches from the canCoder zero (lowest angle of shooter).
+     * Set position of shaft based on inches from 
+     * the canCoder zero (lowest angle of shooter).
+     * 
      * @param distanceInInches Distance in inches
      */
     public void setShaftPosition(double distanceInInches) {
@@ -134,10 +142,10 @@ public class Shooter extends SubsystemBase {
         final double C = -6.04656;
         final double D = 97.6943;
 
-        return A * Math.pow(degrees, 3) 
-             + B * Math.pow(degrees, 2)
-             + C * degrees
-             + D;
+        return A * Math.pow(degrees, 3)
+                + B * Math.pow(degrees, 2)
+                + C * degrees
+                + D;
     }
 
     /**

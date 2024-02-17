@@ -150,7 +150,7 @@ public class RobotContainer {
         test_setAngleLow.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.canCoderLimit)));
 
         intakeNote.onTrue(new IntakeNote());
-        fireNote.onTrue(new FireNote());
+        fireNote.onTrue(new ShootNote());
 
         climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(10)));
         climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));

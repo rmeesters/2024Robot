@@ -1,23 +1,22 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Swerve;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class FireNote extends Command {
+public class ShootNote extends Command {
 
-    private static final double TIME_LIMIT = 3;
+    private static final double TIME_LIMIT = 2;
 
     private final Intake s_Intake = RobotContainer.s_Intake;
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
     private final Timer timer = new Timer();
 
-    public FireNote() {
+    public ShootNote() {
 
     }
 
@@ -27,7 +26,6 @@ public class FireNote extends Command {
      */
     @Override
     public void initialize() {
-        // Start timer to start time limit
         timer.restart();
     }
 
