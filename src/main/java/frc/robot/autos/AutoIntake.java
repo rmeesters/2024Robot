@@ -3,12 +3,12 @@ package frc.robot.autos;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.DriveWithLimelight;
+import frc.robot.commands.DriveToNote;
 import frc.robot.commands.IntakeNote;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 
-public class AutoLoad extends SequentialCommandGroup {
+public class AutoIntake extends SequentialCommandGroup {
 
     private final Intake s_Intake = RobotContainer.s_Intake;
 
@@ -25,11 +25,11 @@ public class AutoLoad extends SequentialCommandGroup {
      * <li>Sense for note
      * <li>Stop after detected
      */
-    public AutoLoad() {
+    public AutoIntake() {
         // Reset odometry and follow trajectory
         // TODO make IntakeNote start 1 second before DriveWithLimelight ends
         addCommands(
-                new DriveWithLimelight(false),
+                new DriveToNote(),
                 new IntakeNote());
 
     }

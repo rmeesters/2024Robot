@@ -4,22 +4,29 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+
+import frc.robot.autos.AutoDrive;
+import frc.robot.commands.DriveToNote;
+import frc.robot.commands.DriveToTag;
+import frc.robot.commands.IntakeNote;
+import frc.robot.commands.ShootNote;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared.
@@ -71,14 +78,6 @@ public class RobotContainer {
     /* Sendable Chooser and Autonomus Commands */
     private static SendableChooser<Command> autoChooser;
 
-    // motor angle
-    // 1770.598
-    // -416.902 at 0
-
-    // cancoder angle
-    // -8.6084 at 0
-    // 36.0359
-
     /**
      * Example Auto
      * 1. move forward 1 meter
@@ -98,7 +97,8 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        configureLimelight(Constants.Limelight.NAME);
+        configureLimelight(Constants.Limelight.Front.NAME);
+        configureLimelight(Constants.Limelight.Back.NAME);
 
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
@@ -133,7 +133,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        
+
         angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
         angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
@@ -164,8 +164,8 @@ public class RobotContainer {
         autoChooser = new SendableChooser<Command>();
         autoChooser.setDefaultOption("Move Auto", exampleAuto);
         autoChooser.addOption("Load Note", new IntakeNote());
-        autoChooser.addOption("Drive to april tag", new DriveToAprilTag());
-        autoChooser.addOption("Move to april tag", new DriveWithLimelight(true));
+        autoChooser.addOption("Drive to Note", new DriveToNote());
+        autoChooser.addOption("Drive to Tag", new DriveToTag(0));
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }

@@ -15,7 +15,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
@@ -23,7 +22,7 @@ import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveToAprilTag extends Command {
+public class oldDriveToAprilTag extends Command {
 
     private final Swerve s_Swerve = RobotContainer.s_Swerve;
 
@@ -42,7 +41,8 @@ public class DriveToAprilTag extends Command {
 
     private boolean APRILTAG_IS_VISIBLE;
 
-    public DriveToAprilTag() {
+    @Deprecated
+    public oldDriveToAprilTag() {
 
     }
 
@@ -53,7 +53,7 @@ public class DriveToAprilTag extends Command {
     @Override
     public void initialize() {
         // Stop if apriltag is visible
-        APRILTAG_IS_VISIBLE = LimelightHelpers.getTV(Constants.Limelight.NAME);
+        APRILTAG_IS_VISIBLE = LimelightHelpers.getTV(Constants.Limelight.Back.NAME);
         if (!APRILTAG_IS_VISIBLE) {
             System.out.println("No apriltag visible");
             cancel();
@@ -113,9 +113,9 @@ public class DriveToAprilTag extends Command {
     }
 
     private void calculatePoints() {
-        double tx = LimelightHelpers.getTX(Constants.Limelight.NAME);
-        double angled_ty = LimelightHelpers.getTY(Constants.Limelight.NAME);
-        double ty = Constants.Limelight.CAMERA_ANGLE + angled_ty;
+        double tx = LimelightHelpers.getTX(Constants.Limelight.Back.NAME);
+        double angled_ty = LimelightHelpers.getTY(Constants.Limelight.Back.NAME);
+        double ty = Constants.Limelight.Back.CAMERA_ANGLE + angled_ty;
 
         double dx = (Constants.Dimensions.APRILTAG_HEIGHT - Constants.Dimensions.CAMERA_HEIGHT)
                 / Math.tan(Math.toRadians(ty));
@@ -128,7 +128,7 @@ public class DriveToAprilTag extends Command {
         // dx *= -ratio;
         // dy *= ratio;
 
-        dy -= Constants.Limelight.TARGET_DISTANCE_AWAY;
+        dy -= Constants.Limelight.TARGET_TAG_DISTANCE;
 
         points = List.of(
                 new Pose2d(0, 0, new Rotation2d(0)),
