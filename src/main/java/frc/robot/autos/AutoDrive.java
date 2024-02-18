@@ -32,6 +32,7 @@ public class AutoDrive extends SequentialCommandGroup {
     private final TrajectoryConfig config;
     private final Trajectory trajectory;
     private final ProfiledPIDController thetaController;
+    private final SwerveControllerCommand swerveCommand;
 
     public AutoDrive(List<Pose2d> points, boolean reversed) {
         config = new TrajectoryConfig(
@@ -44,12 +45,14 @@ public class AutoDrive extends SequentialCommandGroup {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         trajectory = TrajectoryGenerator.generateTrajectory(points, config);
-        //postTrajectoryToDashBoard();
+        postTrajectoryToDashBoard();
+
+        swerveCommand = generateSwerveControllerCommand();
 
         // Reset odometry and follow trajectory
         addCommands(
                 new InstantCommand(() -> s_Swerve.setPose(trajectory.getInitialPose())),
-                generateSwerveControllerCommand());
+                swerveCommand);
     }
 
     private SwerveControllerCommand generateSwerveControllerCommand() {
@@ -68,5 +71,9 @@ public class AutoDrive extends SequentialCommandGroup {
         SmartDashboard.putNumber("auto initial pose x", trajectory.getInitialPose().getX());
         SmartDashboard.putNumber("auto initial pose y", trajectory.getInitialPose().getY());
         SmartDashboard.putString("auto trajectory", trajectory.toString());
+    }
+
+    public double timeToFinish() {
+        return trajectory.getTotalTimeSeconds();
     }
 }

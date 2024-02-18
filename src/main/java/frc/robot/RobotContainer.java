@@ -165,7 +165,9 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Move Auto", exampleAuto);
         autoChooser.addOption("Load Note", new IntakeNote());
         autoChooser.addOption("Drive to Note", new DriveToNote());
-        autoChooser.addOption("Drive to Tag", new DriveToTag(0));
+        autoChooser.addOption("Drive to Tag", new DriveToTag(
+                Constants.Limelight.Pipelines.Speaker.Red.CENTER,
+                Constants.Limelight.Pipelines.Speaker.APRILTAG_HEIGHT));
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }

@@ -23,7 +23,7 @@ public class AutoShoot extends SequentialCommandGroup {
         // Reset odometry and follow trajectory
         //TODO automatically decide and give priority to what pipeline to use
         addCommands(
-                new DriveToTag(Constants.Limelight.Pipelines.SPEAKER),
+                //new DriveToTag(Constants.Limelight.Pipelines.SPEAKER),
                 new ShootNote());
 
     }

@@ -235,15 +235,78 @@ public final class Constants {
         }
 
         public static final class Pipelines {
-            public static int SPEAKER = 0;
-        }
+            public static final class Amp {
+                // Meters high
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 1.0/8.0);
 
-        public static final int TARGET_TAG_DISTANCE = 0;
+                public static final class Red {
+                    // Pipelines
+                    public static final int CENTER = 5;
+                }
+
+                public static final class Blue {
+                    // Pipelines
+                    public static final int CENTER = 6;
+                }
+            }
+
+            public static final class Speaker {
+                // Meters high
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 3.0 + 7.0/8.0);
+
+                public static final class Red {
+                    // Pipelines
+                    public static final int SIDE = 3;
+                    public static final int CENTER = 4;
+                }
+
+                public static final class Blue {
+                    // Pipelines
+                    public static final int SIDE = 8;
+                    public static final int CENTER = 7;
+                }
+            }
+            
+            public static final class Source {
+                // Meters high
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 1.0/8.0);
+
+                public static final class Red {
+                    // Pipelines
+                    public static final int LEFT = 2;
+                    public static final int RIGHT = 1;
+                }
+
+                public static final class Blue {
+                    // Pipelines
+                    public static final int LEFT = 10;
+                    public static final int RIGHT = 9;
+                }
+            }
+            
+            public static final class Stage {
+                // Meters high
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(36.0 + 11.0 + 1.0/2.0);
+
+                public static final class Red {
+                    // Pipelines
+                    public static final int LEFT = 11;
+                    public static final int RIGHT = 12;
+                    public static final int CENTER = 13;
+                }
+
+                public static final class Blue {
+                    // Pipelines
+                    public static final int LEFT = 15;
+                    public static final int RIGHT = 16;
+                    public static final int CENTER = 14;
+                }
+            }
+        }
     }
 
     public static final class Dimensions {
         public static final double NOTE_HEIGHT = 0.05;
-        public static final double APRILTAG_HEIGHT = 1.356;
     }
 
 }

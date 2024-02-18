@@ -3,6 +3,7 @@ package frc.robot.commands;
 import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -12,9 +13,16 @@ import frc.robot.subsystems.Swerve;
 
 public class DriveToNote extends Command {
 
+    private final Swerve s_Swerve = RobotContainer.s_Swerve;
+
     private boolean TARGET_IS_VISIBLE;
 
-    private AutoDrive auto;
+    private AutoDrive driveAuto;
+    private IntakeNote intakeCommand;
+
+    private boolean startedIntake = false;
+
+    private Timer timer = new Timer();
 
     /**
      * Drive to target using limelight
@@ -40,8 +48,11 @@ public class DriveToNote extends Command {
         }
 
         List<Pose2d> points = calculatePoints();
-        auto = new AutoDrive(points, false);
-        auto.initialize();
+        driveAuto = new AutoDrive(points, false);
+        intakeCommand = new IntakeNote();
+        
+        timer.restart();
+        driveAuto.initialize();
     }
 
     /**
@@ -49,7 +60,16 @@ public class DriveToNote extends Command {
      */
     @Override
     public void execute() {
-        auto.execute();
+        driveAuto.execute();
+
+        if (timer.hasElapsed(driveAuto.timeToFinish() - 1)) {
+            if (startedIntake) {
+                intakeCommand.execute();
+                return;
+            }
+            intakeCommand.initialize();
+            startedIntake = true;
+        }
     }
 
     /**
@@ -67,24 +87,26 @@ public class DriveToNote extends Command {
             return;
         }
 
-        auto.end(interrupted);
+        driveAuto.end(interrupted);
+        intakeCommand.end(interrupted);
     }
 
     @Override
     public boolean isFinished() {
-        return !TARGET_IS_VISIBLE || auto.isFinished();
+        return !TARGET_IS_VISIBLE || driveAuto.isFinished() || intakeCommand.isFinished();
     }
 
     private List<Pose2d> calculatePoints() {
-        double tx = LimelightHelpers.getTX(Constants.Limelight.Front.NAME);
-        double angled_ty = LimelightHelpers.getTY(Constants.Limelight.Front.NAME);
-        double ty = Constants.Limelight.Front.CAMERA_ANGLE + angled_ty;
+        double TX = Math.toRadians(s_Swerve.getGyroYaw().getDegrees() + LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
+        double TY = Math.toRadians(Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
-        double dx = (Constants.Dimensions.NOTE_HEIGHT - Constants.Limelight.Front.CAMERA_HEIGHT) / Math.tan(Math.toRadians(ty));
-        double dy = dx * Math.tan(Math.toRadians(tx));
+        double distance = - Constants.Limelight.Back.CAMERA_HEIGHT / Math.tan(TY);
+
+        double dx = distance * Math.cos(TX);
+        double dy = distance * Math.sin(TX);
 
         return List.of(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                new Pose2d(dx, dy, Rotation2d.fromDegrees(tx)));
+                new Pose2d(0, 0, s_Swerve.getGyroYaw()),
+                new Pose2d(dx, dy, new Rotation2d(0)));
     }
 }
