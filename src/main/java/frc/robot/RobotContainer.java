@@ -116,14 +116,19 @@ public class RobotContainer {
         b_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         /* Intake */
-        b_spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(0.6)));
+        b_spinIntake.onTrue(new InstantCommand(s_Intake.inRange(2) ?
+                () -> s_Intake.setSpeed(0)
+                : () -> s_Intake.setSpeed(0.6)));
         b_spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
         b_backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
         b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
         /* Shooter */
-        b_spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1)));
+        b_spinShooter.onTrue(new InstantCommand(() -> {
+            s_Shooter.setSpeed(1);
+            s_Intake.setSpeed(0.3);
+        }));
         b_spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0)));
 
         /* Shooter Angle */

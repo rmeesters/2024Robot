@@ -10,8 +10,6 @@ public class IntakeNote extends Command {
 
     private final Intake s_Intake = RobotContainer.s_Intake;
 
-    private final Timer timer = new Timer();
-
     /**
      * Intake note starts the intake motors, including the conveyer,
      * and runs them until a note is loaded or the command is run a second time.
