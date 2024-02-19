@@ -25,6 +25,7 @@ import frc.robot.commands.ShootNote;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
@@ -57,23 +58,28 @@ public class RobotContainer {
 
     /* Shooter */
     private final JoystickButton spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
-    private final JoystickButton angleDown = new JoystickButton(driver, PS4Controller.Button.kL1.value);
-    private final JoystickButton angleUp = new JoystickButton(driver, PS4Controller.Button.kR1.value);
+    private final JoystickButton backupIntake = new JoystickButton(driver, PS4Controller.Button.kL1.value);
+    private final JoystickButton armShooter = new JoystickButton(driver, PS4Controller.Button.kR1.value);
 
-    private final JoystickButton test_setAngleHigh = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
-    private final JoystickButton test_setAngleLow = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
-    private final JoystickButton intakeNote = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    private final JoystickButton fireNote = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    private final JoystickButton angleDown = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    private final JoystickButton angleUp = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
+    private final JoystickButton setShootPosition = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton setPickupPosition = new JoystickButton(driver, PS4Controller.Button.kCross.value);
 
     /* Climber */
     private final POVButton climbUp = new POVButton(pov, 0);
     private final POVButton climbDown = new POVButton(pov, 180);
+
+    private final POVButton lockClimber = new POVButton(pov, 90);
+    private final POVButton releaseClimber = new POVButton(pov, 270);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public static final Shooter s_Shooter = new Shooter();
     public static final Intake s_Intake = new Intake();
     public static final Climber s_Climber = new Climber();
+
+    public static final Pneumatics s_pneumatics = new Pneumatics();
 
     /* Sendable Chooser and Autonomus Commands */
     private static SendableChooser<Command> autoChooser;
@@ -143,20 +149,25 @@ public class RobotContainer {
         spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1)));
         spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0)));
 
-        spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(0.3)));
+        spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(0.6)));
         spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
-        test_setAngleHigh.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        test_setAngleLow.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.canCoderLimit)));
+        backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
+        backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
-        intakeNote.onTrue(new IntakeNote());
-        fireNote.onTrue(new ShootNote());
+        //armShooter.onTrue(new InstantCommand(() -> s_Shooter.arm()));
+
+        setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
+        setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
 
         climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(10)));
         climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
 
         climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-10)));
         climbDown.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
+
+        lockClimber.onTrue(new InstantCommand(() -> s_pneumatics.lockClimber()));
+        releaseClimber.onTrue(new InstantCommand(() -> s_pneumatics.releaseClimber()));
     }
 
     private void configureAutoChooser() {

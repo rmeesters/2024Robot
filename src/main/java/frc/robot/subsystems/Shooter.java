@@ -142,10 +142,10 @@ public class Shooter extends SubsystemBase {
 
     private double targetPositionInInches(double degrees) {
         // Do NOT change these constants
-        final double A = -0.0156853;
-        final double B = 0.166208;
-        final double C = -6.04656;
-        final double D = 97.6943;
+        final double A = -0.0190931;
+        final double B = 0.13371;
+        final double C = -5.7094;
+        final double D = 91.7202;
 
         return A * Math.pow(degrees, 3)
                 + B * Math.pow(degrees, 2)
@@ -161,5 +161,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
         SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
     }
+
+    
 
 }

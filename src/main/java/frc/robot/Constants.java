@@ -309,4 +309,8 @@ public final class Constants {
         public static final double NOTE_HEIGHT = 0.05;
     }
 
+    public static final class Pneumatics {
+        public static final int airSupplyCan = 0;
+    }
+
 }
