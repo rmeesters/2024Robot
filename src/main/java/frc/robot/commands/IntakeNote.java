@@ -5,14 +5,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class IntakeNote extends Command {
 
     private final Intake s_Intake = RobotContainer.s_Intake;
+    private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
     /**
      * Intake note starts the intake motors, including the conveyer,
-     * and runs them until a note is loaded or the command is run a second time.
+     * until a note is detected in the shooter.
      */
     public IntakeNote() {
 
@@ -24,7 +26,11 @@ public class IntakeNote extends Command {
      */
     @Override
     public void initialize() {
-        if (isFinished()) cancel();
+        if (isFinished()) {
+            cancel();
+            return;
+        }
+        s_Shooter.prepareIntake();
     }
 
     /**

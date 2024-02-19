@@ -10,7 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import frc.robot.autos.DriverAutoMain;
+import frc.robot.commands.DriveToNote;
+import frc.robot.commands.DriveToSpeaker;
+import frc.robot.commands.IntakeNote;
+import frc.robot.commands.ShootNote;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -73,6 +77,12 @@ public class RobotContainer {
 
     /* Sendable Chooser and Autonomus Commands */
     private static SendableChooser<Command> autoChooser;
+    private static SendableChooser<Integer> teamChooser;
+
+    /* Static Variables */
+    public static final int RED = 0;
+    public static final int BLUE = 1;
+    public static int team;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -93,6 +103,7 @@ public class RobotContainer {
         configureButtonBindings();
 
         configureAutoChooser();
+        configureTeamChooser();
     }
 
     private void configureLimelight(String limelightName) {
@@ -154,8 +165,27 @@ public class RobotContainer {
     private void configureAutoChooser() {
         // Autonomous Sendable Chooser
         autoChooser = new SendableChooser<Command>();
+        autoChooser.setDefaultOption("Main Driver", new DriverAutoMain());
+        autoChooser.addOption("Test Drive to Note", new DriveToNote());
+        autoChooser.addOption("Test Drive to Speaker", new DriveToSpeaker());
+        autoChooser.addOption("Test Shoot Auto", new ShootNote());
+        autoChooser.addOption("Test Intake Auto", new IntakeNote());
+        autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
+        autoChooser.addOption("Set angle to 80", new InstantCommand(() -> s_Shooter.setAngle(80)));
+        autoChooser.addOption("Target Speaker", new InstantCommand(() -> s_Shooter.angleToSpeaker()));
 
         SmartDashboard.putData("Auto Mode", autoChooser);
+    }
+
+    private void configureTeamChooser() {
+        teamChooser = new SendableChooser<Integer>();
+        teamChooser.setDefaultOption("Red", RED);
+        teamChooser.addOption("Blue", BLUE);
+    }
+
+    public void assignTeam() {
+        team = teamChooser.getSelected();
     }
 
     /**

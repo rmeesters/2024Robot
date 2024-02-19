@@ -12,8 +12,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
+
+    private final Swerve s_Swerve = RobotContainer.s_Swerve;
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
 
@@ -153,6 +157,7 @@ public class Shooter extends SubsystemBase {
         double targetEncoderValue = Constants.Shooter.canCoderLimit * positionOnShaftPercentage;
 
         // Rotate sahft to calculated position
+        SmartDashboard.putNumber("Target Angle", degrees);
         setShaftRotation(targetEncoderValue);
     }
 
@@ -173,6 +178,21 @@ public class Shooter extends SubsystemBase {
                 + B * Math.pow(degrees, 2)
                 + C * degrees
                 + D;
+    }
+
+    public void prepareIntake() {
+        setShaftPosition(Constants.Shooter.IntakePosition);
+    }
+
+    public void angleToSpeaker() {
+        double TY = Math.toRadians(
+                Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
+
+        double dx = -(Constants.Limelight.Pipelines.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.CAMERA_HEIGHT);
+        double dy = dx / Math.tan(TY) - 2;
+
+        double angle = Math.atan((dy + 0.6) / (dx + 0.5));
+        setAngle(angle);
     }
 
     /**

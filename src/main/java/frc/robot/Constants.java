@@ -161,12 +161,15 @@ public final class Constants {
             public static final double shaftAcceleration = 2000;
             public static final double shaftMaxSpeed = 2000;
 
+            //TODO Tune these
             public static final double KP = 1;
             public static final double KI = 0;
             public static final double KD = 0;
         }
 
         public static final double canCoderLimit = -40;
+
+        public static final double IntakePosition = 3.0;
 
         public static final double boltGrovesPerInch = 5;
 
@@ -237,7 +240,7 @@ public final class Constants {
         public static final class Pipelines {
             public static final class Amp {
                 // Meters high
-                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 1.0/8.0);
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 1.0/8.0 + 10.5/2.0);
 
                 public static final class Red {
                     // Pipelines
@@ -252,7 +255,7 @@ public final class Constants {
 
             public static final class Speaker {
                 // Meters high
-                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 3.0 + 7.0/8.0);
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 3.0 + 7.0/8.0 + 10.5/2.0);
 
                 public static final class Red {
                     // Pipelines
@@ -269,7 +272,7 @@ public final class Constants {
             
             public static final class Source {
                 // Meters high
-                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 1.0/8.0);
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 1.0/8.0 + 10.5/2.0);
 
                 public static final class Red {
                     // Pipelines
@@ -286,7 +289,7 @@ public final class Constants {
             
             public static final class Stage {
                 // Meters high
-                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(36.0 + 11.0 + 1.0/2.0);
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(36.0 + 11.0 + 1.0/2.0 + 10.5/2.0);
 
                 public static final class Red {
                     // Pipelines
