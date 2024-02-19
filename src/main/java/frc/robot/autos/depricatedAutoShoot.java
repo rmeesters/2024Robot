@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
-import frc.robot.commands.DriveToTag;
+import frc.robot.commands.depricatedDriveToTag;
 import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.Intake;
 
-public class AutoShoot extends SequentialCommandGroup {
+public class depricatedAutoShoot extends SequentialCommandGroup {
     
     /**
      * Auto for finding and loading a note into the robot.
@@ -19,7 +19,7 @@ public class AutoShoot extends SequentialCommandGroup {
      * <ol>
      * <li>TODO
      */
-    public AutoShoot() {
+    public depricatedAutoShoot() {
         // Reset odometry and follow trajectory
         //TODO automatically decide and give priority to what pipeline to use
         addCommands(

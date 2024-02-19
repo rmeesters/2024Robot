@@ -1,36 +1,37 @@
 package frc.robot.commands;
 
 import java.util.List;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.autos.AutoDrive;
 import frc.robot.subsystems.Swerve;
 
-public class DriveToNote extends Command {
+public class depricatedDriveToTag extends Command {
 
     private final Swerve s_Swerve = RobotContainer.s_Swerve;
 
+    private final int PIPELINE;
+    private final double HEIGHT;
+
     private boolean TARGET_IS_VISIBLE;
 
-    private AutoDrive driveAuto;
-    private IntakeNote intakeCommand;
-
-    private boolean startedIntake = false;
-
-    private Timer timer = new Timer();
+    private AutoDrive auto;
 
     /**
      * Drive to target using limelight
      * 
-     * @param isAprilTag True: apriltag False: note
+     * @param pipeline What preset values are wanted
+     *                 (Constants.Limelight.Pipelines.<>)
      */
-    public DriveToNote() {
-
+    public depricatedDriveToTag(int pipeline, double tagHeight) {
+        PIPELINE = pipeline;
+        HEIGHT = tagHeight;
     }
 
     /**
@@ -39,20 +40,19 @@ public class DriveToNote extends Command {
      */
     @Override
     public void initialize() {
+        LimelightHelpers.setPipelineIndex(Constants.Limelight.Back.NAME, PIPELINE);
+
         // Stop if target is not visible
-        TARGET_IS_VISIBLE = LimelightHelpers.getTV(Constants.Limelight.Front.NAME);
+        TARGET_IS_VISIBLE = LimelightHelpers.getTV(Constants.Limelight.Back.NAME);
         if (!TARGET_IS_VISIBLE) {
             System.out.println("No target visible");
             cancel();
             return;
         }
 
-        List<Pose2d> points = calculatePoints();
-        driveAuto = new AutoDrive(points, false);
-        intakeCommand = new IntakeNote();
-        
-        timer.restart();
-        driveAuto.initialize();
+        List<Pose2d> points = calculateAprilTagPoints();
+        auto = new AutoDrive(points, true);
+        auto.initialize();
     }
 
     /**
@@ -60,16 +60,7 @@ public class DriveToNote extends Command {
      */
     @Override
     public void execute() {
-        driveAuto.execute();
-
-        if (timer.hasElapsed(driveAuto.timeToFinish() - 1)) {
-            if (startedIntake) {
-                intakeCommand.execute();
-                return;
-            }
-            intakeCommand.initialize();
-            startedIntake = true;
-        }
+        auto.execute();
     }
 
     /**
@@ -87,22 +78,21 @@ public class DriveToNote extends Command {
             return;
         }
 
-        driveAuto.end(interrupted);
-        intakeCommand.end(interrupted);
+        auto.end(interrupted);
     }
 
     @Override
     public boolean isFinished() {
-        return !TARGET_IS_VISIBLE || driveAuto.isFinished() || intakeCommand.isFinished();
+        return !TARGET_IS_VISIBLE || auto.isFinished();
     }
 
-    private List<Pose2d> calculatePoints() {
+    private List<Pose2d> calculateAprilTagPoints() {
         double TX = Math.toRadians(s_Swerve.getGyroYaw().getDegrees() + LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
         double TY = Math.toRadians(Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
-        double distance = - Constants.Limelight.Back.CAMERA_HEIGHT / Math.tan(TY);
+        double distance = - (HEIGHT - Constants.Limelight.Back.CAMERA_HEIGHT) / Math.tan(TY);
 
-        double dx = distance * Math.cos(TX);
+        double dx = 1 - distance * Math.cos(TX);
         double dy = distance * Math.sin(TX);
 
         return List.of(

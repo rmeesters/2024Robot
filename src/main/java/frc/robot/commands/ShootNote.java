@@ -9,24 +9,13 @@ import frc.robot.subsystems.Shooter;
 
 public class ShootNote extends Command {
 
-    private static final double TIME_LIMIT = 1;
-
     private final Intake s_Intake = RobotContainer.s_Intake;
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
     private final Timer timer = new Timer();
 
-    private Integer targetAngle = null;
-
-    private double travelTime = 0;
-
     public ShootNote() {
 
-    }
-
-    public ShootNote atAngle(int angle) {
-        targetAngle = angle;
-        return this;
     }
 
     /**
@@ -36,10 +25,6 @@ public class ShootNote extends Command {
     @Override
     public void initialize() {
         timer.restart();
-
-        if (targetAngle != null) {
-            travelTime = s_Shooter.setAngle(targetAngle);
-        }
     }
 
     /**
@@ -47,19 +32,10 @@ public class ShootNote extends Command {
      */
     @Override
     public void execute() {
-        if (targetAngle == null) {
-            s_Shooter.setSpeed(1);
-            s_Intake.setSpeed(0.2);
-            return;
-        }
+        s_Shooter.setSpeed(1);
 
-        if (timer.hasElapsed(travelTime - 1)) {
-            s_Shooter.setSpeed(1);
-
-            if (timer.hasElapsed(travelTime)) {
-                s_Intake.setSpeed(0.2);
-            }
-        }
+        if (timer.hasElapsed(0.2))
+            s_Intake.setSpeed(0.6);
     }
 
     /**
@@ -80,8 +56,6 @@ public class ShootNote extends Command {
 
     @Override
     public boolean isFinished() {
-        if (targetAngle == null)
-            return timer.hasElapsed(TIME_LIMIT);
-        return timer.hasElapsed(TIME_LIMIT + travelTime);
+        return timer.hasElapsed(1);
     }
 }

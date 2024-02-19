@@ -25,31 +25,23 @@ public class Climber extends SubsystemBase {
         fxClimberMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 
-    public void setSpeed(double speed) {
-        double rotation = fxClimberMotor.getPosition().getValue();
+    public void setSpeed(double speedPercent) {
+        double reading = fxClimberMotor.getPosition().getValue();
 
-        if (rotation > 100) {
-            speed = Math.min(speed, 0);
+        // Too high
+        if (reading > 100 && speedPercent > 0) {
+            speedPercent = 0;
+        }
+        // Too low
+        if (reading < 0 && speedPercent < 0) {
+            speedPercent = 0;
         }
 
-        if (rotation < 0) {
-            speed = Math.max(speed, 0);
-        }
-
-        fxClimberMotor.set(speed / Constants.Climber.Motor.maxSpeed);
+        fxClimberMotor.set(speedPercent);
     }
 
     @Override
     public void periodic() {
-        double rotation = fxClimberMotor.getPosition().getValue();
-
-        SmartDashboard.putNumber("Climber Motor Angle", rotation);
-
-        // if (rotation > 100 && fxClimberMotor.getVelocity().getValue() > 0) {
-
-        // }
+        SmartDashboard.putNumber("Climber Motor Angle", fxClimberMotor.getPosition().getValue());
     }
-
-    //TODO Use MotionMagic
-
 }

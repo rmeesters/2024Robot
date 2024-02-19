@@ -82,44 +82,38 @@ public class Shooter extends SubsystemBase {
      * @param speedPercent Percent of max speed (-1 - 1)
      */
     public void setShaftSpeed(double speedPercent) {
+        double reading = angleCanCoder.getPosition().getValue();
+
+        // Too high
+        if (reading < -40 && speedPercent < 0) {
+            speedPercent = 0;
+        }
+        // Too low
+        if (reading > 0 && speedPercent > 0) {
+            speedPercent = 0;
+        }
+
         fxAngleMotor.set(speedPercent);
     }
 
     /**
-     * Set the position of the shaft assuming the robot started with 
+     * Set the position of the shaft assuming the robot started with
      * the ramp all the way down.
      * 
      * @param rotation 0 - Constants.Shooter.canCoderLimit
      * @return Time to complete
      */
-    public double setShaftRotation(double rotation) {
+    public void setShaftRotation(double rotation) {
+        if (rotation > 0 || rotation < -40) {
+            System.err.println(rotation + " is not a valid shaft rotation (max: 0, min: -40)");
+            return;
+        }
+
         fxAngleMotor.setControl(m_mmReq.withPosition(rotation).withSlot(0));
-
-        //TODO Tune this
-        double travelTime = 0.2 + Math.abs( angleCanCoder.getPosition().getValue() - rotation );
-        return travelTime;
     }
 
     /**
-     * Set the position of the shaft based on angle assuming the
-     * robot started with the ramp all the way down
-     * 
-     * @param degrees
-     */
-    public double setAngle(double degrees) {
-        // 0 is down, 1 is up
-        double positionOnShaftPercentage = 1 - targetPositionInInches(degrees) / Constants.Shooter.ArmRange;
-
-        // Range of 0 to cancoder limit
-        double targetEncoderValue = Constants.Shooter.canCoderLimit * positionOnShaftPercentage;
-
-        // Rotate sahft to calculated position
-        SmartDashboard.putNumber("Target Encoder Value (Shaft)", targetEncoderValue);
-        return setShaftRotation(targetEncoderValue);
-    }
-
-    /**
-     * Set position of shaft based on inches from 
+     * Set position of shaft based on inches from
      * the canCoder zero (lowest angle of shooter).
      * 
      * @param distanceInInches Distance in inches
@@ -130,17 +124,45 @@ public class Shooter extends SubsystemBase {
 
         if (positionOnShaftPercentage > 1 || positionOnShaftPercentage < 0) {
             System.err.println("Invalid shaft position of " + distanceInInches + " inches");
+            return;
         }
 
         // Range of 0 to cancoder limit
         double targetEncoderValue = Constants.Shooter.canCoderLimit * positionOnShaftPercentage;
 
         // Rotate sahft to calculated position
-        SmartDashboard.putNumber("Target Encoder Value (Shaft)", targetEncoderValue);
         setShaftRotation(targetEncoderValue);
     }
 
-    private double targetPositionInInches(double degrees) {
+    /**
+     * Set the position of the shaft based on angle assuming the
+     * robot started with the ramp all the way down
+     * 
+     * @param degrees
+     */
+    public void setAngle(double degrees) {
+        if (degrees < 45 || degrees > 92) {
+            System.err.println(degrees + " is not a valid angle (max: 92, min: 45)");
+            return;
+        }
+
+        // 0 is down, 1 is up
+        double positionOnShaftPercentage = 1 - calculatePositionInInches(degrees) / Constants.Shooter.ArmRange;
+
+        // Range of 0 to cancoder limit
+        double targetEncoderValue = Constants.Shooter.canCoderLimit * positionOnShaftPercentage;
+
+        // Rotate sahft to calculated position
+        setShaftRotation(targetEncoderValue);
+    }
+
+    /**
+     * Get the position the shaft must be in to have a given angle.
+     * 
+     * @param degrees Angle from the horizontal
+     * @return Inches from the highest angle
+     */
+    private double calculatePositionInInches(double degrees) {
         // Do NOT change these constants
         final double A = -0.0190931;
         final double B = 0.13371;
@@ -158,10 +180,8 @@ public class Shooter extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
+        //SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
         SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
     }
-
-    
 
 }

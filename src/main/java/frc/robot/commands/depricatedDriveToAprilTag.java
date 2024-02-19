@@ -22,7 +22,7 @@ import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class oldDriveToAprilTag extends Command {
+public class depricatedDriveToAprilTag extends Command {
 
     private final Swerve s_Swerve = RobotContainer.s_Swerve;
 
@@ -42,7 +42,7 @@ public class oldDriveToAprilTag extends Command {
     private boolean APRILTAG_IS_VISIBLE;
 
     @Deprecated
-    public oldDriveToAprilTag() {
+    public depricatedDriveToAprilTag() {
 
     }
 

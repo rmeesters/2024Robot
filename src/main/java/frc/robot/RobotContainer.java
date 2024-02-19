@@ -44,12 +44,13 @@ public class RobotContainer {
 
     /* Intake */
     private final JoystickButton b_spinIntake = new JoystickButton(driver, PS4Controller.Button.kL2.value);
+    private final JoystickButton b_backupIntake = new JoystickButton(driver, PS4Controller.Button.kL1.value);
 
     /* Shooter */
     private final JoystickButton b_spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
-    private final JoystickButton b_backupIntake = new JoystickButton(driver, PS4Controller.Button.kL1.value);
-    private final JoystickButton b_armShooter = new JoystickButton(driver, PS4Controller.Button.kR1.value);
+    private final JoystickButton b_focusShooter = new JoystickButton(driver, PS4Controller.Button.kR1.value);
 
+    /* Angle */
     private final JoystickButton b_angleDown = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
     private final JoystickButton b_angleUp = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
     private final JoystickButton b_setShootPosition = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
@@ -58,9 +59,6 @@ public class RobotContainer {
     /* Climber */
     private final POVButton b_climbUp = new POVButton(pov, 0);
     private final POVButton b_climbDown = new POVButton(pov, 180);
-
-    private final POVButton b_lockClimber = new POVButton(pov, 90);
-    private final POVButton b_releaseClimber = new POVButton(pov, 270);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -114,15 +112,16 @@ public class RobotContainer {
         /* Driver Buttons */
         b_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        b_spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1)));
-        b_spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0)));
-
         /* Intake */
         b_spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(0.6)));
         b_spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
         b_backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
         b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
+
+        /* Shooter */
+        b_spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1)));
+        b_spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0)));
 
         /* Shooter Angle */
         b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
@@ -137,14 +136,11 @@ public class RobotContainer {
         b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
 
         /* Climber */
-        b_climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(10)));
+        b_climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(1)));
         b_climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
 
-        b_climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-10)));
+        b_climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-1)));
         b_climbDown.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
-
-        b_lockClimber.onTrue(new InstantCommand(() -> h_pneumatics.lockClimber()));
-        b_releaseClimber.onTrue(new InstantCommand(() -> h_pneumatics.releaseClimber()));
     }
 
     private void configureAutoChooser() {

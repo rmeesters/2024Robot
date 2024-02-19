@@ -12,8 +12,6 @@ public class IntakeNote extends Command {
 
     private final Timer timer = new Timer();
 
-    private boolean active = false;
-
     /**
      * Intake note starts the intake motors, including the conveyer,
      * and runs them until a note is loaded or the command is run a second time.
@@ -28,12 +26,7 @@ public class IntakeNote extends Command {
      */
     @Override
     public void initialize() {
-        timer.restart();
-
-        // Toggle whether command will run or stop
-        active = !active;
-        if (!active)
-            cancel();
+        if (isFinished()) cancel();
     }
 
     /**
@@ -41,7 +34,7 @@ public class IntakeNote extends Command {
      */
     @Override
     public void execute() {
-        s_Intake.setSpeed(0.2);
+        s_Intake.setSpeed(0.6);
     }
 
     /**
@@ -55,10 +48,7 @@ public class IntakeNote extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        active = false;
-
         s_Intake.setSpeed(0);
-        timer.stop();
     }
 
     @Override
