@@ -89,7 +89,7 @@ public class Shooter extends SubsystemBase {
             speedPercent = 0;
         }
         // Too low
-        if (reading > 0 && speedPercent > 0) {
+        else if (reading > 0 && speedPercent > 0) {
             speedPercent = 0;
         }
 

@@ -20,5 +20,9 @@ public class PneumaticsHandler {
     public void releaseClimber() {
         climberBlockPh.set(false);
     }
+
+    public void lockClimber(boolean value) {
+        climberBlockPh.set(value);
+    }
     
 }

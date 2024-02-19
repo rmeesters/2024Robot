@@ -29,6 +29,7 @@ import frc.robot.subsystems.Swerve;
  * mappings) should be declared here.
  */
 public class RobotContainer {
+
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final GenericHID pov = new GenericHID(0);
@@ -60,13 +61,15 @@ public class RobotContainer {
     private final POVButton b_climbUp = new POVButton(pov, 0);
     private final POVButton b_climbDown = new POVButton(pov, 180);
 
+    /* Handlers */
+    public static final PneumaticsHandler h_pneumatics = new PneumaticsHandler();
+
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public static final Shooter s_Shooter = new Shooter();
     public static final Intake s_Intake = new Intake();
     public static final Climber s_Climber = new Climber();
 
-    public static final PneumaticsHandler h_pneumatics = new PneumaticsHandler();
 
     /* Sendable Chooser and Autonomus Commands */
     private static SendableChooser<Command> autoChooser;

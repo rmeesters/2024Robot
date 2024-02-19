@@ -7,8 +7,11 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Climber extends SubsystemBase {
+
+    private PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
     private TalonFX fxClimberMotor;
     private TalonFXConfiguration fxConfig;
@@ -33,10 +36,11 @@ public class Climber extends SubsystemBase {
             speedPercent = 0;
         }
         // Too low
-        if (reading < 0 && speedPercent < 0) {
+        else if (reading < 0 && speedPercent < 0) {
             speedPercent = 0;
         }
 
+        h_pneumatics.lockClimber(speedPercent == 0);
         fxClimberMotor.set(speedPercent);
     }
 
