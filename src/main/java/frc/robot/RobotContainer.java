@@ -1,9 +1,5 @@
 package frc.robot;
 
-import java.util.List;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -12,20 +8,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
-import frc.robot.autos.AutoDrive;
-import frc.robot.commands.DriveToNote;
-import frc.robot.commands.DriveToTag;
-import frc.robot.commands.IntakeNote;
-import frc.robot.commands.ShootNote;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.PneumaticsHandler;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
@@ -50,28 +39,28 @@ public class RobotContainer {
     private final int rotationAxis = PS4Controller.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton b_zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
+    private final JoystickButton b_robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     /* Intake */
-    private final JoystickButton spinIntake = new JoystickButton(driver, PS4Controller.Button.kL2.value);
+    private final JoystickButton b_spinIntake = new JoystickButton(driver, PS4Controller.Button.kL2.value);
 
     /* Shooter */
-    private final JoystickButton spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
-    private final JoystickButton backupIntake = new JoystickButton(driver, PS4Controller.Button.kL1.value);
-    private final JoystickButton armShooter = new JoystickButton(driver, PS4Controller.Button.kR1.value);
+    private final JoystickButton b_spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
+    private final JoystickButton b_backupIntake = new JoystickButton(driver, PS4Controller.Button.kL1.value);
+    private final JoystickButton b_armShooter = new JoystickButton(driver, PS4Controller.Button.kR1.value);
 
-    private final JoystickButton angleDown = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
-    private final JoystickButton angleUp = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
-    private final JoystickButton setShootPosition = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    private final JoystickButton setPickupPosition = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    private final JoystickButton b_angleDown = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    private final JoystickButton b_angleUp = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
+    private final JoystickButton b_setShootPosition = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton b_setPickupPosition = new JoystickButton(driver, PS4Controller.Button.kCross.value);
 
     /* Climber */
-    private final POVButton climbUp = new POVButton(pov, 0);
-    private final POVButton climbDown = new POVButton(pov, 180);
+    private final POVButton b_climbUp = new POVButton(pov, 0);
+    private final POVButton b_climbDown = new POVButton(pov, 180);
 
-    private final POVButton lockClimber = new POVButton(pov, 90);
-    private final POVButton releaseClimber = new POVButton(pov, 270);
+    private final POVButton b_lockClimber = new POVButton(pov, 90);
+    private final POVButton b_releaseClimber = new POVButton(pov, 270);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -79,25 +68,10 @@ public class RobotContainer {
     public static final Intake s_Intake = new Intake();
     public static final Climber s_Climber = new Climber();
 
-    public static final Pneumatics s_pneumatics = new Pneumatics();
+    public static final PneumaticsHandler h_pneumatics = new PneumaticsHandler();
 
     /* Sendable Chooser and Autonomus Commands */
     private static SendableChooser<Command> autoChooser;
-
-    /**
-     * Example Auto
-     * 1. move forward 1 meter
-     * 2. wait 1 second
-     * 3. move back 1 meter
-     */
-    private final Command exampleAuto = new SequentialCommandGroup(
-            new AutoDrive(List.of(
-                    new Pose2d(0, 0, new Rotation2d(0)),
-                    new Pose2d(1, 0, new Rotation2d(0))), false),
-            new WaitCommand(3),
-            new AutoDrive(List.of(
-                    new Pose2d(1, 0, new Rotation2d(0)),
-                    new Pose2d(0, 0, new Rotation2d(0))), true));
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -112,7 +86,7 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
                         () -> -driver.getRawAxis(rotationAxis),
-                        () -> robotCentric.getAsBoolean()));
+                        () -> b_robotCentric.getAsBoolean()));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -138,47 +112,44 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        b_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
-        angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
+        b_spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1)));
+        b_spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0)));
 
-        angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
-        angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
+        /* Intake */
+        b_spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(0.6)));
+        b_spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
-        spinShooter.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1)));
-        spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0)));
+        b_backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
+        b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
-        spinIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(0.6)));
-        spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
+        /* Shooter Angle */
+        b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
+        b_angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
-        backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
+        b_angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
+        b_angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        //armShooter.onTrue(new InstantCommand(() -> s_Shooter.arm()));
+        //b_armShooter.onTrue(new InstantCommand(() -> s_Shooter.focus()));
 
-        setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
-        setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
+        b_setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
+        b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
 
-        climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(10)));
-        climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
+        /* Climber */
+        b_climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(10)));
+        b_climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
 
-        climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-10)));
-        climbDown.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
+        b_climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-10)));
+        b_climbDown.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
 
-        lockClimber.onTrue(new InstantCommand(() -> s_pneumatics.lockClimber()));
-        releaseClimber.onTrue(new InstantCommand(() -> s_pneumatics.releaseClimber()));
+        b_lockClimber.onTrue(new InstantCommand(() -> h_pneumatics.lockClimber()));
+        b_releaseClimber.onTrue(new InstantCommand(() -> h_pneumatics.releaseClimber()));
     }
 
     private void configureAutoChooser() {
         // Autonomous Sendable Chooser
         autoChooser = new SendableChooser<Command>();
-        autoChooser.setDefaultOption("Move Auto", exampleAuto);
-        autoChooser.addOption("Load Note", new IntakeNote());
-        autoChooser.addOption("Drive to Note", new DriveToNote());
-        autoChooser.addOption("Drive to Tag", new DriveToTag(
-                Constants.Limelight.Pipelines.Speaker.Red.CENTER,
-                Constants.Limelight.Pipelines.Speaker.APRILTAG_HEIGHT));
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
