@@ -80,6 +80,8 @@ public class Shooter extends SubsystemBase {
         fxRightMotor.set(speedPercent);
     }
 
+    
+
     /**
      * Set the speed of the talonfx shaft motor.
      * 
@@ -89,14 +91,15 @@ public class Shooter extends SubsystemBase {
         double reading = angleCanCoder.getPosition().getValue();
 
         // Too high
-        if (reading < -40 && speedPercent < 0) {
+        if (reading < Constants.Shooter.canCoderMin && speedPercent < 0) {
             speedPercent = 0;
         }
         // Too low
-        else if (reading > 0 && speedPercent > 0) {
+        else if (reading > Constants.Shooter.canCoderMax && speedPercent > 0) {
             speedPercent = 0;
         }
 
+        System.out.println(speedPercent);
         fxAngleMotor.set(speedPercent);
     }
 
@@ -108,8 +111,8 @@ public class Shooter extends SubsystemBase {
      * @return Time to complete
      */
     public void setShaftRotation(double rotation) {
-        if (rotation > 0 || rotation < -40) {
-            System.err.println(rotation + " is not a valid shaft rotation (max: 0, min: -40)");
+        if (rotation > Constants.Shooter.canCoderMax || rotation < Constants.Shooter.canCoderMin) {
+            System.err.println(rotation + " is not a valid shaft rotation (max: 10, min: -32)");
             return;
         }
 
@@ -132,7 +135,7 @@ public class Shooter extends SubsystemBase {
         }
 
         // Range of 0 to cancoder limit
-        double targetEncoderValue = Constants.Shooter.canCoderLimit * positionOnShaftPercentage;
+        double targetEncoderValue = (Constants.Shooter.canCoderMin - Constants.Shooter.canCoderMax) * positionOnShaftPercentage + Constants.Shooter.canCoderMax;
 
         // Rotate sahft to calculated position
         setShaftRotation(targetEncoderValue);
@@ -154,11 +157,12 @@ public class Shooter extends SubsystemBase {
         double positionOnShaftPercentage = 1 - calculatePositionInInches(degrees) / Constants.Shooter.ArmRange;
 
         // Range of 0 to cancoder limit
-        double targetEncoderValue = Constants.Shooter.canCoderLimit * positionOnShaftPercentage;
+        double targetEncoderValue = (Constants.Shooter.canCoderMin - Constants.Shooter.canCoderMax) * positionOnShaftPercentage + Constants.Shooter.canCoderMax;
 
         // Rotate sahft to calculated position
         SmartDashboard.putNumber("Target Angle", degrees);
-        setShaftRotation(targetEncoderValue);
+        SmartDashboard.putNumber("Target Rotation", targetEncoderValue);
+        //setShaftRotation(targetEncoderValue);
     }
 
     /**
@@ -188,11 +192,15 @@ public class Shooter extends SubsystemBase {
         double TY = Math.toRadians(
                 Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
-        double dx = -(Constants.Limelight.Pipelines.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.CAMERA_HEIGHT);
-        double dy = dx / Math.tan(TY) - 2;
+        double dy = -(Constants.Limelight.Pipelines.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.CAMERA_HEIGHT);
+        double dx = dy / Math.tan(TY);
 
         double angle = Math.atan((dy + 0.6) / (dx + 0.5));
         setAngle(angle);
+    }
+
+    public void setZero() {
+        angleCanCoder.setPosition(0);
     }
 
     /**

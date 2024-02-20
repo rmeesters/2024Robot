@@ -30,7 +30,7 @@ public class IntakeNote extends Command {
             cancel();
             return;
         }
-        s_Shooter.prepareIntake();
+        //s_Shooter.prepareIntake();
     }
 
     /**
@@ -38,7 +38,7 @@ public class IntakeNote extends Command {
      */
     @Override
     public void execute() {
-        s_Intake.setSpeed(0.6);
+        s_Intake.setSpeed(1);
     }
 
     /**

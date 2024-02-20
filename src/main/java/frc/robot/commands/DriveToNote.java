@@ -95,7 +95,7 @@ public class DriveToNote extends Command {
     }
 
     private List<Pose2d> calculatePoints() {
-        double TX = Math.toRadians(s_Swerve.getGyroYaw().getDegrees() + LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
+        double TX = Math.toRadians(LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
         double TY = Math.toRadians(Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
         double distance = Constants.Limelight.Back.CAMERA_HEIGHT / Math.tan(TY);

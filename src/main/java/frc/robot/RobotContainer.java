@@ -1,5 +1,9 @@
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -8,12 +12,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.autos.AutoDrive;
+import frc.robot.commands.RotateTo;
 import frc.robot.autos.DriverAutoMain;
 import frc.robot.commands.DriveToNote;
 import frc.robot.commands.DriveToSpeaker;
+import frc.robot.commands.FocusSpeaker;
 import frc.robot.commands.IntakeNote;
+import frc.robot.commands.MoveCommand;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Climber;
@@ -35,12 +45,12 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
 
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    public static final Joystick driver = new Joystick(0);
     private final GenericHID pov = new GenericHID(0);
 
     /* Drive Controls */
-    private final int translationAxis = PS4Controller.Axis.kLeftY.value;
-    private final int strafeAxis = PS4Controller.Axis.kLeftX.value;
+    public static final int translationAxis = PS4Controller.Axis.kLeftY.value;
+    public static final int strafeAxis = PS4Controller.Axis.kLeftX.value;
     private final int rotationAxis = PS4Controller.Axis.kRightX.value;
 
     /* Driver Buttons */
@@ -127,10 +137,7 @@ public class RobotContainer {
         b_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         /* Intake */
-        b_spinIntake.onTrue(new InstantCommand(s_Intake.inRange(2) ?
-                () -> s_Intake.setSpeed(0)
-                : () -> s_Intake.setSpeed(0.6)));
-        b_spinIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
+        b_spinIntake.whileTrue(new IntakeNote());
 
         b_backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
         b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
@@ -138,9 +145,12 @@ public class RobotContainer {
         /* Shooter */
         b_spinShooter.onTrue(new InstantCommand(() -> {
             s_Shooter.setSpeed(1);
-            s_Intake.setSpeed(0.3);
+            s_Intake.setSpeed(1);
         }));
-        b_spinShooter.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0)));
+        b_spinShooter.onFalse(new InstantCommand(() -> {
+            s_Shooter.setSpeed(0);
+            s_Intake.setSpeed(0);
+        }));
 
         /* Shooter Angle */
         b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
@@ -149,7 +159,7 @@ public class RobotContainer {
         b_angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
         b_angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        //b_armShooter.onTrue(new InstantCommand(() -> s_Shooter.focus()));
+        b_focusShooter.whileTrue(new FocusSpeaker());
 
         b_setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
         b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
@@ -166,14 +176,31 @@ public class RobotContainer {
         // Autonomous Sendable Chooser
         autoChooser = new SendableChooser<Command>();
         autoChooser.setDefaultOption("Main Driver", new DriverAutoMain());
+        autoChooser.addOption("Drive Back", new SequentialCommandGroup(
+            new MoveCommand(List.of(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                new Pose2d(2, 0, new Rotation2d(180))), false),
+            new WaitCommand(2),
+            new MoveCommand(List.of(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                new Pose2d(2, 0, new Rotation2d(180))), true),
+            new WaitCommand(2)));
+        autoChooser.addOption("Rotate 90", new SequentialCommandGroup(
+            new MoveCommand(List.of(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                new Pose2d(2, 0, Rotation2d.fromDegrees(90))), false),
+            new WaitCommand(2)));
         autoChooser.addOption("Test Drive to Note", new DriveToNote());
         autoChooser.addOption("Test Drive to Speaker", new DriveToSpeaker());
         autoChooser.addOption("Test Shoot Auto", new ShootNote());
         autoChooser.addOption("Test Intake Auto", new IntakeNote());
         autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
+        autoChooser.addOption("Set shaft to 4in", new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
         autoChooser.addOption("Set angle to 80", new InstantCommand(() -> s_Shooter.setAngle(80)));
         autoChooser.addOption("Target Speaker", new InstantCommand(() -> s_Shooter.angleToSpeaker()));
+        // autoChooser.addOption("Rotate 90 on spot", new RotateTo(90));
+        // autoChooser.addOption("Rotate 0 on spot", new RotateTo(0));
+        // autoChooser.addOption("Rotate 180 on spot", new RotateTo(180));
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }

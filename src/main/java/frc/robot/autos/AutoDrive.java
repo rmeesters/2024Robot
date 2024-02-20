@@ -67,6 +67,19 @@ public class AutoDrive extends SequentialCommandGroup {
                 s_Swerve);
     }
 
+    // private SwerveControllerCommand generateSwerveControllerCommandWithRotation(double rotation) {
+    //     return new SwerveControllerCommand(
+    //             trajectory,
+    //             s_Swerve::getPose,
+    //             Constants.Swerve.swerveKinematics,
+    //             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+    //             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+    //             thetaController,
+    //             new Rotation2d()
+    //             s_Swerve::setModuleStates,
+    //             s_Swerve);
+    // }
+
     private void postTrajectoryToDashBoard() {
         SmartDashboard.putNumber("auto initial pose x", trajectory.getInitialPose().getX());
         SmartDashboard.putNumber("auto initial pose y", trajectory.getInitialPose().getY());

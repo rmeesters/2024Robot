@@ -69,7 +69,7 @@ public final class Constants {
         public static final double angleKD = chosenModule.angleKD;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 2.0; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 1.1; //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
@@ -158,16 +158,17 @@ public final class Constants {
             public static final int canCoderID = 42;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
         
-            public static final double shaftAcceleration = 2000;
-            public static final double shaftMaxSpeed = 2000;
+            public static final double shaftAcceleration = 9999;
+            public static final double shaftMaxSpeed = 9999;
 
             //TODO Tune these
-            public static final double KP = 1;
+            public static final double KP = 30;
             public static final double KI = 0;
             public static final double KD = 0;
         }
 
-        public static final double canCoderLimit = -40;
+        public static final double canCoderMin = -20;
+        public static final double canCoderMax = 11;
 
         public static final double IntakePosition = 3.0;
 
@@ -201,9 +202,9 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+        public static final double kPXController = 4;
+        public static final double kPYController = 4;
+        public static final double kPThetaController = 2;
     
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
@@ -214,33 +215,30 @@ public final class Constants {
     public static final class Limelight {
 
         public static final class Front {
-            public static final String NAME = "limelight-gnomes-front";
+            public static final String NAME = "limelight-gnomesf";
 
             // Vertical angle of camera in degrees (positive means pointing up)
 
-            // TODO Set height of camera
-            public static double CAMERA_ANGLE = 0;
-
-            // TODO Set height of camera
-            public static double CAMERA_HEIGHT = 0.15;
+            public static double CAMERA_ANGLE = -8;
+            public static double CAMERA_HEIGHT = 0.25;
         }
 
         public static final class Back {
-            public static final String NAME = "limelight-gnomes-back";
+            public static final String NAME = "limelight-gnomesb";
 
             // Vertical angle of camera in degrees (positive means pointing up)
 
-            // TODO Set height of camera
-            public static double CAMERA_ANGLE = 4;
-
-            // TODO Set height of camera
-            public static double CAMERA_HEIGHT = 0.15;
+            public static double CAMERA_ANGLE = 6;
+            public static double CAMERA_HEIGHT = 0.235;
         }
 
         public static final class Pipelines {
+
+            public static final int SPEAKER = 0;
+            
             public static final class Amp {
                 // Meters high
-                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 1.0/8.0 + 10.5/2.0);
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48 + 1.0/8 + 3);
 
                 public static final class Red {
                     // Pipelines
@@ -255,7 +253,7 @@ public final class Constants {
 
             public static final class Speaker {
                 // Meters high
-                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 3.0 + 7.0/8.0 + 10.5/2.0);
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(53 + 7.0/8 + 3);
 
                 public static final class Red {
                     // Pipelines
@@ -272,7 +270,7 @@ public final class Constants {
             
             public static final class Source {
                 // Meters high
-                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48.0 + 1.0/8.0 + 10.5/2.0);
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(48 + 1.0/8 + 3);
 
                 public static final class Red {
                     // Pipelines
@@ -289,7 +287,7 @@ public final class Constants {
             
             public static final class Stage {
                 // Meters high
-                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(36.0 + 11.0 + 1.0/2.0 + 10.5/2.0);
+                public static final double APRILTAG_HEIGHT = Units.inchesToMeters(47 + 1.0/2 + 3);
 
                 public static final class Red {
                     // Pipelines

@@ -1,21 +1,17 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.autos.AutoDrive;
 
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+public class MoveCommand extends Command {
 
-public class ShootNote extends Command {
+    AutoDrive autoDrive;
 
-    private final Intake s_Intake = RobotContainer.s_Intake;
-    private final Shooter s_Shooter = RobotContainer.s_Shooter;
-
-    private final Timer timer = new Timer();
-
-    public ShootNote() {
-
+    public MoveCommand(List<Pose2d> points, boolean reverse) {
+        autoDrive = new AutoDrive(points, reverse);
     }
 
     /**
@@ -24,7 +20,7 @@ public class ShootNote extends Command {
      */
     @Override
     public void initialize() {
-        timer.restart();
+        autoDrive.initialize();
     }
 
     /**
@@ -32,10 +28,7 @@ public class ShootNote extends Command {
      */
     @Override
     public void execute() {
-        s_Shooter.setSpeed(1);
-
-        if (timer.hasElapsed(0))
-            s_Intake.setSpeed(0.6);
+        autoDrive.execute();
     }
 
     /**
@@ -49,13 +42,12 @@ public class ShootNote extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        s_Intake.setSpeed(0);
-        s_Shooter.setSpeed(0);
-        timer.stop();
+        autoDrive.end(interrupted);
     }
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(1);
+        return autoDrive.isFinished();
     }
+    
 }

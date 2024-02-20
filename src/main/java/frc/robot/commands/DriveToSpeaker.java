@@ -37,8 +37,7 @@ public class DriveToSpeaker extends Command {
      */
     @Override
     public void initialize() {
-        int pipeline = RobotContainer.team == RobotContainer.RED ? Constants.Limelight.Pipelines.Speaker.Red.CENTER
-                : Constants.Limelight.Pipelines.Speaker.Blue.CENTER;
+        int pipeline = Constants.Limelight.Pipelines.SPEAKER;
         LimelightHelpers.setPipelineIndex(Constants.Limelight.Back.NAME, pipeline);
 
         // Stop if target is not visible
@@ -50,8 +49,9 @@ public class DriveToSpeaker extends Command {
         }
 
         List<Pose2d> points = calculateAprilTagPoints();
-        auto = new AutoDrive(points, true);
-        auto.initialize();
+        System.out.println(points.get(1));
+        // auto = new AutoDrive(points, true);
+        // auto.initialize();
     }
 
     /**
@@ -59,7 +59,7 @@ public class DriveToSpeaker extends Command {
      */
     @Override
     public void execute() {
-        auto.execute();
+        //auto.execute();
     }
 
     /**
@@ -77,17 +77,17 @@ public class DriveToSpeaker extends Command {
             return;
         }
 
-        auto.end(interrupted);
+        //auto.end(interrupted);
     }
 
     @Override
     public boolean isFinished() {
-        return !TAG_IS_VISIBLE || auto.isFinished();
+        return true;//!TAG_IS_VISIBLE || auto.isFinished();
     }
 
     private List<Pose2d> calculateAprilTagPoints() {
         double TX = Math.toRadians(
-                s_Swerve.getGyroYaw().getDegrees() + LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
+                LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
         double TY = Math.toRadians(
                 Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
@@ -98,7 +98,7 @@ public class DriveToSpeaker extends Command {
         double dy = distance * Math.sin(TX);
 
         return List.of(
-                new Pose2d(0, 0, s_Swerve.getGyroYaw()),
-                new Pose2d(dx, dy, new Rotation2d(0)));
+                new Pose2d(0, 0, new Rotation2d(0)),
+                new Pose2d(dx, dy, new Rotation2d(TX)));
     }
 }
