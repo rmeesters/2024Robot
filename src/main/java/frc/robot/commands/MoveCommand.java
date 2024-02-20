@@ -2,16 +2,46 @@ package frc.robot.commands;
 
 import java.util.List;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.autos.AutoDrive;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Swerve;
 
 public class MoveCommand extends Command {
 
-    AutoDrive autoDrive;
+    private final Swerve s_Swerve = RobotContainer.s_Swerve;
+    private final Trajectory trajectory;
+    private final SwerveControllerCommand swerveControllerCommand;
 
-    public MoveCommand(List<Pose2d> points, boolean reverse) {
-        autoDrive = new AutoDrive(points, reverse);
+    public MoveCommand(List<Pose2d> points, boolean reversed) {
+        TrajectoryConfig config = new TrajectoryConfig(
+                Constants.Autos.kMaxSpeedMetersPerSecond,
+                Constants.Autos.kMaxAccelerationMetersPerSecondSquared)
+                .setKinematics(Constants.Swerve.swerveKinematics).setReversed(reversed);
+
+        ProfiledPIDController thetaController = new ProfiledPIDController(
+                Constants.Autos.kPThetaController, 0, 0, Constants.Autos.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        trajectory = TrajectoryGenerator.generateTrajectory(points, config);
+
+        swerveControllerCommand = new SwerveControllerCommand(
+                trajectory,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.Autos.kPXController, 0, 0),
+                new PIDController(Constants.Autos.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
     }
 
     /**
@@ -20,7 +50,8 @@ public class MoveCommand extends Command {
      */
     @Override
     public void initialize() {
-        autoDrive.initialize();
+        s_Swerve.setPose(trajectory.getInitialPose());
+        swerveControllerCommand.initialize();
     }
 
     /**
@@ -28,7 +59,7 @@ public class MoveCommand extends Command {
      */
     @Override
     public void execute() {
-        autoDrive.execute();
+        swerveControllerCommand.execute();
     }
 
     /**
@@ -42,12 +73,12 @@ public class MoveCommand extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        autoDrive.end(interrupted);
+        swerveControllerCommand.end(interrupted);
     }
 
     @Override
     public boolean isFinished() {
-        return autoDrive.isFinished();
+        return swerveControllerCommand.isFinished();
     }
-    
+
 }

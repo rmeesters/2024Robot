@@ -1,14 +1,16 @@
 package frc.robot.commands;
 
 import java.util.List;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
-import frc.robot.autos.AutoDrive;
+import frc.robot.autos.depricatedAutoDrive;
 import frc.robot.subsystems.Swerve;
 
 public class DriveToNote extends Command {
@@ -17,10 +19,7 @@ public class DriveToNote extends Command {
 
     private boolean NOTE_IS_VISIBLE;
 
-    private AutoDrive driveAuto;
-    // private IntakeNote intakeCommand;
-
-    // private boolean startedIntake = false;
+    private depricatedAutoDrive driveAuto;
 
     private Timer timer = new Timer();
 
@@ -46,9 +45,8 @@ public class DriveToNote extends Command {
         }
 
         List<Pose2d> points = calculatePoints();
-        driveAuto = new AutoDrive(points, false);
-        //intakeCommand = new IntakeNote();
-        
+        driveAuto = new depricatedAutoDrive(points, false);
+
         timer.restart();
         driveAuto.initialize();
     }
@@ -59,15 +57,6 @@ public class DriveToNote extends Command {
     @Override
     public void execute() {
         driveAuto.execute();
-
-        // if (timer.hasElapsed(driveAuto.timeToFinish() - 1)) {
-        //     if (startedIntake) {
-        //         intakeCommand.execute();
-        //         return;
-        //     }
-        //     intakeCommand.initialize();
-        //     startedIntake = true;
-        // }
     }
 
     /**
@@ -81,12 +70,10 @@ public class DriveToNote extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        if (!NOTE_IS_VISIBLE) {
+        if (!NOTE_IS_VISIBLE)
             return;
-        }
 
         driveAuto.end(interrupted);
-        //intakeCommand.end(interrupted);
     }
 
     @Override
@@ -95,10 +82,12 @@ public class DriveToNote extends Command {
     }
 
     private List<Pose2d> calculatePoints() {
-        double TX = Math.toRadians(LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
-        double TY = Math.toRadians(Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
+        double TX = Math.toRadians(
+                LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
+        double TY = Math.toRadians(
+                Constants.Limelight.Back.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
-        double distance = Constants.Limelight.Back.CAMERA_HEIGHT / Math.tan(TY);
+        double distance = (Constants.Map.NOTE_HEIGHT - Constants.Limelight.Back.HEIGHT) / Math.tan(TY);
 
         double dx = distance * Math.cos(TX);
         double dy = distance * Math.sin(TX);

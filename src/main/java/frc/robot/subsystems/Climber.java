@@ -21,7 +21,7 @@ public class Climber extends SubsystemBase {
      * conveyer belt and the intake wheels.
      */
     public Climber() {
-        fxClimberMotor = new TalonFX(Constants.Climber.Motor.driveMotorID);
+        fxClimberMotor = new TalonFX(Constants.Climber.BeltMotor.driveMotorID);
         fxConfig = new TalonFXConfiguration();
         fxClimberMotor.getConfigurator().apply(fxConfig);
 

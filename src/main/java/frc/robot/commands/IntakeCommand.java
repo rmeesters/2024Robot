@@ -1,20 +1,20 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+//import frc.robot.subsystems.Shooter;
 
-public class ShootNote extends Command {
+public class IntakeCommand extends Command {
 
     private final Intake s_Intake = RobotContainer.s_Intake;
-    private final Shooter s_Shooter = RobotContainer.s_Shooter;
+    //private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
-    private final Timer timer = new Timer();
-
-    public ShootNote() {
+    /**
+     * Intake note starts the intake motors, including the conveyer,
+     * until a note is detected in the shooter.
+     */
+    public IntakeCommand() {
 
     }
 
@@ -24,7 +24,11 @@ public class ShootNote extends Command {
      */
     @Override
     public void initialize() {
-        timer.restart();
+        if (isFinished()) {
+            cancel();
+            return;
+        }
+        // s_Shooter.prepareIntake();
     }
 
     /**
@@ -32,10 +36,7 @@ public class ShootNote extends Command {
      */
     @Override
     public void execute() {
-        s_Shooter.setSpeed(1);
-
-        if (timer.hasElapsed(0))
-            s_Intake.setSpeed(0.6);
+        s_Intake.setSpeed(0.5);
     }
 
     /**
@@ -50,12 +51,11 @@ public class ShootNote extends Command {
     @Override
     public void end(boolean interrupted) {
         s_Intake.setSpeed(0);
-        s_Shooter.setSpeed(0);
-        timer.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(1);
+        // Return true if note is visible
+        return s_Intake.inRange(2);
     }
 }

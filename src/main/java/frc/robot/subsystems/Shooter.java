@@ -11,13 +11,11 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
-import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
-
-    private final Swerve s_Swerve = RobotContainer.s_Swerve;
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
 
@@ -36,8 +34,8 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter() {
         // Define motors
-        fxLeftMotor = new TalonFX(Constants.Shooter.ShooterMotor.leftMotorID);
-        fxRightMotor = new TalonFX(Constants.Shooter.ShooterMotor.rightMotorID);
+        fxLeftMotor = new TalonFX(Constants.Shooter.WheelMotor.leftMotorID);
+        fxRightMotor = new TalonFX(Constants.Shooter.WheelMotor.rightMotorID);
         fxAngleMotor = new TalonFX(Constants.Shooter.AngleMotor.driveMotorID);
 
         // Configure motors
@@ -79,8 +77,6 @@ public class Shooter extends SubsystemBase {
         fxLeftMotor.set(-speedPercent);
         fxRightMotor.set(speedPercent);
     }
-
-    
 
     /**
      * Set the speed of the talonfx shaft motor.
@@ -127,7 +123,7 @@ public class Shooter extends SubsystemBase {
      */
     public void setShaftPosition(double distanceInInches) {
         // 0 is down, 1 is up
-        double positionOnShaftPercentage = distanceInInches / Constants.Shooter.ArmRange;
+        double positionOnShaftPercentage = distanceInInches / Constants.Shooter.shaftLength;
 
         if (positionOnShaftPercentage > 1 || positionOnShaftPercentage < 0) {
             System.err.println("Invalid shaft position of " + distanceInInches + " inches");
@@ -135,7 +131,8 @@ public class Shooter extends SubsystemBase {
         }
 
         // Range of 0 to cancoder limit
-        double targetEncoderValue = (Constants.Shooter.canCoderMin - Constants.Shooter.canCoderMax) * positionOnShaftPercentage + Constants.Shooter.canCoderMax;
+        double targetEncoderValue = (Constants.Shooter.canCoderMin - Constants.Shooter.canCoderMax)
+                * positionOnShaftPercentage + Constants.Shooter.canCoderMax;
 
         // Rotate sahft to calculated position
         setShaftRotation(targetEncoderValue);
@@ -154,15 +151,16 @@ public class Shooter extends SubsystemBase {
         }
 
         // 0 is down, 1 is up
-        double positionOnShaftPercentage = 1 - calculatePositionInInches(degrees) / Constants.Shooter.ArmRange;
+        double positionOnShaftPercentage = 1 - calculatePositionInInches(degrees) / Constants.Shooter.shaftLength;
 
         // Range of 0 to cancoder limit
-        double targetEncoderValue = (Constants.Shooter.canCoderMin - Constants.Shooter.canCoderMax) * positionOnShaftPercentage + Constants.Shooter.canCoderMax;
+        double targetEncoderValue = (Constants.Shooter.canCoderMin - Constants.Shooter.canCoderMax)
+                * positionOnShaftPercentage + Constants.Shooter.canCoderMax;
 
         // Rotate sahft to calculated position
         SmartDashboard.putNumber("Target Angle", degrees);
         SmartDashboard.putNumber("Target Rotation", targetEncoderValue);
-        //setShaftRotation(targetEncoderValue);
+        // setShaftRotation(targetEncoderValue);
     }
 
     /**
@@ -185,14 +183,14 @@ public class Shooter extends SubsystemBase {
     }
 
     public void prepareIntake() {
-        setShaftPosition(Constants.Shooter.IntakePosition);
+        setShaftPosition(Constants.Shooter.intakePosition);
     }
 
     public void angleToSpeaker() {
         double TY = Math.toRadians(
-                Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
+                Constants.Limelight.Back.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
-        double dy = -(Constants.Limelight.Pipelines.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.CAMERA_HEIGHT);
+        double dy = -(Constants.Map.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.HEIGHT);
         double dx = dy / Math.tan(TY);
 
         double angle = Math.atan((dy + 0.6) / (dx + 0.5));
@@ -208,7 +206,8 @@ public class Shooter extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        //SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
+        // SmartDashboard.putNumber("Angle Motor Angle",
+        // fxAngleMotor.getPosition().getValue());
         SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
     }
 

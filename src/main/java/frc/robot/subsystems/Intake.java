@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
      * Intake consists of 1 falcon500 motor to move the conveyer belt and the intake wheels.
      */
     public Intake() {
-        fxIntakeMotor = new TalonFX(Constants.Intake.Motor.driveMotorID);
+        fxIntakeMotor = new TalonFX(Constants.Intake.ConveyerMotor.driveMotorID);
         fxConfig = new TalonFXConfiguration();
         fxIntakeMotor.getConfigurator().apply(fxConfig);
 

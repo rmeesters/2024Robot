@@ -8,24 +8,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
-import frc.robot.autos.AutoDrive;
-import frc.robot.subsystems.Swerve;
+import frc.robot.autos.depricatedAutoDrive;
 
 public class DriveToSpeaker extends Command {
 
-    private final Swerve s_Swerve = RobotContainer.s_Swerve;
-
     private boolean TAG_IS_VISIBLE;
 
-    private AutoDrive auto;
+    private depricatedAutoDrive auto;
 
     /**
-     * Drive to target using limelight
-     * 
-     * @param pipeline What preset values are wanted
-     *                 (Constants.Limelight.Pipelines.<>)
+     * Drive to speaker using limelight
      */
     public DriveToSpeaker() {
 
@@ -37,8 +29,9 @@ public class DriveToSpeaker extends Command {
      */
     @Override
     public void initialize() {
-        int pipeline = Constants.Limelight.Pipelines.SPEAKER;
-        LimelightHelpers.setPipelineIndex(Constants.Limelight.Back.NAME, pipeline);
+        LimelightHelpers.setPipelineIndex(
+                Constants.Limelight.Back.NAME,
+                Constants.Limelight.Pipelines.SPEAKER);
 
         // Stop if target is not visible
         TAG_IS_VISIBLE = LimelightHelpers.getTV(Constants.Limelight.Back.NAME);
@@ -49,9 +42,9 @@ public class DriveToSpeaker extends Command {
         }
 
         List<Pose2d> points = calculateAprilTagPoints();
-        System.out.println(points.get(1));
-        // auto = new AutoDrive(points, true);
-        // auto.initialize();
+        System.out.println("Destination: " + points.get(1));
+        auto = new depricatedAutoDrive(points, true);
+        auto.initialize();
     }
 
     /**
@@ -59,7 +52,7 @@ public class DriveToSpeaker extends Command {
      */
     @Override
     public void execute() {
-        //auto.execute();
+        auto.execute();
     }
 
     /**
@@ -73,26 +66,24 @@ public class DriveToSpeaker extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        if (!TAG_IS_VISIBLE) {
+        if (!TAG_IS_VISIBLE)
             return;
-        }
 
-        //auto.end(interrupted);
+        auto.end(interrupted);
     }
 
     @Override
     public boolean isFinished() {
-        return true;//!TAG_IS_VISIBLE || auto.isFinished();
+        return !TAG_IS_VISIBLE || auto.isFinished();
     }
 
     private List<Pose2d> calculateAprilTagPoints() {
         double TX = Math.toRadians(
                 LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
         double TY = Math.toRadians(
-                Constants.Limelight.Back.CAMERA_ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
+                Constants.Limelight.Back.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
-        double distance = -(Constants.Limelight.Pipelines.Speaker.APRILTAG_HEIGHT
-                - Constants.Limelight.Back.CAMERA_HEIGHT) / Math.tan(TY) - 2;
+        double distance = (Constants.Limelight.Back.HEIGHT - Constants.Map.Speaker.APRILTAG_HEIGHT) / Math.tan(TY) - 2;
 
         double dx = distance * Math.cos(TX);
         double dy = distance * Math.sin(TX);

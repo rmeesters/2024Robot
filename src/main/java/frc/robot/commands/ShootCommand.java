@@ -7,16 +7,14 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
-public class IntakeNote extends Command {
+public class ShootCommand extends Command {
 
     private final Intake s_Intake = RobotContainer.s_Intake;
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
-    /**
-     * Intake note starts the intake motors, including the conveyer,
-     * until a note is detected in the shooter.
-     */
-    public IntakeNote() {
+    private final Timer timer = new Timer();
+
+    public ShootCommand() {
 
     }
 
@@ -26,11 +24,7 @@ public class IntakeNote extends Command {
      */
     @Override
     public void initialize() {
-        if (isFinished()) {
-            cancel();
-            return;
-        }
-        //s_Shooter.prepareIntake();
+        timer.restart();
     }
 
     /**
@@ -38,7 +32,10 @@ public class IntakeNote extends Command {
      */
     @Override
     public void execute() {
-        s_Intake.setSpeed(1);
+        s_Shooter.setSpeed(1);
+
+        if (timer.hasElapsed(0))
+            s_Intake.setSpeed(0.6);
     }
 
     /**
@@ -53,11 +50,12 @@ public class IntakeNote extends Command {
     @Override
     public void end(boolean interrupted) {
         s_Intake.setSpeed(0);
+        s_Shooter.setSpeed(0);
+        timer.stop();
     }
 
     @Override
     public boolean isFinished() {
-        // Return true if note is visible
-        return s_Intake.inRange(2);
+        return timer.hasElapsed(1);
     }
 }

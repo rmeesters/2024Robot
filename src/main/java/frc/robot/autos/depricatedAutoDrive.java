@@ -4,16 +4,11 @@
 
 package frc.robot.autos;
 
-import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
-
 import java.util.List;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-// import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -21,12 +16,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Swerve;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoDrive extends SequentialCommandGroup {
+public class depricatedAutoDrive extends SequentialCommandGroup {
 
     private final Swerve s_Swerve = RobotContainer.s_Swerve;
     private final TrajectoryConfig config;
@@ -34,14 +32,14 @@ public class AutoDrive extends SequentialCommandGroup {
     private final ProfiledPIDController thetaController;
     private final SwerveControllerCommand swerveCommand;
 
-    public AutoDrive(List<Pose2d> points, boolean reversed) {
+    public depricatedAutoDrive(List<Pose2d> points, boolean reversed) {
         config = new TrajectoryConfig(
-                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                Constants.Autos.kMaxSpeedMetersPerSecond,
+                Constants.Autos.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics).setReversed(reversed);
 
         thetaController = new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+                Constants.Autos.kPThetaController, 0, 0, Constants.Autos.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         trajectory = TrajectoryGenerator.generateTrajectory(points, config);
@@ -60,25 +58,12 @@ public class AutoDrive extends SequentialCommandGroup {
                 trajectory,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                new PIDController(Constants.Autos.kPXController, 0, 0),
+                new PIDController(Constants.Autos.kPYController, 0, 0),
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);
     }
-
-    // private SwerveControllerCommand generateSwerveControllerCommandWithRotation(double rotation) {
-    //     return new SwerveControllerCommand(
-    //             trajectory,
-    //             s_Swerve::getPose,
-    //             Constants.Swerve.swerveKinematics,
-    //             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-    //             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-    //             thetaController,
-    //             new Rotation2d()
-    //             s_Swerve::setModuleStates,
-    //             s_Swerve);
-    // }
 
     private void postTrajectoryToDashBoard() {
         SmartDashboard.putNumber("auto initial pose x", trajectory.getInitialPose().getX());
