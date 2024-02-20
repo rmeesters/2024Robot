@@ -108,7 +108,7 @@ public class Shooter extends SubsystemBase {
      */
     public void setShaftRotation(double rotation) {
         if (rotation > Constants.Shooter.canCoderMax || rotation < Constants.Shooter.canCoderMin) {
-            System.err.println(rotation + " is not a valid shaft rotation (max: 10, min: -32)");
+            System.err.println(rotation + " is not a valid shaft rotation (max: 11, min: -32)");
             return;
         }
 
@@ -160,7 +160,7 @@ public class Shooter extends SubsystemBase {
         // Rotate sahft to calculated position
         SmartDashboard.putNumber("Target Angle", degrees);
         SmartDashboard.putNumber("Target Rotation", targetEncoderValue);
-        // setShaftRotation(targetEncoderValue);
+        setShaftRotation(targetEncoderValue);
     }
 
     /**
@@ -174,12 +174,14 @@ public class Shooter extends SubsystemBase {
         final double A = -0.0190931;
         final double B = 0.13371;
         final double C = -5.7094;
-        final double D = 91.7202;
+        final double D = 91.7202 - degrees;
 
-        return A * Math.pow(degrees, 3)
-                + B * Math.pow(degrees, 2)
-                + C * degrees
-                + D;
+        final double P = -B / A / 3;
+        final double Q = Math.pow(P, 3) + (B*C - 3*A*D) / 6 / Math.pow(A, 2);
+        final double R = C / 3 / A;
+        final double G = Math.sqrt(Math.pow(Q, 2) + Math.pow(R - Math.pow(P, 2), 3));
+
+        return Math.cbrt(Q + G) + Math.cbrt(Q - G) + P + 0.044;
     }
 
     public void prepareIntake() {
