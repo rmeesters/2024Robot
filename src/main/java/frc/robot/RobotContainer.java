@@ -138,10 +138,10 @@ public class RobotContainer {
         /* Shooter Angle */
         b_zeroAngle.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
 
-        b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
+        b_angleUp.whileTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
         b_angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        b_angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
+        b_angleDown.whileTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
         b_angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
         b_focusShooter.whileTrue(new TargetSpeakerCommand());
@@ -150,10 +150,10 @@ public class RobotContainer {
         b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
 
         /* Climber */
-        b_climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(1)));
+        b_climbUp.whileTrue(new InstantCommand(() -> s_Climber.setSpeed(1)));
         b_climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
 
-        b_climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-1)));
+        b_climbDown.whileTrue(new InstantCommand(() -> s_Climber.setSpeed(-1)));
         b_climbDown.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
     }
 
