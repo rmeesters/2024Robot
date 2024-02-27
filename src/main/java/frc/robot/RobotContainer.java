@@ -46,6 +46,8 @@ public class RobotContainer {
     private final JoystickButton b_zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
     private final JoystickButton b_robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
+    private final JoystickButton b_zeroAngle = new JoystickButton(driver, PS4Controller.Button.kShare.value);
+
     /* Intake */
     private final JoystickButton b_spinIntake = new JoystickButton(driver, PS4Controller.Button.kL2.value);
     private final JoystickButton b_backupIntake = new JoystickButton(driver, PS4Controller.Button.kL1.value);
@@ -134,6 +136,8 @@ public class RobotContainer {
         }));
 
         /* Shooter Angle */
+        b_zeroAngle.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+
         b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
         b_angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 

@@ -63,6 +63,8 @@ public class Shooter extends SubsystemBase {
 
         // Make angle motor stop when not accelerating
         fxAngleMotor.setNeutralMode(NeutralModeValue.Brake);
+        fxLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+        fxRightMotor.setNeutralMode(NeutralModeValue.Brake);
 
         // Define canCoder for printing angle to the dashboard
         angleCanCoder = new CANcoder(Constants.Shooter.AngleMotor.canCoderID);
@@ -108,7 +110,7 @@ public class Shooter extends SubsystemBase {
      */
     public void setShaftRotation(double rotation) {
         if (rotation > Constants.Shooter.canCoderMax || rotation < Constants.Shooter.canCoderMin) {
-            System.err.println(rotation + " is not a valid shaft rotation (max: 11, min: -32)");
+            System.err.println(rotation + " is not a valid shaft rotation (max: 11.7, min: -32)");
             return;
         }
 
@@ -177,7 +179,7 @@ public class Shooter extends SubsystemBase {
         final double D = 91.7202 - degrees;
 
         final double P = -B / A / 3;
-        final double Q = Math.pow(P, 3) + (B*C - 3*A*D) / 6 / Math.pow(A, 2);
+        final double Q = Math.pow(P, 3) + (B * C - 3 * A * D) / 6 / Math.pow(A, 2);
         final double R = C / 3 / A;
         final double G = Math.sqrt(Math.pow(Q, 2) + Math.pow(R - Math.pow(P, 2), 3));
 
@@ -199,6 +201,7 @@ public class Shooter extends SubsystemBase {
         setAngle(angle);
     }
 
+    /** Set position of shooter to initialized position (zero on cancoder) */
     public void setZero() {
         angleCanCoder.setPosition(0);
     }

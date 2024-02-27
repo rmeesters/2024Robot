@@ -172,7 +172,7 @@ public final class Constants {
         }
 
         public static final double canCoderMin = -32;
-        public static final double canCoderMax = 11;
+        public static final double canCoderMax = 11.7;
 
         public static final double shaftLength = 8;
 

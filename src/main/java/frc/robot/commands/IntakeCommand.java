@@ -36,7 +36,7 @@ public class IntakeCommand extends Command {
      */
     @Override
     public void execute() {
-        s_Intake.setSpeed(0.5);
+        s_Intake.setSpeed(1);
     }
 
     /**
