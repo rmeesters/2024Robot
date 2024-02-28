@@ -67,6 +67,7 @@ public class RobotContainer {
     private final POVButton b_climbUp = new POVButton(pov, 0);
     private final POVButton b_climbDown = new POVButton(pov, 180);
 
+
     /* Handlers */
     public static final PneumaticsHandler h_pneumatics = new PneumaticsHandler();
 
@@ -83,9 +84,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        configureLimelight(Constants.Limelight.Front.NAME);
-        configureLimelight(Constants.Limelight.Back.NAME);
-
+        /* Controller Movement */
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
                         s_Swerve,
@@ -94,16 +93,15 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(rotationAxis),
                         () -> b_robotCentric.getAsBoolean()));
 
-        // Configure the button bindings
+        /* Setup */
+        configureLimelight(Constants.Limelight.Front.NAME);
+        configureLimelight(Constants.Limelight.Back.NAME);
         configureButtonBindings();
-
         configureAutoChooser();
-
         preparePneumatics();
     }
 
     private void configureLimelight(String limelightName) {
-        // LimelightHelpers.setLEDMode_PipelineControl(limelightName);
         LimelightHelpers.setLEDMode_ForceOn(limelightName);
         LimelightHelpers.setStreamMode_Standard(limelightName);
         LimelightHelpers.setCameraMode_Processor(limelightName);
@@ -134,10 +132,10 @@ public class RobotContainer {
         /* Shooter Angle */
         b_zeroAngle.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
 
-        b_angleUp.whileTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
+        b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
         b_angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        b_angleDown.whileTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
+        b_angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
         b_angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
         b_focusShooter.whileTrue(new TargetSpeakerCommand());
@@ -146,10 +144,10 @@ public class RobotContainer {
         b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
 
         /* Climber */
-        b_climbUp.whileTrue(new InstantCommand(() -> s_Climber.setSpeed(1)));
+        b_climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(1)));
         b_climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
 
-        b_climbDown.whileTrue(new InstantCommand(() -> s_Climber.setSpeed(-1)));
+        b_climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-1)));
         b_climbDown.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
     }
 
@@ -159,8 +157,6 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Main Driver (Red)", new DriverAutoMain(true));
         autoChooser.addOption("Main Driver (Blue)", new DriverAutoMain(false));
         autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        autoChooser.addOption("Set shaft to 4in", new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
-        autoChooser.addOption("Set angle to 80", new InstantCommand(() -> s_Shooter.setAngle(80)));
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }

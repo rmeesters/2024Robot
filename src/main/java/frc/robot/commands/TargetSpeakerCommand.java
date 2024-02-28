@@ -46,14 +46,16 @@ public class TargetSpeakerCommand extends Command {
     public void execute() {
         calculateValues();
 
+        // Rotate to speaker
         double translationVal = MathUtil.applyDeadband(
-                -RobotContainer.driver.getRawAxis(RobotContainer.translationAxis), Constants.stickDeadband);
+                -RobotContainer.driver.getRawAxis(RobotContainer.translationAxis), Constants.STICK_DEAD_BAND);
         double strafeVal = MathUtil.applyDeadband(-RobotContainer.driver.getRawAxis(RobotContainer.strafeAxis),
-                Constants.stickDeadband);
-        double rotationVal = Math.cbrt(1.0 / Constants.Autos.largestPossibleRotation * getAngleDifference());
-        s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), rotationVal, true,
+                Constants.STICK_DEAD_BAND);
+        double rotationVal = Math.cbrt(1.0 / Constants.Autos.LARGEST_POSSIBLE_ROTATION * getAngleDifference());
+        s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED), rotationVal, true,
                 false);
 
+        // Angle shooter to speaker
         s_Shooter.setAngle(targetAngle);
     }
 
@@ -87,10 +89,10 @@ public class TargetSpeakerCommand extends Command {
         targetRotation = s_Swerve.gyro.getYaw() + LimelightHelpers.getTX(Constants.Limelight.Back.NAME);
         double TY = Constants.Limelight.Back.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME);
 
-        double dy = -(Constants.Map.Speaker.APRILTAG_HEIGHT
-                - Constants.Limelight.Back.HEIGHT);
+        double dy = -(Constants.Map.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.HEIGHT);
         double dx = dy / Math.tan(TY);
 
-        targetAngle = Math.atan((dy + 0.6) / (dx + 0.56));
+        targetAngle = Math.atan((dy + Constants.Autos.TARGET_SPEAKER_SHOOTER_ANGLE_VERTICAL_OFFSET_IN_METERS)
+                / (dx + Constants.Autos.HORIZONTAL_DISTANCE_FROM_LIMELIGHT_TO_SHOOTER_ANGLE_PIVOT_IN_METERS));
     }
 }

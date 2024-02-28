@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PneumaticsHandler;
@@ -38,7 +38,7 @@ public class ShootCommand extends Command {
         s_Shooter.setSpeed(1);
         h_pneumatics.setShooter(true);
 
-        if (timer.hasElapsed(0.5)) // TODO make this changable
+        if (timer.hasElapsed(Constants.Shooter.SHOOT_DELAY))
             s_Intake.setSpeed(1);
     }
 

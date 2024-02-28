@@ -18,7 +18,7 @@ public class Climber extends SubsystemBase {
      * conveyer belt and the intake wheels.
      */
     public Climber() {
-        fxClimberMotor = new TalonFX(Constants.Climber.BeltMotor.driveMotorID);
+        fxClimberMotor = new TalonFX(Constants.Climber.BeltMotor.MOTOR_ID);
         fxConfig = new TalonFXConfiguration();
         fxClimberMotor.getConfigurator().apply(fxConfig);
 
@@ -29,11 +29,11 @@ public class Climber extends SubsystemBase {
         double reading = fxClimberMotor.getPosition().getValue();
 
         // Too high
-        if (reading > 100 && speedPercent > 0) {
+        if (reading > Constants.Climber.MAX && speedPercent > 0) {
             speedPercent = 0;
         }
         // Too low
-        else if (reading < 0 && speedPercent < 0) {
+        else if (reading < Constants.Climber.MIN && speedPercent < 0) {
             speedPercent = 0;
         }
 

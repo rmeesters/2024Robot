@@ -34,12 +34,12 @@ public class depricatedAutoDrive extends SequentialCommandGroup {
 
     public depricatedAutoDrive(List<Pose2d> points, boolean reversed) {
         config = new TrajectoryConfig(
-                Constants.Autos.kMaxSpeedMetersPerSecond,
-                Constants.Autos.kMaxAccelerationMetersPerSecondSquared)
+                Constants.Autos.MAX_SPEED_IN_METERS_PER_SECOND,
+                Constants.Autos.MAX_ACCELERATION_IN_METERS_PER_SECOND_SQUARED)
                 .setKinematics(Constants.Swerve.swerveKinematics).setReversed(reversed);
 
         thetaController = new ProfiledPIDController(
-                Constants.Autos.kPThetaController, 0, 0, Constants.Autos.kThetaControllerConstraints);
+                Constants.Autos.CONTROLLER_ANGLE, 0, 0, Constants.Autos.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         trajectory = TrajectoryGenerator.generateTrajectory(points, config);
@@ -58,8 +58,8 @@ public class depricatedAutoDrive extends SequentialCommandGroup {
                 trajectory,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.Autos.kPXController, 0, 0),
-                new PIDController(Constants.Autos.kPYController, 0, 0),
+                new PIDController(Constants.Autos.CONTROLLER_PX, 0, 0),
+                new PIDController(Constants.Autos.CONTROLLER_PY, 0, 0),
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);

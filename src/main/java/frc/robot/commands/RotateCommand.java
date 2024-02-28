@@ -20,12 +20,12 @@ public class RotateCommand extends Command {
     @Override
     public void execute() {
         double translationVal = MathUtil.applyDeadband(
-                -RobotContainer.driver.getRawAxis(RobotContainer.translationAxis), Constants.stickDeadband);
+                -RobotContainer.driver.getRawAxis(RobotContainer.translationAxis), Constants.STICK_DEAD_BAND);
         double strafeVal = MathUtil.applyDeadband(
-                -RobotContainer.driver.getRawAxis(RobotContainer.strafeAxis), Constants.stickDeadband);
-        double rotationVal = Math.cbrt(1.0 / Constants.Autos.largestPossibleRotation * getAngleDifference());
+                -RobotContainer.driver.getRawAxis(RobotContainer.strafeAxis), Constants.STICK_DEAD_BAND);
+        double rotationVal = Math.cbrt(1.0 / Constants.Autos.LARGEST_POSSIBLE_ROTATION * getAngleDifference());
 
-        s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), rotationVal, true,
+        s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED), rotationVal, true,
                 false);
     }
 

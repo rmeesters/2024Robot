@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
 
 public class Shooter extends SubsystemBase {
 
@@ -34,22 +33,22 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter() {
         // Define motors
-        fxLeftMotor = new TalonFX(Constants.Shooter.WheelMotor.leftMotorID);
-        fxRightMotor = new TalonFX(Constants.Shooter.WheelMotor.rightMotorID);
-        fxAngleMotor = new TalonFX(Constants.Shooter.AngleMotor.driveMotorID);
+        fxLeftMotor = new TalonFX(Constants.Shooter.WheelMotor.LEFT_MOTOR_ID);
+        fxRightMotor = new TalonFX(Constants.Shooter.WheelMotor.RIGHT_MOTOR_ID);
+        fxAngleMotor = new TalonFX(Constants.Shooter.AngleMotor.MOTOR_ID);
 
         // Configure motors
         fxShooterConfig = new TalonFXConfiguration();
         fxAngleConfig = new TalonFXConfiguration();
 
         // Make shaft listen to canCoder
-        fxAngleConfig.Feedback.FeedbackRemoteSensorID = Constants.Shooter.AngleMotor.canCoderID;
+        fxAngleConfig.Feedback.FeedbackRemoteSensorID = Constants.Shooter.AngleMotor.CANCODER_ID;
         fxAngleConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
 
         // Acceleration and decceleration of shaft
         MotionMagicConfigs angleMotionMagic = fxAngleConfig.MotionMagic;
-        angleMotionMagic.MotionMagicAcceleration = Constants.Shooter.AngleMotor.shaftAcceleration;
-        angleMotionMagic.MotionMagicCruiseVelocity = Constants.Shooter.AngleMotor.shaftMaxSpeed;
+        angleMotionMagic.MotionMagicAcceleration = Constants.Shooter.AngleMotor.ACCELERATION;
+        angleMotionMagic.MotionMagicCruiseVelocity = Constants.Shooter.AngleMotor.MAX_SPEED;
 
         Slot0Configs slot0 = fxAngleConfig.Slot0;
         slot0.kP = Constants.Shooter.AngleMotor.KP;
@@ -67,7 +66,7 @@ public class Shooter extends SubsystemBase {
         fxRightMotor.setNeutralMode(NeutralModeValue.Brake);
 
         // Define canCoder for printing angle to the dashboard
-        angleCanCoder = new CANcoder(Constants.Shooter.AngleMotor.canCoderID);
+        angleCanCoder = new CANcoder(Constants.Shooter.AngleMotor.CANCODER_ID);
     }
 
     /**
@@ -89,11 +88,11 @@ public class Shooter extends SubsystemBase {
         double reading = angleCanCoder.getPosition().getValue();
 
         // Too high
-        if (reading < Constants.Shooter.canCoderMin && speedPercent < 0) {
+        if (reading < Constants.Shooter.CANCODER_MIN && speedPercent < 0) {
             speedPercent = 0;
         }
         // Too low
-        else if (reading > Constants.Shooter.canCoderMax && speedPercent > 0) {
+        else if (reading > Constants.Shooter.CANCODER_MAX && speedPercent > 0) {
             speedPercent = 0;
         }
 
@@ -109,7 +108,7 @@ public class Shooter extends SubsystemBase {
      * @return Time to complete
      */
     public void setShaftRotation(double rotation) {
-        if (rotation > Constants.Shooter.canCoderMax || rotation < Constants.Shooter.canCoderMin) {
+        if (rotation > Constants.Shooter.CANCODER_MAX || rotation < Constants.Shooter.CANCODER_MIN) {
             System.err.println(rotation + " is not a valid shaft rotation (max: 11.7, min: -32)");
             return;
         }
@@ -125,7 +124,7 @@ public class Shooter extends SubsystemBase {
      */
     public void setShaftPosition(double distanceInInches) {
         // 0 is down, 1 is up
-        double positionOnShaftPercentage = distanceInInches / Constants.Shooter.shaftLength;
+        double positionOnShaftPercentage = distanceInInches / Constants.Shooter.SHAFT_LENGTH_IN_INCHES;
 
         if (positionOnShaftPercentage > 1 || positionOnShaftPercentage < 0) {
             System.err.println("Invalid shaft position of " + distanceInInches + " inches");
@@ -133,8 +132,8 @@ public class Shooter extends SubsystemBase {
         }
 
         // Range of 0 to cancoder limit
-        double targetEncoderValue = (Constants.Shooter.canCoderMin - Constants.Shooter.canCoderMax)
-                * positionOnShaftPercentage + Constants.Shooter.canCoderMax;
+        double targetEncoderValue = (Constants.Shooter.CANCODER_MIN - Constants.Shooter.CANCODER_MAX)
+                * positionOnShaftPercentage + Constants.Shooter.CANCODER_MAX;
 
         // Rotate sahft to calculated position
         setShaftRotation(targetEncoderValue);
@@ -147,17 +146,17 @@ public class Shooter extends SubsystemBase {
      * @param degrees
      */
     public void setAngle(double degrees) {
-        if (degrees < 45 || degrees > 92) {
-            System.err.println(degrees + " is not a valid angle (max: 92, min: 45)");
-            return;
-        }
+        // if (degrees < 45 || degrees > 92) {
+        //     System.err.println(degrees + " is not a valid angle (max: 92, min: 45)");
+        //     return;
+        // }
 
         // 0 is down, 1 is up
-        double positionOnShaftPercentage = 1 - calculatePositionInInches(degrees) / Constants.Shooter.shaftLength;
+        double positionOnShaftPercentage = 1 - calculatePositionInInches(degrees) / Constants.Shooter.SHAFT_LENGTH_IN_INCHES;
 
         // Range of 0 to cancoder limit
-        double targetEncoderValue = (Constants.Shooter.canCoderMin - Constants.Shooter.canCoderMax)
-                * positionOnShaftPercentage + Constants.Shooter.canCoderMax;
+        double targetEncoderValue = (Constants.Shooter.CANCODER_MIN - Constants.Shooter.CANCODER_MAX)
+                * positionOnShaftPercentage + Constants.Shooter.CANCODER_MAX;
 
         // Rotate sahft to calculated position
         SmartDashboard.putNumber("Target Angle", degrees);
@@ -187,19 +186,19 @@ public class Shooter extends SubsystemBase {
     }
 
     public void prepareIntake() {
-        setShaftPosition(Constants.Shooter.intakePosition);
+        setShaftPosition(Constants.Shooter.IDEAL_INTAKE_POSITION_IN_INCHES);
     }
 
-    public void angleToSpeaker() {
-        double TY = Math.toRadians(
-                Constants.Limelight.Back.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
+    // public void angleToSpeaker() {
+    //     double TY = Math.toRadians(
+    //             Constants.Limelight.Back.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
 
-        double dy = -(Constants.Map.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.HEIGHT);
-        double dx = dy / Math.tan(TY);
+    //     double dy = -(Constants.Map.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.HEIGHT);
+    //     double dx = dy / Math.tan(TY);
 
-        double angle = Math.atan((dy + 0.6) / (dx + 0.5));
-        setAngle(angle);
-    }
+    //     double angle = Math.atan((dy + 0.6) / (dx + 0.5));
+    //     setAngle(angle);
+    // }
 
     /** Set position of shooter to initialized position (zero on cancoder) */
     public void setZero() {
@@ -211,8 +210,7 @@ public class Shooter extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("Angle Motor Angle",
-        // fxAngleMotor.getPosition().getValue());
+        // SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
         SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
         SmartDashboard.putNumber("Left Shooter Velocity", fxLeftMotor.getVelocity().getValue());
         SmartDashboard.putNumber("Right Shooter Velocity", fxRightMotor.getVelocity().getValue());

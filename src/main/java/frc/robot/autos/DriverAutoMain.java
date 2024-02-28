@@ -29,6 +29,7 @@ public class DriverAutoMain extends SequentialCommandGroup {
         addCommands(
                 /* Loaded Note */
 
+                // Angle to speaker and activate shooters
                 new InstantCommand(() -> s_Shooter.setShaftRotation(0)),
                 new InstantCommand(() -> s_Shooter.setSpeed(1)),
                 new InstantCommand(() -> s_Intake.setSpeed(1)),
@@ -37,6 +38,7 @@ public class DriverAutoMain extends SequentialCommandGroup {
                 /* Middle Note */
 
                 new ParallelCommandGroup(
+                        // Move to note
                         new SequentialCommandGroup(
                                 new MoveCommand(List.of(
                                         new Pose2d(0, 0, new Rotation2d(0)),
@@ -44,6 +46,7 @@ public class DriverAutoMain extends SequentialCommandGroup {
                                 new MoveCommand(List.of(
                                         new Pose2d(0, 0, new Rotation2d(0)),
                                         new Pose2d(0.5, 0, new Rotation2d(0))), false)),
+                        // Prepare firing angle
                         new InstantCommand(() -> s_Shooter.setShaftRotation(11.5))),
                 new WaitCommand(1),
 
