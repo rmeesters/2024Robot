@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import frc.robot.autos.DriverAutoMain;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TargetSpeakerCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Climber;
@@ -97,6 +98,8 @@ public class RobotContainer {
         configureButtonBindings();
 
         configureAutoChooser();
+
+        preparePneumatics();
     }
 
     private void configureLimelight(String limelightName) {
@@ -126,14 +129,7 @@ public class RobotContainer {
         b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
         /* Shooter */
-        b_spinShooter.onTrue(new InstantCommand(() -> {
-            s_Shooter.setSpeed(1);
-            s_Intake.setSpeed(1);
-        }));
-        b_spinShooter.onFalse(new InstantCommand(() -> {
-            s_Shooter.setSpeed(0);
-            s_Intake.setSpeed(0);
-        }));
+        b_spinShooter.whileTrue(new ShootCommand());
 
         /* Shooter Angle */
         b_zeroAngle.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
@@ -167,6 +163,12 @@ public class RobotContainer {
         autoChooser.addOption("Set angle to 80", new InstantCommand(() -> s_Shooter.setAngle(80)));
 
         SmartDashboard.putData("Auto Mode", autoChooser);
+    }
+
+    private void preparePneumatics() {
+        h_pneumatics.setShooter(false);
+        h_pneumatics.setClimber(true);
+        //h_pneumatics.setPusher(false);
     }
 
     /**

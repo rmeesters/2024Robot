@@ -23,7 +23,7 @@ public class RotateCommand extends Command {
                 -RobotContainer.driver.getRawAxis(RobotContainer.translationAxis), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(
                 -RobotContainer.driver.getRawAxis(RobotContainer.strafeAxis), Constants.stickDeadband);
-        double rotationVal = Math.cbrt(1.0 / Constants.Autos.maxRotation * getAngleDifference());
+        double rotationVal = Math.cbrt(1.0 / Constants.Autos.largestPossibleRotation * getAngleDifference());
 
         s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), rotationVal, true,
                 false);

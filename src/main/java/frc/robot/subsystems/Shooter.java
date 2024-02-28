@@ -214,6 +214,13 @@ public class Shooter extends SubsystemBase {
         // SmartDashboard.putNumber("Angle Motor Angle",
         // fxAngleMotor.getPosition().getValue());
         SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
+        SmartDashboard.putNumber("Left Shooter Velocity", fxLeftMotor.getVelocity().getValue());
+        SmartDashboard.putNumber("Right Shooter Velocity", fxRightMotor.getVelocity().getValue());
+        SmartDashboard.putNumber("Right Shooter Velocity", fxAngleMotor.getVelocity().getValue());
+    }
+
+    public double getAverageSpeed() {
+        return fxLeftMotor.getVelocity().getValue();
     }
 
 }

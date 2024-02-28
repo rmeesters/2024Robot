@@ -17,17 +17,18 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
 
     public static final class Swerve {
+
         public static final int pigeonID = 1;
 
-        public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW-
+        // Always ensure Gyro is CCW+ CW-
+        public static final boolean invertGyro = true;
 
         public static final COTSTalonFXSwerveConstants chosenModule = COTSTalonFXSwerveConstants.SDS.MK4
                 .Falcon500(COTSTalonFXSwerveConstants.SDS.MK4.driveRatios.L2);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(22.5); // TODO: This must be tuned to specific
-                                                                            // robot
-        public static final double wheelBase = Units.inchesToMeters(23.6); // TODO: This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(25);
+        public static final double wheelBase = Units.inchesToMeters(22.25);
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /*
@@ -201,7 +202,7 @@ public final class Constants {
         public static final double kPYController = 4;
         public static final double kPThetaController = 2;
 
-        public static final double maxRotation = 25;
+        public static final double largestPossibleRotation = 25;
 
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(

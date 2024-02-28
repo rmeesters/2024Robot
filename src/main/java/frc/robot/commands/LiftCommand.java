@@ -25,7 +25,7 @@ public class LiftCommand extends Command {
 
     @Override
     public void initialize() {
-        h_pneumatics.releaseClimber();
+        h_pneumatics.setClimber(false);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class LiftCommand extends Command {
 
         new SequentialCommandGroup(
             new WaitCommand(0.2),
-            new InstantCommand(() -> h_pneumatics.lockClimber())
+            new InstantCommand(() -> h_pneumatics.setClimber(true))
         ).schedule();
     }
     

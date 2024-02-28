@@ -7,22 +7,27 @@ import edu.wpi.first.wpilibj.Solenoid;
 public class PneumaticsHandler {
 
     private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
-    private final Solenoid climberBlockPh = new Solenoid(PneumaticsModuleType.REVPH, 15);
+    private final Solenoid s_climberBlock = new Solenoid(PneumaticsModuleType.REVPH, 15);
+    private final Solenoid s_shooterBlock = new Solenoid(PneumaticsModuleType.REVPH, 12);
+    //private final Solenoid s_pusher = new Solenoid(PneumaticsModuleType.REVPH, 13);
 
     public PneumaticsHandler() {
         compressor.enableAnalog(70, 120);
     }
 
-    public void lockClimber() {
-        climberBlockPh.set(true);
+    /** Activate/Deactivate climber blocker
+     * @param value true: blocked, false: released
+     */
+    public void setClimber(boolean value) {
+        s_climberBlock.set(value);
     }
 
-    public void releaseClimber() {
-        climberBlockPh.set(false);
+    public void setShooter(boolean value) {
+        s_shooterBlock.set(value);
     }
 
-    public void lockClimber(boolean value) {
-        climberBlockPh.set(value);
-    }
+    // public void setPusher(boolean value) {
+    //     s_pusher.set(value);
+    // }
     
 }

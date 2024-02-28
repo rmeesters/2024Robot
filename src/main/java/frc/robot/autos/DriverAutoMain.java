@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import frc.robot.RobotContainer;
-import frc.robot.commands.IntakeCommand;
+//import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.RotateCommand;
 import frc.robot.subsystems.Intake;

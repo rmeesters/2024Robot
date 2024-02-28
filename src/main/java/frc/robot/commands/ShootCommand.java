@@ -5,12 +5,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PneumaticsHandler;
 import frc.robot.subsystems.Shooter;
 
 public class ShootCommand extends Command {
 
     private final Intake s_Intake = RobotContainer.s_Intake;
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
+
+    private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
     private final Timer timer = new Timer();
 
@@ -33,9 +36,10 @@ public class ShootCommand extends Command {
     @Override
     public void execute() {
         s_Shooter.setSpeed(1);
+        h_pneumatics.setShooter(true);
 
-        if (timer.hasElapsed(0))
-            s_Intake.setSpeed(0.6);
+        if (timer.hasElapsed(0.5)) // TODO make this changable
+            s_Intake.setSpeed(1);
     }
 
     /**
@@ -51,11 +55,12 @@ public class ShootCommand extends Command {
     public void end(boolean interrupted) {
         s_Intake.setSpeed(0);
         s_Shooter.setSpeed(0);
+        h_pneumatics.setShooter(false);
         timer.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(1);
+        return false;
     }
 }
