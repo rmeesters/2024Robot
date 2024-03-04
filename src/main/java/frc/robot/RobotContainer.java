@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -153,10 +155,15 @@ public class RobotContainer {
 
     private void configureAutoChooser() {
         // Autonomous Sendable Chooser
-        autoChooser = new SendableChooser<Command>();
-        autoChooser.setDefaultOption("Main Driver (Red)", new DriverAutoMain(true));
-        autoChooser.addOption("Main Driver (Blue)", new DriverAutoMain(false));
-        autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+
+        /* Coded Autos */
+        // autoChooser = new SendableChooser<Command>();
+        // autoChooser.setDefaultOption("Main Driver (Red)", new DriverAutoMain(true));
+        // autoChooser.addOption("Main Driver (Blue)", new DriverAutoMain(false));
+        // autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+
+        /* Path Planner Autos */
+        autoChooser = AutoBuilder.buildAutoChooser();
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
