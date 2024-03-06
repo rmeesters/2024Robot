@@ -49,7 +49,7 @@ public class depricatedAutoDrive extends SequentialCommandGroup {
 
         // Reset odometry and follow trajectory
         addCommands(
-                new InstantCommand(() -> s_Swerve.setPose(trajectory.getInitialPose())),
+                new InstantCommand(() -> s_Swerve.resetPose(trajectory.getInitialPose())),
                 swerveCommand);
     }
 

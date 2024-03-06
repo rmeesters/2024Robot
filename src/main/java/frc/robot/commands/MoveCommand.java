@@ -50,7 +50,7 @@ public class MoveCommand extends Command {
      */
     @Override
     public void initialize() {
-        s_Swerve.setPose(trajectory.getInitialPose());
+        s_Swerve.resetPose(trajectory.getInitialPose());
         swerveControllerCommand.initialize();
     }
 
