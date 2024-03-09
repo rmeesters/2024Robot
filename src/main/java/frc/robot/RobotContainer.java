@@ -1,6 +1,5 @@
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -10,10 +9,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import frc.robot.autos.DriveClimber;
 import frc.robot.autos.DriverAutoMain;
+import frc.robot.autos.DriverAutoMidTwoNote;
+import frc.robot.autos.DriverAutoMoveBack;
+import frc.robot.autos.DriverAutoNoMove;
+import frc.robot.autos.DriverAutoSide;
+import frc.robot.autos.SpitAndMove;
+import frc.robot.commands.DriveToNote;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TargetSpeakerCommand;
@@ -36,6 +44,8 @@ import frc.robot.subsystems.Swerve;
  */
 public class RobotContainer {
 
+    public static boolean noteLoaded = false;
+
     /* Controllers */
     public static final Joystick driver = new Joystick(0);
     private final GenericHID pov = new GenericHID(0);
@@ -48,6 +58,11 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton b_zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
     private final JoystickButton b_robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton b_zeroShooter = new JoystickButton(driver, PS4Controller.Button.kShare.value);
+    private final JoystickButton b_backupShoot = new JoystickButton(driver, PS4Controller.Button.kPS.value);
+    private final POVButton b_ampPosition = new POVButton(pov, 90);
+    private final POVButton b_ampScore = new POVButton(pov, 270);
+
 
     private final JoystickButton b_zeroAngle = new JoystickButton(driver, PS4Controller.Button.kShare.value);
 
@@ -129,10 +144,44 @@ public class RobotContainer {
         b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
         /* Shooter */
+
+        b_backupShoot.whileTrue(new InstantCommand(() -> {
+            s_Shooter.setSpeed(1);
+            s_Intake.setSpeed(1);
+            h_pneumatics.setShooterSolenoid(true);
+        }));
+        b_backupShoot.onFalse(new InstantCommand(() -> {
+            s_Shooter.setSpeed(0);
+            s_Intake.setSpeed(0);
+            h_pneumatics.setShooterSolenoid(false);
+        }));
+
+
         b_spinShooter.whileTrue(new ShootCommand());
+        b_spinShooter.onFalse(new InstantCommand(() -> {
+            s_Shooter.setSpeed(0);
+            s_Intake.setSpeed(0);
+            h_pneumatics.setShooterSolenoid(false);
+        }));
+
 
         /* Shooter Angle */
-        b_zeroAngle.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        b_zeroShooter.whileTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        //b_ampPosition.whileTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(-29.76)));
+        b_ampScore.whileTrue(new SequentialCommandGroup(
+            new InstantCommand(() -> h_pneumatics.setAmpSolenoid(true)),
+            new WaitCommand(.5),
+            new InstantCommand(() -> {
+            h_pneumatics.setShooterSolenoid(true);
+            s_Intake.setSpeed(0.5);
+            s_Shooter.setSpeed(.35);
+        })));
+        b_ampScore.onFalse(new InstantCommand(() -> {
+            h_pneumatics.setShooterSolenoid(false);
+            s_Shooter.setSpeed(0);
+            h_pneumatics.setAmpSolenoid(false);
+            s_Intake.setSpeed(0);
+        }));
 
         b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
         b_angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
@@ -140,30 +189,39 @@ public class RobotContainer {
         b_angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
         b_angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        b_focusShooter.whileTrue(new TargetSpeakerCommand());
-
+        //b_focusShooter.whileTrue(new TargetSpeakerCommand());
         b_setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
         b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
 
         /* Climber */
-        b_climbUp.onTrue(new InstantCommand(() -> s_Climber.setSpeed(1)));
-        b_climbUp.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
+        b_climbUp.whileTrue(new DriveClimber(1));
+        b_climbUp.onFalse(( new InstantCommand(() ->{ 
+        s_Climber.setSpeed(0);
+        h_pneumatics.setClimber(true);
+        })));
 
-        b_climbDown.onTrue(new InstantCommand(() -> s_Climber.setSpeed(-1)));
-        b_climbDown.onFalse(new InstantCommand(() -> s_Climber.setSpeed(0)));
+        b_climbDown.whileTrue(new DriveClimber(-1));
+        b_climbDown.onFalse(( new InstantCommand(() ->{ 
+        s_Climber.setSpeed(0);
+        h_pneumatics.setClimber(true);
+        })));
     }
 
     private void configureAutoChooser() {
         // Autonomous Sendable Chooser
-
-        /* Coded Autos */
-        // autoChooser = new SendableChooser<Command>();
-        // autoChooser.setDefaultOption("Main Driver (Red)", new DriverAutoMain(true));
-        // autoChooser.addOption("Main Driver (Blue)", new DriverAutoMain(false));
-        // autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-
-        /* Path Planner Autos */
-        autoChooser = AutoBuilder.buildAutoChooser();
+        autoChooser = new SendableChooser<Command>();
+        autoChooser.setDefaultOption("Main Driver (Red)", new DriverAutoMain(true));
+        autoChooser.addOption("Main Driver (Blue)", new DriverAutoMain(false));
+        autoChooser.addOption("Side Driver (Blue)", new DriverAutoSide(false));
+        autoChooser.addOption("Side Driver (Red)", new DriverAutoSide(true));
+        autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        autoChooser.addOption("Set shaft to 4in", new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
+        autoChooser.addOption("Set angle to 80", new InstantCommand(() -> s_Shooter.setAngle(80)));
+        autoChooser.addOption("center two piece", new DriverAutoMidTwoNote() );
+        autoChooser.addOption("just shoot", new DriverAutoNoMove() );
+        autoChooser.addOption("note test", new DriveToNote() );
+        autoChooser.addOption("Shoot and move back", new DriverAutoMoveBack());
+        autoChooser.addOption("Spit Note and move back", new SpitAndMove());
 
         SmartDashboard.putData("Auto Mode", autoChooser);
     }

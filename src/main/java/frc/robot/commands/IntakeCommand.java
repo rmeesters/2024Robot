@@ -7,6 +7,7 @@ import frc.robot.subsystems.Intake;
 
 public class IntakeCommand extends Command {
 
+
     private final Intake s_Intake = RobotContainer.s_Intake;
     //private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
@@ -36,6 +37,7 @@ public class IntakeCommand extends Command {
      */
     @Override
     public void execute() {
+        //if (s_Intake.inRange(2)) RobotContainer.noteLoaded = true;
         s_Intake.setSpeed(1);
     }
 

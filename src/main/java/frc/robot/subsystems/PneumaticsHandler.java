@@ -8,9 +8,9 @@ import frc.robot.Constants;
 public class PneumaticsHandler {
 
     private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
-    private final Solenoid s_climberBlock = new Solenoid(PneumaticsModuleType.REVPH, Constants.Pneumatics.CLIMBER_ID); // 15
-    private final Solenoid s_shooterBlock = new Solenoid(PneumaticsModuleType.REVPH, Constants.Pneumatics.SHOOTER_ID); // 12
-    //private final Solenoid s_pusher = new Solenoid(PneumaticsModuleType.REVPH, Constants.Pneumatics.PUSHER_ID); // 13
+    private final Solenoid s_climberBlock = new Solenoid(PneumaticsModuleType.REVPH, 15);
+    private final Solenoid s_shooterBlock = new Solenoid(PneumaticsModuleType.REVPH, 12);
+    private final Solenoid ampSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 14);
 
     public PneumaticsHandler() {
         compressor.enableAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
@@ -30,8 +30,11 @@ public class PneumaticsHandler {
         s_shooterBlock.set(value);
     }
 
-    // public void setPusher(boolean value) {
-    //     s_pusher.set(value);
-    // }
-    
+    public void setShooterSolenoid(boolean on) {
+        s_shooterBlock.set(on);
+    }
+    public void setAmpSolenoid(boolean on) {
+        ampSolenoid.set(on);
+    }
+
 }

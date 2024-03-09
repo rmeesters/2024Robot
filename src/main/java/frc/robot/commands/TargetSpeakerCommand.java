@@ -1,7 +1,13 @@
 package frc.robot.commands;
 
+import java.lang.module.ModuleDescriptor.Requires;
+
+import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
@@ -19,6 +25,8 @@ public class TargetSpeakerCommand extends Command {
 
     private double targetRotation, targetAngle;
 
+    PIDController pid;
+
     /**
      * Drive to target using limelight
      * 
@@ -26,7 +34,8 @@ public class TargetSpeakerCommand extends Command {
      *                 (Constants.Limelight.Pipelines.<>)
      */
     public TargetSpeakerCommand() {
-
+        pid = new PIDController(.08,0,0);
+        //addRequirements(s_Shooter);
     }
 
     /**
@@ -51,12 +60,13 @@ public class TargetSpeakerCommand extends Command {
                 -RobotContainer.driver.getRawAxis(RobotContainer.translationAxis), Constants.STICK_DEAD_BAND);
         double strafeVal = MathUtil.applyDeadband(-RobotContainer.driver.getRawAxis(RobotContainer.strafeAxis),
                 Constants.STICK_DEAD_BAND);
-        double rotationVal = Math.cbrt(1.0 / Constants.Autos.LARGEST_POSSIBLE_ROTATION * getAngleDifference());
-        s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED), rotationVal, true,
-                false);
+       // double rotationVal = Math.cbrt(1.0 / Constants.Autos.maxRotation * getAngleDifference());
+        double rotationVal = pid.calculate(LimelightHelpers.getTX(Constants.Limelight.Back.NAME),0);
+       // s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), rotationVal, true,
+         //       false);
 
-        // Angle shooter to speaker
-        s_Shooter.setAngle(targetAngle);
+        //s_Shooter.setAngle(targetAngle);
+        SmartDashboard.putNumber("target angle", targetAngle);
     }
 
     public double getAngleDifference() {
@@ -92,7 +102,16 @@ public class TargetSpeakerCommand extends Command {
         double dy = -(Constants.Map.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.HEIGHT);
         double dx = dy / Math.tan(TY);
 
-        targetAngle = Math.atan((dy + Constants.Autos.TARGET_SPEAKER_SHOOTER_ANGLE_VERTICAL_OFFSET_IN_METERS)
-                / (dx + Constants.Autos.HORIZONTAL_DISTANCE_FROM_LIMELIGHT_TO_SHOOTER_ANGLE_PIVOT_IN_METERS));
+       // targetAngle = Math.atan((dy + 0.6) / (dx + 0.56));
+        targetAngle = TY;
+       // double aprilHeight = 60;
+       // double c = Math.sqrt((21.5*21.5) + Math.pow((Math.sin(TY))/aprilHeight,2) - 2*aprilHeight*(Math.sin(TY)/aprilHeight)*Math.cos(180-TY));
+        //double b = Math.asin(Math.sin(180-TY)/c)*(Math.sin(TY)/aprilHeight);
+
+        SmartDashboard.putNumber("dx", dx);
+        SmartDashboard.putNumber("dy", dy);
+//        SmartDashboard.putNumber("target angle", b);
+
+
     }
 }

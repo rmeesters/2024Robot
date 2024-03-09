@@ -40,6 +40,9 @@ public class Climber extends SubsystemBase {
         fxClimberMotor.set(speedPercent);
     }
 
+    public void setPnumaticLock(boolean on){
+        
+    }
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Climber Motor Angle", fxClimberMotor.getPosition().getValue());

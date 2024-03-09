@@ -62,8 +62,8 @@ public class Shooter extends SubsystemBase {
 
         // Make angle motor stop when not accelerating
         fxAngleMotor.setNeutralMode(NeutralModeValue.Brake);
-        fxLeftMotor.setNeutralMode(NeutralModeValue.Brake);
-        fxRightMotor.setNeutralMode(NeutralModeValue.Brake);
+        fxRightMotor.setNeutralMode(NeutralModeValue.Coast);
+        fxLeftMotor.setNeutralMode(NeutralModeValue.Coast);
 
         // Define canCoder for printing angle to the dashboard
         angleCanCoder = new CANcoder(Constants.Shooter.AngleMotor.CANCODER_ID);
@@ -108,11 +108,11 @@ public class Shooter extends SubsystemBase {
      * @return Time to complete
      */
     public void setShaftRotation(double rotation) {
-        if (rotation > Constants.Shooter.CANCODER_MAX || rotation < Constants.Shooter.CANCODER_MIN) {
-            System.err.println(rotation + " is not a valid shaft rotation (max: 11.7, min: -32)");
+        /*if (rotation > Constants.Shooter.canCoderMax || rotation < Constants.Shooter.canCoderMin) {
+            System.err.println(rotation + " is not a valid shaft rotation (max: 11, min: -32)");
             return;
-        }
-
+        }*/
+        System.err.println("rotation:" + rotation);
         fxAngleMotor.setControl(m_mmReq.withPosition(rotation).withSlot(0));
     }
 
@@ -126,10 +126,10 @@ public class Shooter extends SubsystemBase {
         // 0 is down, 1 is up
         double positionOnShaftPercentage = distanceInInches / Constants.Shooter.SHAFT_LENGTH_IN_INCHES;
 
-        if (positionOnShaftPercentage > 1 || positionOnShaftPercentage < 0) {
+        /*if (positionOnShaftPercentage > 1 || positionOnShaftPercentage < 0) {
             System.err.println("Invalid shaft position of " + distanceInInches + " inches");
             return;
-        }
+        }*/
 
         // Range of 0 to cancoder limit
         double targetEncoderValue = (Constants.Shooter.CANCODER_MIN - Constants.Shooter.CANCODER_MAX)
@@ -146,13 +146,18 @@ public class Shooter extends SubsystemBase {
      * @param degrees
      */
     public void setAngle(double degrees) {
-        // if (degrees < 45 || degrees > 92) {
-        //     System.err.println(degrees + " is not a valid angle (max: 92, min: 45)");
-        //     return;
-        // }
+        double targetEncoderValue = (55-degrees)*0.78;
+        if (degrees < 41 || degrees > 90) {
+            System.err.println(degrees + " is not a valid angle (max: 92, min: 45)");
+        }
+        if(degrees < 41) {
+            targetEncoderValue = (55-41)*0.78;
+        } else if (degrees > 90) {
+            targetEncoderValue = (55-90)*0.78;
+        }
 
-        // 0 is down, 1 is up
-        double positionOnShaftPercentage = 1 - calculatePositionInInches(degrees) / Constants.Shooter.SHAFT_LENGTH_IN_INCHES;
+        /*// 0 is down, 1 is up
+        double positionOnShaftPercentage = 1 - calculatePositionInInches(degrees) / Constants.Shooter.shaftLength;
 
         // Range of 0 to cancoder limit
         double targetEncoderValue = (Constants.Shooter.CANCODER_MIN - Constants.Shooter.CANCODER_MAX)
@@ -160,7 +165,7 @@ public class Shooter extends SubsystemBase {
 
         // Rotate sahft to calculated position
         SmartDashboard.putNumber("Target Angle", degrees);
-        SmartDashboard.putNumber("Target Rotation", targetEncoderValue);
+        SmartDashboard.putNumber("Target Rotation", targetEncoderValue);*/
         setShaftRotation(targetEncoderValue);
     }
 
@@ -205,12 +210,17 @@ public class Shooter extends SubsystemBase {
         angleCanCoder.setPosition(0);
     }
 
+    public double getRPS() {
+        return fxLeftMotor.getVelocity().getValue();
+    }
     /**
      * Update dashboard with rotation values
      */
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("Angle Motor Angle", fxAngleMotor.getPosition().getValue());
+        // SmartDashboard.putNumber("Angle Motor Angle",
+        // fxAngleMotor.getPosition().getValue());
+        SmartDashboard.putNumber("shooter rps", getRPS());
         SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
         SmartDashboard.putNumber("Left Shooter Velocity", fxLeftMotor.getVelocity().getValue());
         SmartDashboard.putNumber("Right Shooter Velocity", fxRightMotor.getVelocity().getValue());

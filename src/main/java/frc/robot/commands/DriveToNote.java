@@ -83,17 +83,17 @@ public class DriveToNote extends Command {
 
     private List<Pose2d> calculatePoints() {
         double TX = Math.toRadians(
-                LimelightHelpers.getTX(Constants.Limelight.Back.NAME));
+                LimelightHelpers.getTX(Constants.Limelight.Front.NAME));
         double TY = Math.toRadians(
-                Constants.Limelight.Back.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
+                Constants.Limelight.Front.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Front.NAME));
 
-        double distance = (Constants.Map.NOTE_HEIGHT - Constants.Limelight.Back.HEIGHT) / Math.tan(TY);
-
+        double distance = (Constants.Map.NOTE_HEIGHT - Constants.Limelight.Front.HEIGHT) / Math.tan(TY);
         double dx = distance * Math.cos(TX);
         double dy = distance * Math.sin(TX);
 
         return List.of(
                 new Pose2d(0, 0, s_Swerve.getGyroYaw()),
-                new Pose2d(dx, dy, new Rotation2d(0)));
+                LimelightHelpers.getBotPose2d(Constants.Limelight.Front.NAME));
+                //new Pose2d(dx, dy, new Rotation2d((180-s_Swerve.gyro.getYaw() + LimelightHelpers.getTX(Constants.Limelight.Front.NAME)))));
     }
 }

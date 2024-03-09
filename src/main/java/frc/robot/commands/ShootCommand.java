@@ -36,10 +36,12 @@ public class ShootCommand extends Command {
     @Override
     public void execute() {
         s_Shooter.setSpeed(1);
-        h_pneumatics.setShooter(true);
-
-        if (timer.hasElapsed(Constants.Shooter.SHOOT_DELAY))
+        if (s_Shooter.getRPS() < -100) {
             s_Intake.setSpeed(1);
+            h_pneumatics.setShooterSolenoid(true);
+        }
+        /*if (timer.hasElapsed(0))
+            s_Intake.setSpeed(0.6);*/
     }
 
     /**
@@ -55,12 +57,13 @@ public class ShootCommand extends Command {
     public void end(boolean interrupted) {
         s_Intake.setSpeed(0);
         s_Shooter.setSpeed(0);
-        h_pneumatics.setShooter(false);
-        timer.stop();
+        h_pneumatics.setShooterSolenoid(false);
+        //timer.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+       // return timer.hasElapsed(1);
+       return false;
     }
 }
