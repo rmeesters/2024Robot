@@ -85,24 +85,11 @@ public class Shooter extends SubsystemBase {
      * @param speedPercent Percent of max speed (-1 - 1)
      */
     public void setShaftSpeed(double speedPercent) {
-        double reading = angleCanCoder.getPosition().getValue();
-
-        // Too high
-        if (reading < Constants.Shooter.CANCODER_MIN && speedPercent < 0) {
-            speedPercent = 0;
-        }
-        // Too low
-        else if (reading > Constants.Shooter.CANCODER_MAX && speedPercent > 0) {
-            speedPercent = 0;
-        }
-
-        System.out.println(speedPercent);
         fxAngleMotor.set(speedPercent);
     }
 
     /**
-     * Set the position of the shaft assuming the robot started with
-     * the ramp all the way down.
+     * Set the position of the shaft.
      * 
      * @param rotation 0 - Constants.Shooter.canCoderLimit
      * @return Time to complete
@@ -213,6 +200,11 @@ public class Shooter extends SubsystemBase {
     public double getRPS() {
         return fxLeftMotor.getVelocity().getValue();
     }
+
+    public double getCanCoderPosition() {
+        return angleCanCoder.getPosition().getValue();
+    }
+
     /**
      * Update dashboard with rotation values
      */
@@ -225,10 +217,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Left Shooter Velocity", fxLeftMotor.getVelocity().getValue());
         SmartDashboard.putNumber("Right Shooter Velocity", fxRightMotor.getVelocity().getValue());
         SmartDashboard.putNumber("Right Shooter Velocity", fxAngleMotor.getVelocity().getValue());
-    }
-
-    public double getAverageSpeed() {
-        return fxLeftMotor.getVelocity().getValue();
     }
 
 }

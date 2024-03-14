@@ -166,7 +166,7 @@ public final class Constants {
 
         public static final double IDEAL_INTAKE_POSITION_IN_INCHES = 3.0;
 
-        public static final double CANCODER_MIN = -32;
+        public static final double CANCODER_MIN = -30;
         public static final double CANCODER_MAX = 11.7;
 
         public static final double SHAFT_LENGTH_IN_INCHES = 8;

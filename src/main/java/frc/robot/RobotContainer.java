@@ -21,6 +21,7 @@ import frc.robot.autos.DriverAutoMoveBack;
 import frc.robot.autos.DriverAutoNoMove;
 import frc.robot.autos.DriverAutoSide;
 import frc.robot.autos.SpitAndMove;
+import frc.robot.commands.AngleShooterCommand;
 import frc.robot.commands.DriveToNote;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
@@ -183,11 +184,14 @@ public class RobotContainer {
             s_Intake.setSpeed(0);
         }));
 
-        b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
-        b_angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
+        // b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
+        // b_angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
 
-        b_angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
-        b_angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
+        // b_angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
+        // b_angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
+
+        b_angleUp.whileTrue(new AngleShooterCommand(-1));
+        b_angleDown.whileTrue(new AngleShooterCommand(1));
 
         //b_focusShooter.whileTrue(new TargetSpeakerCommand());
         b_setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
