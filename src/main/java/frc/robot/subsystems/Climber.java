@@ -26,16 +26,16 @@ public class Climber extends SubsystemBase {
     }
 
     public void setSpeed(double speedPercent) {
-        double reading = fxClimberMotor.getPosition().getValue();
+        // double reading = fxClimberMotor.getPosition().getValue();
 
-        // Too high
-        if (reading > Constants.Climber.MAX && speedPercent > 0) {
-            speedPercent = 0;
-        }
-        // Too low
-        else if (reading < Constants.Climber.MIN && speedPercent < 0) {
-            speedPercent = 0;
-        }
+        // // Too high
+        // if (reading > Constants.Climber.MAX && speedPercent > 0) {
+        //     speedPercent = 0;
+        // }
+        // // Too low
+        // else if (reading < Constants.Climber.MIN && speedPercent < 0) {
+        //     speedPercent = 0;
+        // }
 
         fxClimberMotor.set(speedPercent);
     }

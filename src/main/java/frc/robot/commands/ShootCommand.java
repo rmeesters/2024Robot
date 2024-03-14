@@ -36,12 +36,10 @@ public class ShootCommand extends Command {
     @Override
     public void execute() {
         s_Shooter.setSpeed(1);
-        if (s_Shooter.getRPS() < -100) {
+        if (s_Shooter.getRPS() < -Constants.Shooter.TARGET_SHOOTER_SPEED) {
             s_Intake.setSpeed(1);
             h_pneumatics.setShooterSolenoid(true);
         }
-        /*if (timer.hasElapsed(0))
-            s_Intake.setSpeed(0.6);*/
     }
 
     /**

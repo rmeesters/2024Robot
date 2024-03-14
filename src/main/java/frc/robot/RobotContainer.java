@@ -195,15 +195,15 @@ public class RobotContainer {
 
         /* Climber */
         b_climbUp.whileTrue(new DriveClimber(1));
-        b_climbUp.onFalse(( new InstantCommand(() ->{ 
-        s_Climber.setSpeed(0);
-        h_pneumatics.setClimber(true);
+        b_climbUp.onFalse(( new InstantCommand(() ->{
+            s_Climber.setSpeed(0);
+            h_pneumatics.setClimber(true);
         })));
 
         b_climbDown.whileTrue(new DriveClimber(-1));
         b_climbDown.onFalse(( new InstantCommand(() ->{ 
-        s_Climber.setSpeed(0);
-        h_pneumatics.setClimber(true);
+            s_Climber.setSpeed(0);
+            h_pneumatics.setClimber(true);
         })));
     }
 

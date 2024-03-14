@@ -21,7 +21,7 @@ public final class Constants {
         //public static final int pigeonID = 1;
 
         // Always ensure Gyro is CCW+ CW-
-        public static final boolean INVERT_GYRO = true;
+        public static final boolean INVERT_GYRO = false;
 
         public static final COTSTalonFXSwerveConstants chosenModule =
                 COTSTalonFXSwerveConstants.SDS.MK4.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4.driveRatios.L2);
@@ -150,7 +150,7 @@ public final class Constants {
         public static final double MAX = 100;
         
         // Time between moving the climber and activating/deactivating blocker
-        public static final double DELAY_AFTER_PNEUMATICS = 0.2;
+        public static final double DELAY_AFTER_PNEUMATICS = 0.1;
 
         /* Module Specific Constants */
         /* Single falcon500 motor */
@@ -162,6 +162,7 @@ public final class Constants {
     public static final class Shooter {
 
         public static final double SHOOT_DELAY = 0.5;
+        public static final double TARGET_SHOOTER_SPEED = 98;
 
         public static final double IDEAL_INTAKE_POSITION_IN_INCHES = 3.0;
 
