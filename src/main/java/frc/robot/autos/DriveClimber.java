@@ -31,7 +31,7 @@ public class DriveClimber extends SequentialCommandGroup {
      */
     public DriveClimber(double speed) {
         addCommands(
-        new InstantCommand(()-> s_PneumaticsHandler.setClimber(false)),
+        new InstantCommand(()-> s_PneumaticsHandler.setClimberSolenoid(false)),
         new WaitCommand(0.25),
         new InstantCommand(()-> s_Climber.setSpeed(speed))
         );

@@ -25,7 +25,7 @@ public class LiftCommand extends Command {
     @Override
     public void initialize() {
         // Unlock climber
-        h_pneumatics.setClimber(false);
+        h_pneumatics.setClimberSolenoid(false);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class LiftCommand extends Command {
         // Lock climber after delay
         new SequentialCommandGroup(
             new WaitCommand(Constants.Climber.DELAY_AFTER_PNEUMATICS),
-            new InstantCommand(() -> h_pneumatics.setClimber(true))
+            new InstantCommand(() -> h_pneumatics.setClimberSolenoid(true))
         ).schedule();
     }
     

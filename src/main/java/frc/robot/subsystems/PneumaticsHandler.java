@@ -19,22 +19,19 @@ public class PneumaticsHandler {
     /** Activate/Deactivate climber blocker
      * @param value true: blocked, false: released
      */
-    public void setClimber(boolean value) {
+    public void setClimberSolenoid(boolean value) {
         s_climberBlock.set(value);
     }
 
     /** Activate/Deactivate shooter blocker
      * @param value true: released, false: blocked
      */
-    public void setShooter(boolean value) {
+    public void setShooterSolenoid(boolean value) {
         s_shooterBlock.set(value);
     }
-
-    public void setShooterSolenoid(boolean on) {
-        s_shooterBlock.set(on);
-    }
-    public void setAmpSolenoid(boolean on) {
-        ampSolenoid.set(on);
+    
+    public void setAmpSolenoid(boolean value) {
+        ampSolenoid.set(value);
     }
 
 }

@@ -173,7 +173,7 @@ public class RobotContainer {
             new InstantCommand(() -> {
             h_pneumatics.setShooterSolenoid(true);
             s_Intake.setSpeed(0.5);
-            s_Shooter.setSpeed(.35);
+            s_Shooter.setSpeed(0.2);
         })));
         b_ampScore.onFalse(new InstantCommand(() -> {
             h_pneumatics.setShooterSolenoid(false);
@@ -199,13 +199,13 @@ public class RobotContainer {
         b_climbUp.whileTrue(new DriveClimber(1));
         b_climbUp.onFalse(( new InstantCommand(() ->{
             s_Climber.setSpeed(0);
-            h_pneumatics.setClimber(true);
+            h_pneumatics.setClimberSolenoid(true);
         })));
 
         b_climbDown.whileTrue(new DriveClimber(-1));
         b_climbDown.onFalse(( new InstantCommand(() ->{ 
             s_Climber.setSpeed(0);
-            h_pneumatics.setClimber(true);
+            h_pneumatics.setClimberSolenoid(true);
         })));
     }
 
@@ -234,9 +234,9 @@ public class RobotContainer {
     }
 
     private void preparePneumatics() {
-        h_pneumatics.setShooter(false);
-        h_pneumatics.setClimber(true);
-        //h_pneumatics.setPusher(false);
+        h_pneumatics.setShooterSolenoid(false);
+        h_pneumatics.setClimberSolenoid(true);
+        h_pneumatics.setAmpSolenoid(false);
     }
 
     /**
