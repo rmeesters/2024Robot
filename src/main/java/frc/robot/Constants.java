@@ -161,7 +161,7 @@ public final class Constants {
 
     public static final class Shooter {
 
-        public static final double SHOOT_DELAY = 0.5;
+        //public static final double SHOOT_DELAY = 0.5;
         public static final double TARGET_SHOOTER_SPEED = 98;
 
         public static final double IDEAL_INTAKE_POSITION_IN_INCHES = 3.0;
@@ -229,14 +229,14 @@ public final class Constants {
         public static final class Front {
             public static final String NAME = "limelight-gnomesf";
 
-            public static double ANGLE = -8;
+            public static double ANGLE = -1;
             public static double HEIGHT = 0.25;
         }
 
         public static final class Back {
             public static final String NAME = "limelight-gnomesb";
 
-            public static double ANGLE = 6;
+            public static double ANGLE = 8;
             public static double HEIGHT = 0.235;
         }
 
