@@ -60,12 +60,9 @@ public class RobotContainer {
     private final JoystickButton b_zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
     private final JoystickButton b_robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton b_zeroShooter = new JoystickButton(driver, PS4Controller.Button.kShare.value);
-    private final JoystickButton b_backupShoot = new JoystickButton(driver, PS4Controller.Button.kPS.value);
+    //private final JoystickButton b_backupShoot = new JoystickButton(driver, PS4Controller.Button.kPS.value);
     private final POVButton b_ampPosition = new POVButton(pov, 90);
     private final POVButton b_ampScore = new POVButton(pov, 270);
-
-
-    private final JoystickButton b_zeroAngle = new JoystickButton(driver, PS4Controller.Button.kShare.value);
 
     /* Intake */
     private final JoystickButton b_spinIntake = new JoystickButton(driver, PS4Controller.Button.kL2.value);
@@ -116,6 +113,7 @@ public class RobotContainer {
         configureLimelight(Constants.Limelight.Back.NAME);
         configureButtonBindings();
         configureAutoChooser();
+        stopMotors();
         preparePneumatics();
     }
 
@@ -146,16 +144,16 @@ public class RobotContainer {
 
         /* Shooter */
 
-        b_backupShoot.whileTrue(new InstantCommand(() -> {
-            s_Shooter.setSpeed(1);
-            s_Intake.setSpeed(1);
-            h_pneumatics.setShooterSolenoid(true);
-        }));
-        b_backupShoot.onFalse(new InstantCommand(() -> {
-            s_Shooter.setSpeed(0);
-            s_Intake.setSpeed(0);
-            h_pneumatics.setShooterSolenoid(false);
-        }));
+        // b_backupShoot.whileTrue(new InstantCommand(() -> {
+        //     s_Shooter.setSpeed(1);
+        //     s_Intake.setSpeed(1);
+        //     h_pneumatics.setShooterSolenoid(true);
+        // }));
+        // b_backupShoot.onFalse(new InstantCommand(() -> {
+        //     s_Shooter.setSpeed(0);
+        //     s_Intake.setSpeed(0);
+        //     h_pneumatics.setShooterSolenoid(false);
+        // }));
 
 
         b_spinShooter.whileTrue(new ShootCommand());
@@ -167,8 +165,8 @@ public class RobotContainer {
 
 
         /* Shooter Angle */
-        b_zeroShooter.whileTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        //b_ampPosition.whileTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(-29.76)));
+        b_zeroShooter.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        b_ampPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(-29.76)));
         b_ampScore.whileTrue(new SequentialCommandGroup(
             new InstantCommand(() -> h_pneumatics.setAmpSolenoid(true)),
             new WaitCommand(.5),
@@ -193,7 +191,7 @@ public class RobotContainer {
         b_angleUp.whileTrue(new AngleShooterCommand(-1));
         b_angleDown.whileTrue(new AngleShooterCommand(1));
 
-        //b_focusShooter.whileTrue(new TargetSpeakerCommand());
+        b_focusShooter.whileTrue(new TargetSpeakerCommand());
         b_setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
         b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
 
@@ -228,6 +226,11 @@ public class RobotContainer {
         autoChooser.addOption("Spit Note and move back", new SpitAndMove());
 
         SmartDashboard.putData("Auto Mode", autoChooser);
+    }
+
+    private void stopMotors() {
+        s_Shooter.setSpeed(0);
+        s_Intake.setSpeed(0);
     }
 
     private void preparePneumatics() {
