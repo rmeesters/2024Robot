@@ -34,8 +34,8 @@ public class TargetSpeakerCommand extends Command {
      *                 (Constants.Limelight.Pipelines.<>)
      */
     public TargetSpeakerCommand() {
-        pid = new PIDController(.08,0,0);
-        //addRequirements(s_Shooter);
+        pid = new PIDController(.08, 0, 0);
+        // addRequirements(s_Shooter);
     }
 
     /**
@@ -60,12 +60,12 @@ public class TargetSpeakerCommand extends Command {
                 -RobotContainer.driver.getRawAxis(RobotContainer.translationAxis), Constants.STICK_DEAD_BAND);
         double strafeVal = MathUtil.applyDeadband(-RobotContainer.driver.getRawAxis(RobotContainer.strafeAxis),
                 Constants.STICK_DEAD_BAND);
-       // double rotationVal = Math.cbrt(1.0 / Constants.Autos.maxRotation * getAngleDifference());
-        double rotationVal = pid.calculate(LimelightHelpers.getTX(Constants.Limelight.Back.NAME),0);
-       // s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), rotationVal, true,
-         //       false);
+        // double rotationVal = Math.cbrt(1.0 / Constants.Autos.LARGEST_POSSIBLE_ROTATION * getAngleDifference());
+        double rotationVal = pid.calculate(LimelightHelpers.getTX(Constants.Limelight.Back.NAME), 0);
+        s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_ANGULAR_VELOCITY),
+                rotationVal, true, false);
 
-        //s_Shooter.setAngle(targetAngle);
+        s_Shooter.setAngle(targetAngle);
         SmartDashboard.putNumber("target angle", targetAngle);
     }
 
@@ -102,16 +102,19 @@ public class TargetSpeakerCommand extends Command {
         double dy = -(Constants.Map.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.HEIGHT);
         double dx = dy / Math.tan(TY);
 
-       // targetAngle = Math.atan((dy + 0.6) / (dx + 0.56));
+        targetAngle = Math.atan((dy + Constants.Autos.SPEAKER_TO_APRILTAG_IN_METERS)
+                / (dx + Constants.Autos.BACK_LIMELIGHT_TO_SHOOTER_PIVOT_IN_METERS));
+
+        /*
         targetAngle = TY;
-       // double aprilHeight = 60;
-       // double c = Math.sqrt((21.5*21.5) + Math.pow((Math.sin(TY))/aprilHeight,2) - 2*aprilHeight*(Math.sin(TY)/aprilHeight)*Math.cos(180-TY));
-        //double b = Math.asin(Math.sin(180-TY)/c)*(Math.sin(TY)/aprilHeight);
+        // double aprilHeight = 60;
+        // double c = Math.sqrt((21.5*21.5) + Math.pow((Math.sin(TY))/aprilHeight,2) -
+        // 2*aprilHeight*(Math.sin(TY)/aprilHeight)*Math.cos(180-TY));
+        // double b = Math.asin(Math.sin(180-TY)/c)*(Math.sin(TY)/aprilHeight);
 
         SmartDashboard.putNumber("dx", dx);
         SmartDashboard.putNumber("dy", dy);
-//        SmartDashboard.putNumber("target angle", b);
-
-
+        // SmartDashboard.putNumber("target angle", b);
+        */
     }
 }

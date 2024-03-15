@@ -216,8 +216,8 @@ public final class Constants {
         public static final double LARGEST_POSSIBLE_ROTATION = 25;
 
         /* Target Speaker Command */
-        public static final double TARGET_SPEAKER_SHOOTER_ANGLE_VERTICAL_OFFSET_IN_METERS = 0.6;
-        public static final double HORIZONTAL_DISTANCE_FROM_LIMELIGHT_TO_SHOOTER_ANGLE_PIVOT_IN_METERS = 0.56;
+        public static final double SPEAKER_TO_APRILTAG_IN_METERS = 0.6;
+        public static final double BACK_LIMELIGHT_TO_SHOOTER_PIVOT_IN_METERS = 0.56;
 
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
