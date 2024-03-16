@@ -21,7 +21,7 @@ public final class Constants {
         //public static final int pigeonID = 1;
 
         // Always ensure Gyro is CCW+ CW-
-        public static final boolean INVERT_GYRO = false;
+        public static final boolean INVERT_GYRO = true;
 
         public static final COTSTalonFXSwerveConstants chosenModule =
                 COTSTalonFXSwerveConstants.SDS.MK4.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4.driveRatios.L2);
