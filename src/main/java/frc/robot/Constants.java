@@ -96,6 +96,9 @@ public final class Constants {
         /** Radians per Second */
         public static final double MAX_ANGULAR_VELOCITY = 3.0;
 
+        /* Distance from center of robot to wheels */
+        public static final double DRIVE_BASE_RADIUS = 0.43;
+
         /* Neutral Modes */
         public static final NeutralModeValue DRIVE_NEUTRAL_MODE = NeutralModeValue.Brake;
         public static final NeutralModeValue ANGLE_NEUTRAL_MODE = NeutralModeValue.Coast;
@@ -161,7 +164,7 @@ public final class Constants {
 
     public static final class Shooter {
 
-        //public static final double SHOOT_DELAY = 0.5;
+        public static final double SHOOT_DELAY = 2;
         public static final double TARGET_SHOOTER_SPEED = 98;
 
         public static final double IDEAL_INTAKE_POSITION_IN_INCHES = 3.0;

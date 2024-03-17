@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
     else {
       RobotContainer.noteLoaded = false;
     }
-    SmartDashboard.putBoolean("note loaded",RobotContainer.noteLoaded);
+    SmartDashboard.putBoolean("note loaded", RobotContainer.noteLoaded);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

@@ -1,6 +1,9 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -19,7 +22,7 @@ import frc.robot.autos.DriverAutoMain;
 import frc.robot.autos.DriverAutoMidTwoNote;
 import frc.robot.autos.DriverAutoMoveBack;
 import frc.robot.autos.DriverAutoNoMove;
-import frc.robot.autos.DriverAutoSide;
+import frc.robot.autos.DriverAutoWallSide;
 import frc.robot.autos.SpitAndMove;
 import frc.robot.commands.AngleShooterCommand;
 import frc.robot.commands.DriveToNote;
@@ -45,6 +48,7 @@ import frc.robot.subsystems.Swerve;
  */
 public class RobotContainer {
 
+    public static Rotation2d gyro_temp = new Rotation2d();
     public static boolean noteLoaded = false;
 
     /* Controllers */
@@ -139,21 +143,21 @@ public class RobotContainer {
         /* Intake */
         b_spinIntake.whileTrue(new IntakeCommand());
 
-        b_backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
-        b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
+        // b_backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
+        // b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
         /* Shooter */
 
-        // b_backupShoot.whileTrue(new InstantCommand(() -> {
-        //     s_Shooter.setSpeed(1);
-        //     s_Intake.setSpeed(1);
-        //     h_pneumatics.setShooterSolenoid(true);
-        // }));
-        // b_backupShoot.onFalse(new InstantCommand(() -> {
-        //     s_Shooter.setSpeed(0);
-        //     s_Intake.setSpeed(0);
-        //     h_pneumatics.setShooterSolenoid(false);
-        // }));
+        b_backupIntake.whileTrue(new InstantCommand(() -> {
+            s_Shooter.setSpeed(-1);
+            s_Intake.setSpeed(-1);
+            h_pneumatics.setShooterSolenoid(true);
+        }));
+        b_backupIntake.onFalse(new InstantCommand(() -> {
+            s_Shooter.setSpeed(0);
+            s_Intake.setSpeed(0);
+            h_pneumatics.setShooterSolenoid(false);
+        }));
 
 
         b_spinShooter.whileTrue(new ShootCommand());
@@ -173,7 +177,7 @@ public class RobotContainer {
             new InstantCommand(() -> {
             h_pneumatics.setShooterSolenoid(true);
             s_Intake.setSpeed(0.5);
-            s_Shooter.setSpeed(0.2);
+            s_Shooter.setSpeed(0.22);
         })));
         b_ampScore.onFalse(new InstantCommand(() -> {
             h_pneumatics.setShooterSolenoid(false);
@@ -211,14 +215,13 @@ public class RobotContainer {
 
     private void configureAutoChooser() {
         // Autonomous Sendable Chooser
-        autoChooser = new SendableChooser<Command>();
-        autoChooser.setDefaultOption("Main Driver (Red)", new DriverAutoMain(true));
+        //autoChooser = new SendableChooser<Command>();
+        autoChooser = AutoBuilder.buildAutoChooser("PathPlanner Test (middle note)");
+        autoChooser.addOption("Main Driver (Red)", new DriverAutoMain(true));
         autoChooser.addOption("Main Driver (Blue)", new DriverAutoMain(false));
-        autoChooser.addOption("Side Driver (Blue)", new DriverAutoSide(false));
-        autoChooser.addOption("Side Driver (Red)", new DriverAutoSide(true));
+        autoChooser.addOption("Wall Side Driver (Blue)", new DriverAutoWallSide(false));
+        autoChooser.addOption("Wall Side Driver (Red)", new DriverAutoWallSide(true));
         autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        autoChooser.addOption("Set shaft to 4in", new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
-        autoChooser.addOption("Set angle to 80", new InstantCommand(() -> s_Shooter.setAngle(80)));
         autoChooser.addOption("center two piece", new DriverAutoMidTwoNote() );
         autoChooser.addOption("just shoot", new DriverAutoNoMove() );
         autoChooser.addOption("note test", new DriveToNote() );

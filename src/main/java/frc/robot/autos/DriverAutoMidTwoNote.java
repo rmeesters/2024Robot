@@ -45,7 +45,7 @@ public class DriverAutoMidTwoNote extends SequentialCommandGroup {
                                 new MoveCommand(List.of(
                                         new Pose2d(0, 0, new Rotation2d(0)),
                                         new Pose2d(0.5, 0, new Rotation2d(0))), false)),
-                        new InstantCommand(() -> s_Shooter.setShaftRotation(5))),
+                        new InstantCommand(() -> s_Shooter.setShaftRotation(11))),
                 new WaitCommand(1),
 
                 // Left note

@@ -32,9 +32,10 @@ public class DriverAutoNoMove extends SequentialCommandGroup {
                 // Loaded note
                 new InstantCommand(() -> s_Shooter.setShaftRotation(0)),
                 new InstantCommand(() -> s_Shooter.setSpeed(1)),
+                new WaitCommand(0.5),
                 new InstantCommand(() -> s_Intake.setSpeed(1)),
                 new InstantCommand(() -> h_pneumatics.setShooterSolenoid(true)),
-                new WaitCommand(0.5),
+                new WaitCommand(1),
                         
                 // Disable auto
                 new InstantCommand(() -> h_pneumatics.setShooterSolenoid(false)),
