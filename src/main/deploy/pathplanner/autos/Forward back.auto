@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4491709985507655,
+      "x": 1.5,
       "y": 6.0
     },
     "rotation": 0
@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 4.0
           }
         },
         {

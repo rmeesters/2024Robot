@@ -104,6 +104,9 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        configurePathPlannerCommands();
+        s_Swerve.configureAutoBuilder();
+
         /* Controller Movement */
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
@@ -117,7 +120,6 @@ public class RobotContainer {
         configureLimelight(Constants.Limelight.Front.NAME);
         configureLimelight(Constants.Limelight.Back.NAME);
         configureButtonBindings();
-        configurePathPlanner();
         configureAutoChooser();
         stopMotors();
         preparePneumatics();
@@ -178,8 +180,8 @@ public class RobotContainer {
             new WaitCommand(.5),
             new InstantCommand(() -> {
             h_pneumatics.setShooterSolenoid(true);
-            s_Intake.setSpeed(0.5);
-            s_Shooter.setSpeed(0.22);
+            s_Intake.setSpeed(0.3);
+            s_Shooter.setSpeed(0.2);
         })));
         b_ampScore.onFalse(new InstantCommand(() -> {
             h_pneumatics.setShooterSolenoid(false);
@@ -215,16 +217,18 @@ public class RobotContainer {
         })));
     }
 
-    private void configurePathPlanner() {
+    private void configurePathPlannerCommands() {
         NamedCommands.registerCommand("Start Shooter", new InstantCommand(() -> s_Shooter.setSpeed(1)));
         NamedCommands.registerCommand("Reverse Shooter", new InstantCommand(() -> s_Shooter.setSpeed(-1)));
+        NamedCommands.registerCommand("Stop Shooter", new InstantCommand(() -> s_Shooter.setSpeed(0)));
         NamedCommands.registerCommand("Start Intake", new InstantCommand(() -> s_Intake.setSpeed(1)));
         NamedCommands.registerCommand("Reverse Intake", new InstantCommand(() -> s_Intake.setSpeed(-1)));
+        NamedCommands.registerCommand("Stop Intake", new InstantCommand(() -> s_Intake.setSpeed(0)));
         NamedCommands.registerCommand("Lower Shooter Pin", new InstantCommand(() -> h_pneumatics.setShooterSolenoid(true)));
         NamedCommands.registerCommand("Raise Shooter Pin", new InstantCommand(() -> h_pneumatics.setShooterSolenoid(false)));
-        NamedCommands.registerCommand("Shooter Angle -> 0", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        NamedCommands.registerCommand("Shooter Angle -> 10.7", new InstantCommand(() -> s_Shooter.setShaftRotation(10.7)));
-        NamedCommands.registerCommand("Shooter Angle -> 11", new InstantCommand(() -> s_Shooter.setShaftRotation(11)));
+        NamedCommands.registerCommand("Angle to 0", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        NamedCommands.registerCommand("Angle to 10.7", new InstantCommand(() -> s_Shooter.setShaftRotation(10.7)));
+        NamedCommands.registerCommand("Angle to 11", new InstantCommand(() -> s_Shooter.setShaftRotation(11)));
         //NamedCommands.registerCommand("command_name", new InstantCommand(() -> ___));
     }
 

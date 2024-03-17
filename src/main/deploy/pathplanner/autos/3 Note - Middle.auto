@@ -1,0 +1,168 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.36086297850199,
+      "y": 5.55
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Start Shooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Angle to 0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Lower Shooter Pin"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start Intake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Angle to 11"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Raise Shooter Pin"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Wall Side Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Angle to 0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Lower Shooter Pin"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Return Wall Note After Middle"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start Intake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Shooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Raise Shooter Pin"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

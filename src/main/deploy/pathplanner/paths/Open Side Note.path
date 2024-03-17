@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.36,
-        "y": 5.55
+        "x": 0.75,
+        "y": 4.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.86,
-        "y": 5.55
+        "x": 1.032842712474619,
+        "y": 4.117157287525381
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.2,
-        "y": 5.55
+        "x": 2.65,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.7,
-        "y": 5.55
+        "x": 1.15,
+        "y": 4.1
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "Middle Auto Dest 1"
+      "isLocked": false,
+      "linkedName": "Open Side Auto Dest 1"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -43,9 +49,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle",
+  "folder": "Open Side",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.255118703057704,
     "velocity": 0
   },
   "useDefaultConstraints": true

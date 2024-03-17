@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3634789691291282,
-        "y": 6.0
+        "x": 2.65,
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.488641298785729,
-        "y": 6.049857277167581
+        "x": 1.6887664017838722,
+        "y": 4.11050362756931
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Open Side Auto Dest 1"
     },
     {
       "anchor": {
-        "x": 3.95137825766257,
-        "y": 4.815892053496008
+        "x": 0.7401886415755699,
+        "y": 4.391563704668065
       },
       "prevControl": {
-        "x": 3.9342398517782424,
-        "y": 6.135549306589218
+        "x": 0.9392728628538557,
+        "y": 4.075371117931965
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -60.25511870305773,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Open Side",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

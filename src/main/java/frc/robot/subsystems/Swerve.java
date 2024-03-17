@@ -32,6 +32,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     //public Pigeon2 gyro;
     public AHRS gyro;
+    private double STATIC_YAW;
   
   private Field2d field = new Field2d();
 
@@ -51,7 +52,10 @@ public class Swerve extends SubsystemBase {
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+    }
 
+    public void configureAutoBuilder() {
+        
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
@@ -164,6 +168,10 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d getGyroYaw() {
         return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+    }
+
+    public Rotation2d getStaticYaw() {
+        return Rotation2d.fromDegrees(STATIC_YAW + getGyroYaw().getDegrees());
     }
 
     public void resetModulesToAbsolute(){
