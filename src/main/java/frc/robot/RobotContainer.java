@@ -2,6 +2,7 @@ package frc.robot;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -116,6 +117,7 @@ public class RobotContainer {
         configureLimelight(Constants.Limelight.Front.NAME);
         configureLimelight(Constants.Limelight.Back.NAME);
         configureButtonBindings();
+        configurePathPlanner();
         configureAutoChooser();
         stopMotors();
         preparePneumatics();
@@ -211,6 +213,19 @@ public class RobotContainer {
             s_Climber.setSpeed(0);
             h_pneumatics.setClimberSolenoid(true);
         })));
+    }
+
+    private void configurePathPlanner() {
+        NamedCommands.registerCommand("Start Shooter", new InstantCommand(() -> s_Shooter.setSpeed(1)));
+        NamedCommands.registerCommand("Reverse Shooter", new InstantCommand(() -> s_Shooter.setSpeed(-1)));
+        NamedCommands.registerCommand("Start Intake", new InstantCommand(() -> s_Intake.setSpeed(1)));
+        NamedCommands.registerCommand("Reverse Intake", new InstantCommand(() -> s_Intake.setSpeed(-1)));
+        NamedCommands.registerCommand("Lower Shooter Pin", new InstantCommand(() -> h_pneumatics.setShooterSolenoid(true)));
+        NamedCommands.registerCommand("Raise Shooter Pin", new InstantCommand(() -> h_pneumatics.setShooterSolenoid(false)));
+        NamedCommands.registerCommand("Shooter Angle -> 0", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        NamedCommands.registerCommand("Shooter Angle -> 10.7", new InstantCommand(() -> s_Shooter.setShaftRotation(10.7)));
+        NamedCommands.registerCommand("Shooter Angle -> 11", new InstantCommand(() -> s_Shooter.setShaftRotation(11)));
+        //NamedCommands.registerCommand("command_name", new InstantCommand(() -> ___));
     }
 
     private void configureAutoChooser() {
