@@ -28,6 +28,7 @@ import frc.robot.autos.SpitAndMove;
 import frc.robot.commands.AngleShooterCommand;
 import frc.robot.commands.DriveToNote;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.RotateCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TargetSpeakerCommand;
 import frc.robot.commands.TeleopSwerve;
@@ -65,7 +66,7 @@ public class RobotContainer {
     private final JoystickButton b_zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
     private final JoystickButton b_robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton b_zeroShooter = new JoystickButton(driver, PS4Controller.Button.kShare.value);
-    //private final JoystickButton b_backupShoot = new JoystickButton(driver, PS4Controller.Button.kPS.value);
+    private final JoystickButton b_forwardGyro = new JoystickButton(driver, PS4Controller.Button.kPS.value);
     private final POVButton b_ampPosition = new POVButton(pov, 90);
     private final POVButton b_ampScore = new POVButton(pov, 270);
 
@@ -75,13 +76,15 @@ public class RobotContainer {
 
     /* Shooter */
     private final JoystickButton b_spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
-    private final JoystickButton b_focusShooter = new JoystickButton(driver, PS4Controller.Button.kR1.value);
+    // private final JoystickButton b_focusShooter = new JoystickButton(driver, PS4Controller.Button.kR1.value);
 
     /* Angle */
     private final JoystickButton b_angleDown = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
     private final JoystickButton b_angleUp = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
-    private final JoystickButton b_setShootPosition = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    private final JoystickButton b_setPickupPosition = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    // private final JoystickButton b_setShootPosition = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    // private final JoystickButton b_setPickupPosition = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+
+    private final JoystickButton b_prepareSpeaker = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
 
     /* Climber */
     private final POVButton b_climbUp = new POVButton(pov, 0);
@@ -143,12 +146,10 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         b_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        b_forwardGyro.onTrue(new InstantCommand(() -> s_Swerve.directGyroForward()));
 
         /* Intake */
         b_spinIntake.whileTrue(new IntakeCommand());
-
-        // b_backupIntake.onTrue(new InstantCommand(() -> s_Intake.setSpeed(-0.6)));
-        // b_backupIntake.onFalse(new InstantCommand(() -> s_Intake.setSpeed(0)));
 
         /* Shooter */
 
@@ -163,25 +164,19 @@ public class RobotContainer {
             h_pneumatics.setShooterSolenoid(false);
         }));
 
-
         b_spinShooter.whileTrue(new ShootCommand());
-        b_spinShooter.onFalse(new InstantCommand(() -> {
-            s_Shooter.setSpeed(0);
-            s_Intake.setSpeed(0);
-            h_pneumatics.setShooterSolenoid(false);
-        }));
-
 
         /* Shooter Angle */
         b_zeroShooter.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
         b_ampPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(-29.76)));
+
         b_ampScore.whileTrue(new SequentialCommandGroup(
             new InstantCommand(() -> h_pneumatics.setAmpSolenoid(true)),
-            new WaitCommand(.5),
+            new WaitCommand(0.5),
             new InstantCommand(() -> {
-            h_pneumatics.setShooterSolenoid(true);
-            s_Intake.setSpeed(0.3);
-            s_Shooter.setSpeed(0.2);
+                h_pneumatics.setShooterSolenoid(true);
+                s_Intake.setSpeed(0.3);
+                s_Shooter.setSpeed(0.2);
         })));
         b_ampScore.onFalse(new InstantCommand(() -> {
             h_pneumatics.setShooterSolenoid(false);
@@ -190,18 +185,21 @@ public class RobotContainer {
             s_Intake.setSpeed(0);
         }));
 
-        // b_angleUp.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(-1)));
-        // b_angleUp.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
-
-        // b_angleDown.onTrue(new InstantCommand(() -> s_Shooter.setShaftSpeed(1)));
-        // b_angleDown.onFalse(new InstantCommand(() -> s_Shooter.setShaftSpeed(0)));
-
         b_angleUp.whileTrue(new AngleShooterCommand(-1));
         b_angleDown.whileTrue(new AngleShooterCommand(1));
 
-        b_focusShooter.whileTrue(new TargetSpeakerCommand());
-        b_setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
-        b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
+        // b_focusShooter.whileTrue(new TargetSpeakerCommand());
+        // b_setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
+        // b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
+
+        Command prepareSpeakerCommand = new ParallelCommandGroup(
+            new InstantCommand(() -> s_Shooter.setAngle(0)),
+            new RotateCommand(0)
+        );
+        b_prepareSpeaker.whileTrue(prepareSpeakerCommand);
+        b_prepareSpeaker.onFalse(new InstantCommand(() -> {
+            prepareSpeakerCommand.cancel();
+        }));
 
         /* Climber */
         b_climbUp.whileTrue(new DriveClimber(1));

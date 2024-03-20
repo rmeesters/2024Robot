@@ -32,7 +32,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     //public Pigeon2 gyro;
     public AHRS gyro;
-    private double STATIC_YAW;
+    private double YAW_OFFSET;
   
   private Field2d field = new Field2d();
 
@@ -155,23 +155,30 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setHeading(Rotation2d heading){
+        YAW_OFFSET -= heading.getDegrees();
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
     }
 
     public void zeroHeading(){
+        YAW_OFFSET += gyro.getYaw();
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
 
     public void zeroGyro(){
+        YAW_OFFSET = 0;
         gyro.zeroYaw();
     }
 
     public Rotation2d getGyroYaw() {
         return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
+ 
+    public Rotation2d getRawYaw() {
+        return Rotation2d.fromDegrees(YAW_OFFSET + getGyroYaw().getDegrees());
+    }
 
-    public Rotation2d getStaticYaw() {
-        return Rotation2d.fromDegrees(STATIC_YAW + getGyroYaw().getDegrees());
+    public void directGyroForward() {
+        setHeading(getRawYaw());
     }
 
     public void resetModulesToAbsolute(){
