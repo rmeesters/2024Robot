@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.65,
-        "y": 4.1
+        "x": 8.3,
+        "y": 0.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6887664017838722,
-        "y": 4.11050362756931
+        "x": 5.300000000000001,
+        "y": 0.8000000000000004
       },
       "isLocked": false,
-      "linkedName": "Open Side Auto Dest 1"
+      "linkedName": "Open Side Auto Dest 3"
     },
     {
       "anchor": {
-        "x": 0.7401886415755699,
-        "y": 4.391563704668065
+        "x": 0.7639747277268621,
+        "y": 4.380783653053116
       },
       "prevControl": {
-        "x": 0.9392728628538557,
-        "y": 4.075371117931965
+        "x": 2.2110077787185816,
+        "y": 1.7528385719417177
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Open Side Auto Dest 2"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.25511870305773,
+    "rotation": -60.25511870305777,
     "rotateFast": false
   },
   "reversed": false,

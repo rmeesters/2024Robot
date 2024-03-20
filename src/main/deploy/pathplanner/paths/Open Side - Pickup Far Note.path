@@ -1,0 +1,74 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7639747277268621,
+        "y": 4.380783653053116
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.2388484618797784,
+        "y": 1.9059099189001993
+      },
+      "isLocked": false,
+      "linkedName": "Open Side Auto Dest 2"
+    },
+    {
+      "anchor": {
+        "x": 6.360319721195926,
+        "y": 0.8
+      },
+      "prevControl": {
+        "x": 4.360319721195926,
+        "y": 0.8
+      },
+      "nextControl": {
+        "x": 7.360319721195926,
+        "y": 0.8
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.3,
+        "y": 0.8
+      },
+      "prevControl": {
+        "x": 7.800000000000001,
+        "y": 0.8
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Open Side Auto Dest 3"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Open Side",
+  "previewStartingState": {
+    "rotation": -59.84490600380095,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
