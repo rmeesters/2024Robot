@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 4.4
+      "x": 1.36086297850199,
+      "y": 5.55
     },
-    "rotation": 49.97392116266153
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -18,13 +18,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Angle to 0"
+                  "name": "Start Shooter"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Start Shooter"
+                  "name": "Angle to 0"
                 }
               },
               {
@@ -55,27 +55,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Raise Shooter Pin"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Open Side - Pickup Side Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Open Side - Return Side Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Angle to 11"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle - Center Note"
+                }
+              }
+            ]
           }
         },
         {
@@ -85,46 +80,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Lower Shooter Pin"
+                  "name": "Raise Shooter Pin"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Start Intake"
+                  "pathName": "Middle Side - Pickup Side Note"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Raise Shooter Pin"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Open Side - Pickup Far Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Open Side - Return Far Note"
           }
         },
         {
@@ -134,16 +99,34 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Lower Shooter Pin"
+                  "name": "Stop Intake"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Start Intake"
+                  "name": "Angle to 0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Lower Shooter Pin"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle Side - Return Side Note"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start Intake"
           }
         },
         {

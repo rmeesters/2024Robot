@@ -1,0 +1,84 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.2,
+        "y": 5.55
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.7,
+        "y": 5.55
+      },
+      "isLocked": false,
+      "linkedName": "Middle Auto Dest 1"
+    },
+    {
+      "anchor": {
+        "x": 5.495095330758274,
+        "y": 6.479413025604014
+      },
+      "prevControl": {
+        "x": 4.495095330758274,
+        "y": 6.479413025604014
+      },
+      "nextControl": {
+        "x": 6.495095330758274,
+        "y": 6.479413025604014
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.5,
+        "y": 5.8
+      },
+      "prevControl": {
+        "x": 7.000001268752564,
+        "y": 5.801126388456421
+      },
+      "nextControl": {
+        "x": 7.999998731247436,
+        "y": 5.79887361154358
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 9.0,
+        "y": 5.8
+      },
+      "prevControl": {
+        "x": 8.5,
+        "y": 5.8
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Middle Far Auto Dest 2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Middle",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

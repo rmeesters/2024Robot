@@ -4,9 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "Forward Back",
-    "Wall Side",
     "Middle",
-    "Open Side"
+    "Open Side",
+    "Wall Side"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

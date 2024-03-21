@@ -1,0 +1,58 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7547702129349723,
+        "y": 6.7
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.1083236035282462,
+        "y": 7.053553390593274
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.05,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 2.05,
+        "y": 7.0
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Wall Side Auto Dest 1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Wall Side",
+  "previewStartingState": {
+    "rotation": 59.82647997035565,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
