@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 4.4
+      "x": 0.7547702129349723,
+      "y": 6.7
     },
-    "rotation": -60.55765412587542
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -73,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Open Side - Pickup Side Note"
+                  "pathName": "Wall Side - Pickup Side Note"
                 }
               }
             ]
@@ -98,82 +98,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Open Side - Return Side Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Lower Shooter Pin"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Start Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Raise Shooter Pin"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Angle to 1.5"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Open Side - Pickup Far Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop Shooter"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Angle to 0"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Open Side - Return Far Note"
+                  "pathName": "Wall Side - Return Side Note"
                 }
               }
             ]
@@ -232,6 +157,6 @@
       ]
     }
   },
-  "folder": "Open Side",
+  "folder": "Far Side",
   "choreoAuto": false
 }

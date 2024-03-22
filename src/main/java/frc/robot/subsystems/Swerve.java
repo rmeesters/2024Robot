@@ -32,7 +32,6 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     //public Pigeon2 gyro;
     public AHRS gyro;
-    private double YAW_OFFSET;
   
   private Field2d field = new Field2d();
 
@@ -155,30 +154,23 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setHeading(Rotation2d heading){
-        YAW_OFFSET -= heading.getDegrees();
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
     }
 
     public void zeroHeading(){
-        YAW_OFFSET += gyro.getYaw();
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
 
     public void zeroGyro(){
-        YAW_OFFSET = 0;
         gyro.zeroYaw();
     }
 
     public Rotation2d getGyroYaw() {
         return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
- 
-    public Rotation2d getRawYaw() {
-        return Rotation2d.fromDegrees(YAW_OFFSET + getGyroYaw().getDegrees());
-    }
 
     public void directGyroForward() {
-        setHeading(getRawYaw());
+        setHeading(getGyroYaw());
     }
 
     public void resetModulesToAbsolute(){
@@ -191,7 +183,7 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
         
-        SmartDashboard.putNumber("Gyro", gyro.getYaw());
+        SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());

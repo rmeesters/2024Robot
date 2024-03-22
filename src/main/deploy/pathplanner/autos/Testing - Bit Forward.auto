@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3959954881393342,
-      "y": 5.562647359246215
+      "x": 1.45,
+      "y": 6.0
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Rotation Test"
+            "pathName": "Bit Forward"
           }
         }
       ]

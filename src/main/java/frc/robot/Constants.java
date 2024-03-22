@@ -23,14 +23,14 @@ public final class Constants {
         // Always ensure Gyro is CCW+ CW-
         public static final boolean INVERT_GYRO = true;
 
-        public static final COTSTalonFXSwerveConstants chosenModule =
+        private static final COTSTalonFXSwerveConstants chosenModule =
                 COTSTalonFXSwerveConstants.SDS.MK4.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4.driveRatios.L2);
 
         /* Drivetrain Constants */
         // Distance from left wheel to right
-        public static final double TRACK_WIDTH = Units.inchesToMeters(25);
+        private static final double TRACK_WIDTH = Units.inchesToMeters(25);
         // Distance from front wheel to back
-        public static final double WHEEL_BASE = Units.inchesToMeters(22.25);
+        private static final double WHEEL_BASE = Units.inchesToMeters(22.25);
         public static final double WHEEL_CIRCUMFERENCE = chosenModule.wheelCircumference;
 
         /*
@@ -149,11 +149,11 @@ public final class Constants {
     public static final class Climber {
 
         // Highest and lowest height
-        public static final double MIN = 0;
-        public static final double MAX = 100;
+        public static final double CANCODER_MIN = 0;
+        public static final double CANCODER_MAX = 100;
         
         // Time between moving the climber and activating/deactivating blocker
-        public static final double DELAY_AFTER_PNEUMATICS = 0.1;
+        public static final double DELAY_AFTER_PNEUMATICS = 0.25;
 
         /* Module Specific Constants */
         /* Single falcon500 motor */
@@ -167,13 +167,10 @@ public final class Constants {
         public static final double SHOOT_DELAY = 2;
         public static final double TARGET_SHOOTER_SPEED = 98;
 
-        public static final double IDEAL_INTAKE_POSITION_IN_INCHES = 3.0;
+        public static final double IDEAL_INTAKE_POSITION = 1.5;
 
         public static final double CANCODER_MIN = -30;
         public static final double CANCODER_MAX = 11.7;
-
-        public static final double SHAFT_LENGTH_IN_INCHES = 8;
-        public static final double GROOVES_PER_INCH = 5;
 
         /* Module Specific Constants */
         /* Shooter Left motor */

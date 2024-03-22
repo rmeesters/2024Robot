@@ -17,42 +17,26 @@ public class AngleShooterCommand extends Command {
 
     @Override
     public void initialize() {
-        
+        if (speed == 0)
+            cancel();
     }
 
     @Override
     public void execute() {
-
-        boolean close = false;
+        double distance;
 
         // Min and max
-        if (speed < 0) {
-            double distance = s_Shooter.getCanCoderPosition() - Constants.Shooter.CANCODER_MIN;
+        if (speed < 0) 
+            distance = s_Shooter.getCanCoderPosition() - Constants.Shooter.CANCODER_MIN;
+        else
+            distance = Constants.Shooter.CANCODER_MAX - s_Shooter.getCanCoderPosition();
 
-            if (distance < 0) {
-                cancel();
-                return;
-            }
-            
-            if (distance < 0.5) {
-                close = true;
-            }
+        if (distance < 0) {
+            cancel();
+            return;
         }
 
-        else if (speed > 0) {
-            double distance = Constants.Shooter.CANCODER_MAX - s_Shooter.getCanCoderPosition();
-
-            if (distance < 0) {
-                cancel();
-                return;
-            }
-
-            if (distance < 0.5) {
-                close = true;
-            }
-        }
-
-        s_Shooter.setShaftSpeed(close ? speed / 5 : speed);
+        s_Shooter.setShaftSpeed(distance < 0.5 ? speed / 5 : speed);
     }
 
     @Override

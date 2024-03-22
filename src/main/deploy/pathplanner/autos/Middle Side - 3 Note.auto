@@ -84,6 +84,12 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "Angle to 1.5"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "Middle Side - Pickup Side Note"
@@ -163,6 +169,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Middle",
   "choreoAuto": false
 }

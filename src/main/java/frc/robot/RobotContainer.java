@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.autos.DriveClimber;
 import frc.robot.autos.DriverAutoMain;
 import frc.robot.autos.DriverAutoMidTwoNote;
 import frc.robot.autos.DriverAutoMoveBack;
@@ -26,11 +25,12 @@ import frc.robot.autos.DriverAutoNoMove;
 import frc.robot.autos.DriverAutoWallSide;
 import frc.robot.autos.SpitAndMove;
 import frc.robot.commands.AngleShooterCommand;
+import frc.robot.commands.DriveClimberCommand;
 import frc.robot.commands.DriveToNote;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.RotateCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.commands.TargetSpeakerCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -81,8 +81,6 @@ public class RobotContainer {
     /* Angle */
     private final JoystickButton b_angleDown = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
     private final JoystickButton b_angleUp = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
-    // private final JoystickButton b_setShootPosition = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    // private final JoystickButton b_setPickupPosition = new JoystickButton(driver, PS4Controller.Button.kCross.value);
 
     private final JoystickButton b_prepareSpeaker = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
 
@@ -189,11 +187,9 @@ public class RobotContainer {
         b_angleDown.whileTrue(new AngleShooterCommand(1));
 
         // b_focusShooter.whileTrue(new TargetSpeakerCommand());
-        // b_setShootPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(4)));
-        // b_setPickupPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftPosition(6)));
 
         Command prepareSpeakerCommand = new ParallelCommandGroup(
-            new InstantCommand(() -> s_Shooter.setAngle(0)),
+            new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.IDEAL_INTAKE_POSITION)),
             new RotateCommand(0)
         );
         b_prepareSpeaker.whileTrue(prepareSpeakerCommand);
@@ -202,17 +198,17 @@ public class RobotContainer {
         }));
 
         /* Climber */
-        b_climbUp.whileTrue(new DriveClimber(1));
-        b_climbUp.onFalse(( new InstantCommand(() ->{
-            s_Climber.setSpeed(0);
-            h_pneumatics.setClimberSolenoid(true);
-        })));
+        // Command stopClimbing = new InstantCommand(() ->{
+        //     s_Climber.setSpeed(0);
+        //     h_pneumatics.setClimberSolenoid(true);
+        // });
+        // b_climbUp.whileTrue(new DriveClimberCommand(1));
+        // b_climbUp.onFalse(stopClimbing);
 
-        b_climbDown.whileTrue(new DriveClimber(-1));
-        b_climbDown.onFalse(( new InstantCommand(() ->{ 
-            s_Climber.setSpeed(0);
-            h_pneumatics.setClimberSolenoid(true);
-        })));
+        // b_climbDown.whileTrue(new DriveClimberCommand(-1));
+        // b_climbDown.onFalse(stopClimbing);
+        b_climbUp.whileTrue(new MoveClimberCommand(1));
+        b_climbDown.whileTrue(new MoveClimberCommand(-1));
     }
 
     private void configurePathPlannerCommands() {
@@ -225,6 +221,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Lower Shooter Pin", new InstantCommand(() -> h_pneumatics.setShooterSolenoid(true)));
         NamedCommands.registerCommand("Raise Shooter Pin", new InstantCommand(() -> h_pneumatics.setShooterSolenoid(false)));
         NamedCommands.registerCommand("Angle to 0", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        NamedCommands.registerCommand("Angle to 1.5", new InstantCommand(() -> s_Shooter.setShaftRotation(1.5)));
         NamedCommands.registerCommand("Angle to 10.7", new InstantCommand(() -> s_Shooter.setShaftRotation(10.7)));
         NamedCommands.registerCommand("Angle to 11", new InstantCommand(() -> s_Shooter.setShaftRotation(11)));
         //NamedCommands.registerCommand("command_name", new InstantCommand(() -> ___));
@@ -232,20 +229,19 @@ public class RobotContainer {
 
     private void configureAutoChooser() {
         // Autonomous Sendable Chooser
-        //autoChooser = new SendableChooser<Command>();
-        autoChooser = AutoBuilder.buildAutoChooser("PathPlanner Test (middle note)");
-        autoChooser.addOption("Main Driver (Red)", new DriverAutoMain(true));
-        autoChooser.addOption("Main Driver (Blue)", new DriverAutoMain(false));
-        autoChooser.addOption("Wall Side Driver (Blue)", new DriverAutoWallSide(false));
-        autoChooser.addOption("Wall Side Driver (Red)", new DriverAutoWallSide(true));
-        autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        autoChooser.addOption("center two piece", new DriverAutoMidTwoNote() );
-        autoChooser.addOption("just shoot", new DriverAutoNoMove() );
-        autoChooser.addOption("note test", new DriveToNote() );
-        autoChooser.addOption("Shoot and move back", new DriverAutoMoveBack());
-        autoChooser.addOption("Spit Note and move back", new SpitAndMove());
+        autoChooser = AutoBuilder.buildAutoChooser("Middle Side - 3 Note");
+        autoChooser.addOption("Old - Main Driver (Red)", new DriverAutoMain(true));
+        autoChooser.addOption("Old - Main Driver (Blue)", new DriverAutoMain(false));
+        autoChooser.addOption("Old - Wall Side Driver (Blue)", new DriverAutoWallSide(false));
+        autoChooser.addOption("Old - Wall Side Driver (Red)", new DriverAutoWallSide(true));
+        //autoChooser.addOption("Zero angle", new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
+        autoChooser.addOption("Center Two Piece", new DriverAutoMidTwoNote() );
+        autoChooser.addOption("Just Shoot", new DriverAutoNoMove() );
+        //autoChooser.addOption("note test", new DriveToNote() );
+        autoChooser.addOption("Shoot and Move Back", new DriverAutoMoveBack());
+        autoChooser.addOption("Spit Note and Move Back", new SpitAndMove());
 
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        SmartDashboard.putData("Selected Auto", autoChooser);
     }
 
     private void stopMotors() {

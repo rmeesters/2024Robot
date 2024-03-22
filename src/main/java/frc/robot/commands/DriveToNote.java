@@ -3,7 +3,6 @@ package frc.robot.commands;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -82,14 +81,14 @@ public class DriveToNote extends Command {
     }
 
     private List<Pose2d> calculatePoints() {
-        double TX = Math.toRadians(
-                LimelightHelpers.getTX(Constants.Limelight.Front.NAME));
-        double TY = Math.toRadians(
-                Constants.Limelight.Front.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Front.NAME));
+        // double TX = Math.toRadians(
+        //         LimelightHelpers.getTX(Constants.Limelight.Front.NAME));
+        // double TY = Math.toRadians(
+        //         Constants.Limelight.Front.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Front.NAME));
 
-        double distance = (Constants.Map.NOTE_HEIGHT - Constants.Limelight.Front.HEIGHT) / Math.tan(TY);
-        double dx = distance * Math.cos(TX);
-        double dy = distance * Math.sin(TX);
+        // double distance = (Constants.Map.NOTE_HEIGHT - Constants.Limelight.Front.HEIGHT) / Math.tan(TY);
+        // double dx = distance * Math.cos(TX);
+        // double dy = distance * Math.sin(TX);
 
         return List.of(
                 new Pose2d(0, 0, s_Swerve.getGyroYaw()),
