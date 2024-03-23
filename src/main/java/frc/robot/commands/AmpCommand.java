@@ -27,6 +27,7 @@ public class AmpCommand extends Command {
     private final double ROLLER_REVERSED_SPEED = 0.6;
     private final double INTAKE_SPEED = 0.2;
     private final double ROLLER_DELAY = 0.2;
+    private final double SHOOTER_DELAY = 3;
 
     public AmpCommand(boolean reversed) {
         b_reversed = reversed;
@@ -43,8 +44,6 @@ public class AmpCommand extends Command {
         h_pneumatics.setTiltSolenoid(true);
 
         if (b_reversed) return;
-
-        h_pneumatics.setShooterSolenoid(true);
     }
 
     /**
@@ -58,7 +57,10 @@ public class AmpCommand extends Command {
         if (b_reversed) return;
 
         s_Shooter.setSpeed(SHOOTER_SPEED);
-        s_Intake.setSpeed(INTAKE_SPEED);
+        if (timer.hasElapsed(SHOOTER_DELAY)) {
+            s_Intake.setSpeed(INTAKE_SPEED);
+            h_pneumatics.setShooterSolenoid(true);
+        }
     }
 
     /**

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -178,13 +179,15 @@ public class RobotContainer {
         b_prepareShooter.whileTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
         b_prepareShooter.onFalse(new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION)));
 
-        b_prepareAmp.whileTrue(new ParallelCommandGroup(
+        b_prepareAmp.whileTrue(new SequentialCommandGroup(
             new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.VERTICAL_POSITION)),
             new AmpCommand(false)
         ));
         b_scoreAmp.whileTrue(new AmpCommand(true));
-        b_autoPrepareAmp.whileTrue(new PrepareAmpCommand());
+        Command prpareAmpCommand = new PrepareAmpCommand();
+        b_autoPrepareAmp.whileTrue(prpareAmpCommand);
         b_autoPrepareAmp.onFalse(new InstantCommand(() -> {
+            prpareAmpCommand.cancel();
             s_Shooter.setSpeed(0);
             s_Intake.setSpeed(0);
             s_Roller.setSpeed(0);

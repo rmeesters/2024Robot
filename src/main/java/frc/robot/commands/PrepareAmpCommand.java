@@ -22,9 +22,10 @@ public class PrepareAmpCommand extends SequentialCommandGroup {
     
     public PrepareAmpCommand() {
         addCommands(
-            new ParallelCommandGroup(
+            new SequentialCommandGroup(
                 //  * tilt
                 new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.VERTICAL_POSITION)),
+                new WaitCommand(2),
                 new SequentialCommandGroup(
                     //  * pin off
                     //  * tilt on
@@ -35,13 +36,15 @@ public class PrepareAmpCommand extends SequentialCommandGroup {
                         s_Intake.setSpeed(0.3);
                     }),
                     //  * wait
-                    new WaitCommand(0.5),
+                    new WaitCommand(1),
                     //  * pin on
                     new InstantCommand(() -> h_pneumatics.setShooterSolenoid(true)),
                     //  * wait
-                    new WaitCommand(0.5),
+                    new WaitCommand(0.6),
                     //  * pin off
                     new InstantCommand(() -> h_pneumatics.setShooterSolenoid(false)),
+                    //  * wait
+                    new WaitCommand(0.6),
                     //  * shooter on
                     //  * roller on
                     //  * pin on
@@ -51,7 +54,7 @@ public class PrepareAmpCommand extends SequentialCommandGroup {
                         h_pneumatics.setShooterSolenoid(true);
                     }),
                     //  * wait
-                    new WaitCommand(0.5),
+                    new WaitCommand(0.6),
                     //  * intake off
                     //  * shooter off
                     //  * pin off
@@ -61,9 +64,16 @@ public class PrepareAmpCommand extends SequentialCommandGroup {
                         s_Intake.setSpeed(0);
                         s_Roller.setSpeed(0);
                         h_pneumatics.setShooterSolenoid(false);
-                    }))),// 6498k405
+                        h_pneumatics.setTiltSolenoid(false);
+                    }))),
+            //  * wait
+            new WaitCommand(0.5),
+            //  * tilt on
+            new InstantCommand(() -> h_pneumatics.setTiltSolenoid(true)),
+            //  * wait
+            new WaitCommand(0.2),
             //  * reverse roller
-            new InstantCommand(() -> s_Roller.setSpeed(0.1)),
+            new InstantCommand(() -> s_Roller.setSpeed(0.2)),
             //  * wait
             new WaitCommand(1.5),
             //  * roller off
