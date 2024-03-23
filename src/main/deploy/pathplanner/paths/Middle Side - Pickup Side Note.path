@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2,
+        "x": 3.0,
         "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.85,
-        "y": 5.55
+        "x": 2.823223304703363,
+        "y": 5.726776695296636
       },
       "isLocked": false,
       "linkedName": "Middle Auto Dest 1"
@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 2.9,
-        "y": 6.95
+        "y": 6.949999999999989
       },
       "nextControl": null,
       "isLocked": false,

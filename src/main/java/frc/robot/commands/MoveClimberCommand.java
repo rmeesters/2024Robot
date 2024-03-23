@@ -24,6 +24,7 @@ public class MoveClimberCommand extends Command {
 
     @Override
     public void initialize() {
+        timer.restart();
         // Unlock climber
         h_pneumatics.setClimberSolenoid(false);
     }
@@ -39,6 +40,7 @@ public class MoveClimberCommand extends Command {
     public void end(boolean interrupted) {
         // Stop climber
         s_Climber.setSpeed(0);
+        timer.stop();
 
         // Lock climber
         new InstantCommand(() -> h_pneumatics.setClimberSolenoid(true));

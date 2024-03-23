@@ -33,6 +33,7 @@ import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.RotateCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.PrepareAmpCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PneumaticsHandler;
@@ -54,6 +55,7 @@ public class RobotContainer {
 
     public static Rotation2d gyro_temp = new Rotation2d();
     public static boolean noteLoaded = false;
+    public static boolean trapOn = false;
 
     /* Controllers */
     public static final Joystick driver = new Joystick(0);
@@ -70,7 +72,7 @@ public class RobotContainer {
     private final JoystickButton b_zeroShooter = new JoystickButton(driver, PS4Controller.Button.kShare.value);
     private final JoystickButton b_forwardGyro = new JoystickButton(driver, PS4Controller.Button.kPS.value);
     private final POVButton b_scoreAmp = new POVButton(pov, 90);
-    //private final POVButton b_ampScore = new POVButton(pov, 270);
+    private final POVButton b_toggleTrap = new POVButton(pov, 270);
 
     /* Intake */
     private final JoystickButton b_spinIntake = new JoystickButton(driver, PS4Controller.Button.kL2.value);
@@ -84,7 +86,8 @@ public class RobotContainer {
     private final JoystickButton b_angleDown = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
     private final JoystickButton b_angleUp = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
 
-    private final JoystickButton b_prepareSpeaker = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    //private final JoystickButton b_prepareSpeaker = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton b_autoPrepareAmp = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
     private final JoystickButton b_prepareAmp = new JoystickButton(driver, PS4Controller.Button.kCross.value);
 
     /* Climber */
@@ -175,8 +178,19 @@ public class RobotContainer {
         b_prepareShooter.whileTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
         b_prepareShooter.onFalse(new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION)));
 
-        b_prepareAmp.whileTrue(new AmpCommand(false));
+        b_prepareAmp.whileTrue(new ParallelCommandGroup(
+            new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.VERTICAL_POSITION)),
+            new AmpCommand(false)
+        ));
         b_scoreAmp.whileTrue(new AmpCommand(true));
+        b_autoPrepareAmp.whileTrue(new PrepareAmpCommand());
+        b_autoPrepareAmp.onFalse(new InstantCommand(() -> {
+            s_Shooter.setSpeed(0);
+            s_Intake.setSpeed(0);
+            s_Roller.setSpeed(0);
+            h_pneumatics.setShooterSolenoid(false);
+            h_pneumatics.setTiltSolenoid(false);
+        }));
         // b_ampScore.whileTrue(new SequentialCommandGroup(
         //     new InstantCommand(() -> h_pneumatics.setAmpSolenoid(true)),
         //     new WaitCommand(0.5),
@@ -191,20 +205,24 @@ public class RobotContainer {
         //     h_pneumatics.setAmpSolenoid(false);
         //     s_Intake.setSpeed(0);
         // }));
+        b_toggleTrap.onTrue(new InstantCommand(() -> {
+            trapOn = !trapOn;
+            h_pneumatics.setTrapSolenoid(trapOn);
+        }));
 
         b_angleUp.whileTrue(new AngleShooterCommand(-1));
         b_angleDown.whileTrue(new AngleShooterCommand(1));
 
         // b_focusShooter.whileTrue(new TargetSpeakerCommand());
 
-        Command prepareSpeakerCommand = new ParallelCommandGroup(
-            //new InstantCommand(() -> s_Shooter.setShaftRotation(0)),
-            new RotateCommand(0)
-        );
-        b_prepareSpeaker.whileTrue(prepareSpeakerCommand);
-        b_prepareSpeaker.onFalse(new InstantCommand(() -> {
-            prepareSpeakerCommand.cancel();
-        }));
+        // Command prepareSpeakerCommand = new ParallelCommandGroup(
+        //     //new InstantCommand(() -> s_Shooter.setShaftRotation(0)),
+        //     new RotateCommand(0)
+        // );
+        // b_prepareSpeaker.whileTrue(prepareSpeakerCommand);
+        // b_prepareSpeaker.onFalse(new InstantCommand(() -> {
+        //     prepareSpeakerCommand.cancel();
+        // }));
 
         /* Climber */
         // Command stopClimbing = new InstantCommand(() ->{
@@ -263,7 +281,7 @@ public class RobotContainer {
     private void preparePneumatics() {
         h_pneumatics.setShooterSolenoid(false);
         h_pneumatics.setClimberSolenoid(true);
-        h_pneumatics.setAmpSolenoid(false);
+        h_pneumatics.setTrapSolenoid(false);
         h_pneumatics.setTiltSolenoid(false);
     }
 

@@ -167,7 +167,8 @@ public final class Constants {
         public static final double SHOOT_DELAY = 2;
         public static final double TARGET_SHOOTER_SPEED = 98;
 
-        public static final double PICKUP_POSITION = 3; //1.5;
+        public static final double PICKUP_POSITION = 8; //1.5;
+        public static final double VERTICAL_POSITION = -29.76; //1.5;
 
         public static final double CANCODER_MIN = -30;
         public static final double CANCODER_MAX = 11.7;
