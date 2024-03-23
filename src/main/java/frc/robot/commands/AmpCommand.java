@@ -19,6 +19,11 @@ public class AmpCommand extends Command {
     
     private final boolean b_reversed;
 
+    private final double SHAFT_ROTATION = 29.76;
+    private final double SHOOTER_SPEED = 0.1;
+    private final double ROLLER_SPEED = 0.3;
+    private final double INTAKE_SPEED = 0.2;
+
     public AmpCommand(boolean reversed) {
         b_reversed = reversed;
     }
@@ -33,7 +38,7 @@ public class AmpCommand extends Command {
 
         if (b_reversed) return;
 
-        s_Shooter.setShaftRotation(-29.76);
+        s_Shooter.setShaftRotation(SHAFT_ROTATION);
     }
 
     /**
@@ -41,12 +46,12 @@ public class AmpCommand extends Command {
      */
     @Override
     public void execute() {
-        s_Roller.setSpeed(b_reversed ? 0.2 : -0.2);
+        s_Roller.setSpeed(b_reversed ? ROLLER_SPEED : -ROLLER_SPEED);
 
         if (b_reversed) return;
 
-        s_Shooter.setSpeed(0.2);
-        s_Intake.setSpeed(0.2);
+        s_Shooter.setSpeed(SHOOTER_SPEED);
+        s_Intake.setSpeed(INTAKE_SPEED);
     }
 
     /**
