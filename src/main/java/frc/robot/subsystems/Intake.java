@@ -59,8 +59,8 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    public void setSpeed(double speedPercentage) {
-        fxIntakeMotor.set(-speedPercentage);
+    public void setSpeed(double speedPercent) {
+        fxIntakeMotor.set(-speedPercent);
     }
 
     @Override

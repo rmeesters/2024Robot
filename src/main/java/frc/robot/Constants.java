@@ -167,7 +167,7 @@ public final class Constants {
         public static final double SHOOT_DELAY = 2;
         public static final double TARGET_SHOOTER_SPEED = 98;
 
-        public static final double IDEAL_INTAKE_POSITION = 1.5;
+        public static final double PICKUP_POSITION = 3; //1.5;
 
         public static final double CANCODER_MIN = -30;
         public static final double CANCODER_MAX = 11.7;
@@ -199,6 +199,14 @@ public final class Constants {
         /* Single falcon500 motor */
         public static final class ConveyerMotor {
             public static final int MOTOR_ID = 51;
+        }
+    }
+
+    public static final class Roller {
+        /* Module Specific Constants */
+        /* Single falcon500 motor */
+        public static final class RollerMotor {
+            public static final int MOTOR_ID = 44;
         }
     }
 

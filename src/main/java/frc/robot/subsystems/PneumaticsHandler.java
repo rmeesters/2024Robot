@@ -10,7 +10,8 @@ public class PneumaticsHandler {
     private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
     private final Solenoid s_climberBlock = new Solenoid(PneumaticsModuleType.REVPH, 15);
     private final Solenoid s_shooterBlock = new Solenoid(PneumaticsModuleType.REVPH, 12);
-    private final Solenoid ampSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 14);
+    private final Solenoid s_tiltSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 13);
+    private final Solenoid s_ampSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 14);
 
     public PneumaticsHandler() {
         compressor.enableAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
@@ -31,7 +32,11 @@ public class PneumaticsHandler {
     }
     
     public void setAmpSolenoid(boolean value) {
-        ampSolenoid.set(value);
+        s_ampSolenoid.set(value);
+    }
+
+    public void setTiltSolenoid(boolean value) {
+        s_tiltSolenoid.set(value);
     }
 
 }
