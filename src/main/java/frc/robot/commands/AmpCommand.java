@@ -38,6 +38,7 @@ public class AmpCommand extends Command {
 
         if (b_reversed) return;
 
+        h_pneumatics.setShooterSolenoid(true);
         s_Shooter.setShaftRotation(SHAFT_ROTATION);
     }
 
@@ -68,6 +69,7 @@ public class AmpCommand extends Command {
         s_Roller.setSpeed(0);
         s_Intake.setSpeed(0);
         s_Shooter.setSpeed(0);
+        h_pneumatics.setShooterSolenoid(false);
         h_pneumatics.setTiltSolenoid(false);
     }
 
