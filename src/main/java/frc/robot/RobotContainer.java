@@ -66,6 +66,7 @@ public class RobotContainer {
     public static final int translationAxis = PS4Controller.Axis.kLeftY.value;
     public static final int strafeAxis = PS4Controller.Axis.kLeftX.value;
     private final int rotationAxis = PS4Controller.Axis.kRightX.value;
+    //private final int rotationTargetAxis = PS4Controller.Axis.kRightY.value;
 
     /* Driver Buttons */
     private final JoystickButton b_zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
@@ -123,6 +124,7 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
                         () -> -driver.getRawAxis(rotationAxis),
+                        //() -> -driver.getRawAxis(rotationTargetAxis),
                         () -> b_robotCentric.getAsBoolean()));
 
         /* Setup */
@@ -174,40 +176,58 @@ public class RobotContainer {
 
         /* Shooter Angle */
         b_zeroShooter.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        //b_ampPosition.onTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(-29.76)));
-
-        b_prepareShooter.whileTrue(new InstantCommand(() -> s_Shooter.setShaftRotation(0)));
-        b_prepareShooter.onFalse(new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION)));
+        
+        b_prepareShooter.whileTrue(new InstantCommand(() -> {
+            s_Shooter.setShaftRotation(0);
+            s_Shooter.setSpeed(1);
+        }));
+        b_prepareShooter.onFalse(new InstantCommand(() -> {
+            s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
+            s_Shooter.setSpeed(0);
+        }));
 
         b_prepareAmp.whileTrue(new SequentialCommandGroup(
-            new InstantCommand(() -> s_Shooter.setShaftRotation(Constants.Shooter.VERTICAL_POSITION)),
-            new AmpCommand(false)
+            new InstantCommand(() -> {
+                s_Shooter.setShaftRotation(Constants.Shooter.VERTICAL_POSITION);
+                h_pneumatics.setTiltSolenoid(true);
+                s_Roller.setSpeed(-0.3);
+                s_Shooter.setSpeed(0.1);
+            }),
+            new WaitCommand(3),
+            new InstantCommand(() -> {
+                s_Intake.setSpeed(0.2);
+                h_pneumatics.setShooterSolenoid(true);
+            })
         ));
-        b_scoreAmp.whileTrue(new AmpCommand(true));
-        Command prpareAmpCommand = new PrepareAmpCommand();
-        b_autoPrepareAmp.whileTrue(prpareAmpCommand);
+        b_prepareAmp.onFalse(new InstantCommand(() -> {
+            s_Roller.setSpeed(0);
+            s_Intake.setSpeed(0);
+            s_Shooter.setSpeed(0);
+            h_pneumatics.setShooterSolenoid(false);
+            h_pneumatics.setTiltSolenoid(false);
+        }));
+
+        b_scoreAmp.whileTrue(new SequentialCommandGroup(
+            new InstantCommand(() -> h_pneumatics.setTiltSolenoid(true)),
+            new WaitCommand(0.2),
+            new InstantCommand(() -> s_Roller.setSpeed(0.6))
+        ));
+        b_scoreAmp.onFalse(new InstantCommand(() -> {
+            s_Roller.setSpeed(0);
+            h_pneumatics.setTiltSolenoid(false);
+        }));
+
+        Command prepareAmpAuto = new PrepareAmpCommand();
+        b_autoPrepareAmp.whileTrue(prepareAmpAuto);
         b_autoPrepareAmp.onFalse(new InstantCommand(() -> {
-            prpareAmpCommand.cancel();
+            prepareAmpAuto.cancel();
             s_Shooter.setSpeed(0);
             s_Intake.setSpeed(0);
             s_Roller.setSpeed(0);
             h_pneumatics.setShooterSolenoid(false);
             h_pneumatics.setTiltSolenoid(false);
         }));
-        // b_ampScore.whileTrue(new SequentialCommandGroup(
-        //     new InstantCommand(() -> h_pneumatics.setAmpSolenoid(true)),
-        //     new WaitCommand(0.5),
-        //     new InstantCommand(() -> {
-        //         h_pneumatics.setShooterSolenoid(true);
-        //         s_Intake.setSpeed(0.3);
-        //         s_Shooter.setSpeed(0.2);
-        // })));
-        // b_ampScore.onFalse(new InstantCommand(() -> {
-        //     h_pneumatics.setShooterSolenoid(false);
-        //     s_Shooter.setSpeed(0);
-        //     h_pneumatics.setAmpSolenoid(false);
-        //     s_Intake.setSpeed(0);
-        // }));
+        
         b_toggleTrap.onTrue(new InstantCommand(() -> {
             trapOn = !trapOn;
             h_pneumatics.setTrapSolenoid(trapOn);
@@ -215,28 +235,7 @@ public class RobotContainer {
 
         b_angleUp.whileTrue(new AngleShooterCommand(-1));
         b_angleDown.whileTrue(new AngleShooterCommand(1));
-
-        // b_focusShooter.whileTrue(new TargetSpeakerCommand());
-
-        // Command prepareSpeakerCommand = new ParallelCommandGroup(
-        //     //new InstantCommand(() -> s_Shooter.setShaftRotation(0)),
-        //     new RotateCommand(0)
-        // );
-        // b_prepareSpeaker.whileTrue(prepareSpeakerCommand);
-        // b_prepareSpeaker.onFalse(new InstantCommand(() -> {
-        //     prepareSpeakerCommand.cancel();
-        // }));
-
-        /* Climber */
-        // Command stopClimbing = new InstantCommand(() ->{
-        //     s_Climber.setSpeed(0);
-        //     h_pneumatics.setClimberSolenoid(true);
-        // });
-        // b_climbUp.whileTrue(new DriveClimberCommand(1));
-        // b_climbUp.onFalse(stopClimbing);
-
-        // b_climbDown.whileTrue(new DriveClimberCommand(-1));
-        // b_climbDown.onFalse(stopClimbing);
+        
         b_climbUp.whileTrue(new MoveClimberCommand(1));
         b_climbDown.whileTrue(new MoveClimberCommand(-1));
     }

@@ -42,8 +42,6 @@ public class AmpCommand extends Command {
         timer.restart();
         
         h_pneumatics.setTiltSolenoid(true);
-
-        if (b_reversed) return;
     }
 
     /**

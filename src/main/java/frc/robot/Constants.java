@@ -94,7 +94,7 @@ public final class Constants {
         /** Meters per Second */
         public static final double MAX_SPEED = 4.5;
         /** Radians per Second */
-        public static final double MAX_ANGULAR_VELOCITY = 3.0;
+        public static final double MAX_ANGULAR_VELOCITY = 4.0;
 
         /* Distance from center of robot to wheels */
         public static final double DRIVE_BASE_RADIUS = 0.43;
