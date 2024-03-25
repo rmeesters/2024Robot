@@ -32,9 +32,9 @@ import frc.robot.commands.DriveToNote;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.RotateCommand;
+import frc.robot.commands.ScoreAmpCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.PrepareAmpCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PneumaticsHandler;
@@ -57,6 +57,7 @@ public class RobotContainer {
     public static Rotation2d gyro_temp = new Rotation2d();
     public static boolean noteLoaded = false;
     public static boolean trapOn = false;
+    public static boolean ampAutoOn = false;
 
     /* Controllers */
     public static final Joystick driver = new Joystick(0);
@@ -210,22 +211,32 @@ public class RobotContainer {
         b_scoreAmp.whileTrue(new SequentialCommandGroup(
             new InstantCommand(() -> h_pneumatics.setTiltSolenoid(true)),
             new WaitCommand(0.2),
-            new InstantCommand(() -> s_Roller.setSpeed(0.6))
+            new InstantCommand(() -> s_Roller.setSpeed(1))
         ));
         b_scoreAmp.onFalse(new InstantCommand(() -> {
             s_Roller.setSpeed(0);
             h_pneumatics.setTiltSolenoid(false);
         }));
 
-        Command prepareAmpAuto = new PrepareAmpCommand();
-        b_autoPrepareAmp.whileTrue(prepareAmpAuto);
-        b_autoPrepareAmp.onFalse(new InstantCommand(() -> {
+        Command prepareAmpAuto = new SequentialCommandGroup(
+            new ScoreAmpCommand(),
+            new InstantCommand(() -> ampAutoOn = false)
+        );
+        b_autoPrepareAmp.onTrue(new InstantCommand(() -> {
+            if (!ampAutoOn) {
+                ampAutoOn = true;
+                prepareAmpAuto.schedule();
+                return;
+            }
+            
             prepareAmpAuto.cancel();
+            s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
+            h_pneumatics.setTiltSolenoid(false);
+            h_pneumatics.setShooterSolenoid(false);
             s_Shooter.setSpeed(0);
             s_Intake.setSpeed(0);
             s_Roller.setSpeed(0);
-            h_pneumatics.setShooterSolenoid(false);
-            h_pneumatics.setTiltSolenoid(false);
+            ampAutoOn = false;
         }));
         
         b_toggleTrap.onTrue(new InstantCommand(() -> {

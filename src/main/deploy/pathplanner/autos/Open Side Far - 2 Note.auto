@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7547702129349723,
-      "y": 6.7
+      "x": 0.75,
+      "y": 4.4
     },
-    "rotation": 60.0
+    "rotation": -60.55765412587542
   },
   "command": {
     "type": "sequential",
@@ -73,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Wall Side - Pickup Side Note"
+                  "pathName": "Open Side - Pickup Far Note"
                 }
               }
             ]
@@ -86,7 +86,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Stop Intake"
+                  "name": "Stop Shooter"
                 }
               },
               {
@@ -98,7 +98,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Wall Side - Return Side Note"
+                  "pathName": "Open Side - Return Far Note"
                 }
               }
             ]
@@ -157,6 +157,6 @@
       ]
     }
   },
-  "folder": "Wall Side",
+  "folder": "Open Side",
   "choreoAuto": false
 }

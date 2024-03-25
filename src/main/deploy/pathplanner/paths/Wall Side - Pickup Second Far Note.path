@@ -16,25 +16,19 @@
     },
     {
       "anchor": {
-        "x": 0.73,
-        "y": 6.710309340732804
+        "x": 8.5,
+        "y": 5.78
       },
       "prevControl": {
-        "x": 1.4371067811865479,
-        "y": 7.417416121919352
+        "x": 4.5,
+        "y": 5.78
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Wall Side Auto Dest 2"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.45,
-      "rotationDegrees": 60.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.38726514422852,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Wall Side",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -0.23702997799565426,
     "velocity": 0
   },
   "useDefaultConstraints": true

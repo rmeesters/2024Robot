@@ -9,10 +9,10 @@
     "Wall Side"
   ],
   "autoFolders": [
-    "Far Side",
+    "Wall Side",
     "Middle",
-    "Testing",
-    "Open Side"
+    "Open Side",
+    "Testing"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

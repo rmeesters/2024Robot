@@ -40,6 +40,10 @@ public class TeleopSwerve extends Command {
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.STICK_DEAD_BAND);
         //double rotationTargetVal = MathUtil.applyDeadband(rotationTargetSup.getAsDouble(), 0.9);
 
+        // if (rotationTargetVal != 0) {
+        //     rotationVal = 1;
+        // }
+
         /* Drive */
         s_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED), 
