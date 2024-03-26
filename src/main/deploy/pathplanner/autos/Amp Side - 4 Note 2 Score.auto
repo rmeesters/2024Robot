@@ -63,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Wall Side - Pickup Side Note"
+            "pathName": "Amp Side - Pickup Side Note"
           }
         },
         {
@@ -75,7 +75,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Wall Side - Return Side Note"
+            "pathName": "Amp Side - Return Side Note"
           }
         },
         {
@@ -106,7 +106,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Wall Side - Pickup Far Note"
+            "pathName": "Amp Side - Pickup Far Note"
           }
         },
         {
@@ -124,7 +124,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Wall Side - Pickup Second Far Note"
+            "pathName": "Amp Side - Pickup Second Far Note"
           }
         },
         {
@@ -136,6 +136,6 @@
       ]
     }
   },
-  "folder": "Wall Side",
+  "folder": "Amp Side",
   "choreoAuto": false
 }

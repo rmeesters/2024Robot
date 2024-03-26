@@ -55,27 +55,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Raise Shooter Pin"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Wall Side - Pickup Side Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Wall Side - Return Side Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Raise Shooter Pin"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Angle to 1.5"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Side - Pickup Side Note"
+                }
+              }
+            ]
           }
         },
         {
@@ -85,46 +86,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Lower Shooter Pin"
+                  "name": "Stop Intake"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Start Intake"
+                  "name": "Angle to 0"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Side - Return Side Note"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Raise Shooter Pin"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Wall Side - Pickup Far Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Wall Side - Return Far Note"
           }
         },
         {
@@ -180,6 +157,6 @@
       ]
     }
   },
-  "folder": "Wall Side",
+  "folder": "Amp Side",
   "choreoAuto": false
 }

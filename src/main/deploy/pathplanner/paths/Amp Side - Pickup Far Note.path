@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.5,
-        "y": 7.45
+        "x": 0.7284778050297884,
+        "y": 6.710309340732804
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.5,
-        "y": 7.45
+        "x": 1.4355845862163357,
+        "y": 7.417416121919352
       },
       "isLocked": false,
-      "linkedName": "Wall Side Auto Dest 3"
+      "linkedName": "Wall Side Auto Dest 2"
     },
     {
       "anchor": {
-        "x": 0.73,
-        "y": 6.710309340732804
+        "x": 8.5,
+        "y": 7.45
       },
       "prevControl": {
-        "x": 1.4371067811865479,
-        "y": 7.417416121919352
+        "x": 6.5,
+        "y": 7.45
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Wall Side Auto Dest 2"
+      "linkedName": "Wall Side Auto Dest 3"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.45,
-      "rotationDegrees": 60.0,
+      "waypointRelativePos": 0.25,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
@@ -45,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.38726514422852,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Wall Side",
+  "folder": "Amp Side",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 59.913071329621054,
     "velocity": 0
   },
   "useDefaultConstraints": true
