@@ -67,7 +67,7 @@ public class RobotContainer {
     public static final int translationAxis = PS4Controller.Axis.kLeftY.value;
     public static final int strafeAxis = PS4Controller.Axis.kLeftX.value;
     private final int rotationAxis = PS4Controller.Axis.kRightX.value;
-    //private final int rotationTargetAxis = PS4Controller.Axis.kRightY.value;
+    private final int rotationTargetAxis = 3; //PS4Controller.Axis.kRightY.value;
 
     /* Driver Buttons */
     private final JoystickButton b_zeroGyro = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
@@ -125,7 +125,7 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
                         () -> -driver.getRawAxis(rotationAxis),
-                        //() -> -driver.getRawAxis(rotationTargetAxis),
+                        () -> -driver.getRawAxis(3),
                         () -> b_robotCentric.getAsBoolean()));
 
         /* Setup */
