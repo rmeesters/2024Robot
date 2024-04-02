@@ -100,6 +100,7 @@ public class Shooter extends SubsystemBase {
             System.err.println(rotation + " is not a valid shaft rotation (max: 11, min: -32)");
             return;
         }
+        rotation += ANGLE_OFFSET;
         System.err.println("rotation:" + rotation);
         fxAngleMotor.setControl(m_mmReq.withPosition(rotation).withSlot(0));
     }

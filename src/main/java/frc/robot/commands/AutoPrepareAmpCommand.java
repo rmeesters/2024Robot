@@ -12,7 +12,7 @@ import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
-public class ScoreAmpCommand extends SequentialCommandGroup {
+public class AutoPrepareAmpCommand extends SequentialCommandGroup {
 
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
     private final Swerve s_Swerve = RobotContainer.s_Swerve;
@@ -20,7 +20,7 @@ public class ScoreAmpCommand extends SequentialCommandGroup {
     private final Intake s_Intake = RobotContainer.s_Intake;
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
     
-    public ScoreAmpCommand() {
+    public AutoPrepareAmpCommand() {
         addCommands(
                 // Angle and prepare
                 new InstantCommand(() -> {
@@ -40,7 +40,7 @@ public class ScoreAmpCommand extends SequentialCommandGroup {
                     s_Roller.setSpeed(-0.5);
                 }),
                 //  * wait
-                new WaitCommand(0.75),
+                new WaitCommand(0.8),
                 //  * intake off
                 //  * shooter off
                 //  * pin off
@@ -50,7 +50,6 @@ public class ScoreAmpCommand extends SequentialCommandGroup {
                     s_Intake.setSpeed(0);
                     s_Roller.setSpeed(0);
                     h_pneumatics.setShooterSolenoid(false);
-                    h_pneumatics.setTiltSolenoid(false);
                 }));
     }
 

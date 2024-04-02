@@ -76,7 +76,6 @@ public class AmpCommand extends Command {
         s_Intake.setSpeed(0);
         s_Shooter.setSpeed(0);
         h_pneumatics.setShooterSolenoid(false);
-        h_pneumatics.setTiltSolenoid(false);
         timer.stop();
     }
 

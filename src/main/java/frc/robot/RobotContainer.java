@@ -9,14 +9,17 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.DriverAutoMain;
 import frc.robot.autos.DriverAutoMidTwoNote;
 import frc.robot.autos.DriverAutoMoveBack;
@@ -28,7 +31,7 @@ import frc.robot.commands.ArmShooterCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.ReverseIntakeCommand;
-import frc.robot.commands.ScoreAmpCommand;
+import frc.robot.commands.AutoPrepareAmpCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Climber;
@@ -69,7 +72,7 @@ public class RobotContainer {
     public static final int translationAxis = PS4Controller.Axis.kLeftY.value;
     public static final int strafeAxis = PS4Controller.Axis.kLeftX.value;
     private final int rotationAxis = PS4Controller.Axis.kRightX.value;
-    private final int rotationTargetAxis = 3; //// PS4Controller.Axis.kRightY.value;
+    private final int rotationTargetAxis = 3; // RightY: 3;
 
 
     /* Driver Buttons */
@@ -86,8 +89,8 @@ public class RobotContainer {
     // Set the current position of the shooter to be the new zero
     private final JoystickButton b_zeroShooter = new JoystickButton(driver, PS4Controller.Button.kShare.value);
 
-    // Reset the zero of the shooter back to the initial zero
-    private final JoystickButton b_resetShooter = new JoystickButton(driver, PS4Controller.Button.kTouchpad.value);
+    //// Reset the zero of the shooter back to the initial zero
+    //// private final JoystickButton b_resetShooter = new JoystickButton(driver, PS4Controller.Button.kTouchpad.value);
 
 
     /* Intake Buttons */
@@ -106,11 +109,11 @@ public class RobotContainer {
      * @see Constants.Shooter Shooter Constants
      */
     private final JoystickButton b_spinShooter = new JoystickButton(driver, PS4Controller.Button.kR2.value);
-    private final JoystickButton b_spinShooter_sideDriver = new JoystickButton(sideDriver, PS4Controller.Button.kR2.value); //TODO
+    private final Trigger b_spinShooter_sideDriver = new Trigger(sideDriver.axisGreaterThan(3, 0.5, CommandScheduler.getInstance().getActiveButtonLoop()));
 
     // Reverse intake (1 motor) and shooter (2 motors) and lower shooter pin (1 pneumatic)
     private final JoystickButton b_armShooter = new JoystickButton(driver, PS4Controller.Button.kR1.value);
-    private final JoystickButton b_armShooter_sideDriver = new JoystickButton(sideDriver, PS4Controller.Button.kR1.value); //TODO
+    private final JoystickButton b_armShooter_sideDriver = new JoystickButton(sideDriver, PS4Controller.Button.kR1.value);
 
     // Angle shooter down by rotating worm drive (1 motor) until a min/max canCoder is reached (slow down when close)
     private final JoystickButton b_angleDown = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
@@ -123,9 +126,9 @@ public class RobotContainer {
 
     //// private final JoystickButton b_prepareSpeaker = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
 
-    private final JoystickButton b_autoPrepareAmp = new JoystickButton(sideDriver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton b_autoPrepareAmp = new JoystickButton(sideDriver, 2); // Circle: 2
     private final JoystickButton b_prepareAmp = new JoystickButton(sideDriver, PS4Controller.Button.kL1.value);
-    private final JoystickButton b_scoreAmp = new JoystickButton(sideDriver, PS4Controller.Button.kL2.value);
+    private final Trigger b_scoreAmp = new Trigger(sideDriver.axisGreaterThan(2, 0.5, CommandScheduler.getInstance().getActiveButtonLoop()));
 
     /* Climber Buttons */
 
@@ -200,7 +203,7 @@ public class RobotContainer {
         b_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         b_resetGyro.onTrue(new InstantCommand(() -> s_Swerve.directGyroForward()));
         b_zeroShooter.onTrue(new InstantCommand(() -> s_Shooter.setZeroByOffset()));
-        b_resetShooter.onTrue(new InstantCommand(() -> s_Shooter.resetOffset()));
+        //// b_resetShooter.onTrue(new InstantCommand(() -> s_Shooter.resetOffset()));
 
         /* Intake Buttons */
 
@@ -265,21 +268,20 @@ public class RobotContainer {
             s_Intake.setSpeed(0);
             s_Shooter.setSpeed(0);
             h_pneumatics.setShooterSolenoid(false);
-            h_pneumatics.setTiltSolenoid(false);
         }));
 
         b_scoreAmp.whileTrue(new SequentialCommandGroup(
-            new InstantCommand(() -> h_pneumatics.setTiltSolenoid(true)),
+            new InstantCommand(() -> h_pneumatics.setTiltSolenoid(false)),
             new WaitCommand(0.2),
             new InstantCommand(() -> s_Roller.setSpeed(1))
         ));
         b_scoreAmp.onFalse(new InstantCommand(() -> {
             s_Roller.setSpeed(0);
-            h_pneumatics.setTiltSolenoid(false);
+            h_pneumatics.setTiltSolenoid(true);
         }));
 
         Command prepareAmpAuto = new SequentialCommandGroup(
-            new ScoreAmpCommand(),
+            new AutoPrepareAmpCommand(),
 
             // Turn off when finished
             new InstantCommand(() -> ampAutoOn = false)
@@ -296,7 +298,6 @@ public class RobotContainer {
             ampAutoOn = false;
             prepareAmpAuto.cancel();
             s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
-            h_pneumatics.setTiltSolenoid(false);
             h_pneumatics.setShooterSolenoid(false);
             s_Shooter.setSpeed(0);
             s_Intake.setSpeed(0);
@@ -353,7 +354,7 @@ public class RobotContainer {
         h_pneumatics.setShooterSolenoid(false);
         h_pneumatics.setClimberSolenoid(true);
         h_pneumatics.setTrapSolenoid(false);
-        h_pneumatics.setTiltSolenoid(false);
+        h_pneumatics.setTiltSolenoid(true);
     }
 
     /**

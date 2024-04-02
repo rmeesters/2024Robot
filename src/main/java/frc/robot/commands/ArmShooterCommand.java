@@ -3,11 +3,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.PneumaticsHandler;
 import frc.robot.subsystems.Shooter;
 
 public class ArmShooterCommand extends Command {
 
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
+    private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
     public ArmShooterCommand() {
         
@@ -20,6 +22,7 @@ public class ArmShooterCommand extends Command {
     @Override
     public void initialize() {
         s_Shooter.setShaftRotation(0);
+        h_pneumatics.setTiltSolenoid(false);
     }
 
     /**
@@ -43,6 +46,7 @@ public class ArmShooterCommand extends Command {
     public void end(boolean interrupted) {
         s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
         s_Shooter.setSpeed(0);
+        h_pneumatics.setTiltSolenoid(true);
     }
 
     @Override
