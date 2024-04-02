@@ -26,6 +26,7 @@ public class Shooter extends SubsystemBase {
     private TalonFXConfiguration fxAngleConfig;
 
     private CANcoder angleCanCoder;
+    private double ANGLE_OFFSET = 0;
 
     /**
      * Shooter consists of 3 falcon500 motors, 2 to accellerate the projectile, and
@@ -142,7 +143,15 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getCanCoderPosition() {
-        return angleCanCoder.getPosition().getValue();
+        return angleCanCoder.getPosition().getValue() - ANGLE_OFFSET;
+    }
+
+    public void resetOffset() {
+        ANGLE_OFFSET = 0;
+    }
+
+    public void setZeroByOffset() {
+        ANGLE_OFFSET = angleCanCoder.getPosition().getValue();
     }
 
     /**
