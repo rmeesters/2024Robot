@@ -326,6 +326,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("Angle to 1.5", new InstantCommand(() -> s_Shooter.setShaftRotation(1.5)));
         NamedCommands.registerCommand("Angle to 10.7", new InstantCommand(() -> s_Shooter.setShaftRotation(10.7)));
         NamedCommands.registerCommand("Angle to 11", new InstantCommand(() -> s_Shooter.setShaftRotation(11)));
+        NamedCommands.registerCommand("Tilt Up", new InstantCommand(() -> h_pneumatics.setTiltSolenoid(false)));
+        NamedCommands.registerCommand("Tilt Down", new InstantCommand(() -> h_pneumatics.setTiltSolenoid(true)));
     }
 
     private void configureAutoChooser() {
@@ -354,7 +356,7 @@ public class RobotContainer {
         h_pneumatics.setShooterSolenoid(false);
         h_pneumatics.setClimberSolenoid(true);
         h_pneumatics.setTrapSolenoid(false);
-        h_pneumatics.setTiltSolenoid(true);
+        h_pneumatics.setTiltSolenoid(false);
     }
 
     /**
