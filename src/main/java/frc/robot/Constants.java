@@ -165,7 +165,7 @@ public final class Constants {
     public static final class Shooter {
 
         public static final double SHOOT_DELAY = 2;
-        public static final double TARGET_SHOOTER_SPEED = 98;
+        public static final double TARGET_SHOOTER_SPEED = 97;
 
         public static final double MOVE_POSITION = 11;
         public static final double PICKUP_POSITION = 3;

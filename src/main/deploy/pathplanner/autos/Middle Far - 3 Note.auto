@@ -148,12 +148,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Stop Intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "Stop Shooter"
                 }
               },
@@ -164,6 +158,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Far - Pickup Far Note 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Intake"
           }
         }
       ]
