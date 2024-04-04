@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.PneumaticsHandler;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
 
 
 /**
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private final Shooter s_Shooter = RobotContainer.s_Shooter;
+  private final Swerve s_Swerve = RobotContainer.s_Swerve;
   private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
   /**
@@ -88,6 +90,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     new InstantCommand(() -> {
       s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
+      s_Swerve.directGyroForward();
       h_pneumatics.setTiltSolenoid(true);
     }).schedule();
     // This makes sure that the autonomous stops running when
