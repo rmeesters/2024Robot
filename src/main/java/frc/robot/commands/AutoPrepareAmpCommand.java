@@ -40,7 +40,7 @@ public class AutoPrepareAmpCommand extends SequentialCommandGroup {
                     s_Roller.setSpeed(-0.5);
                 }),
                 //  * wait
-                new WaitCommand(0.8),
+                new WaitCommand(0.9),
                 //  * intake off
                 //  * shooter off
                 //  * pin off

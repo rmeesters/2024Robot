@@ -1,17 +1,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PneumaticsHandler;
+import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shooter;
 
-public class ArmShooterCommand extends Command {
+public class ReverseEverythingCommand extends Command {
 
+    private final Intake s_Intake = RobotContainer.s_Intake;
+    private final Roller s_Roller = RobotContainer.s_Roller;
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
+
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
-    public ArmShooterCommand() {
+    public ReverseEverythingCommand() {
         
     }
 
@@ -21,8 +25,8 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void initialize() {
-        s_Shooter.setShaftRotation(Constants.Shooter.SHOOT_POSITION);
-        h_pneumatics.setTiltSolenoid(false);
+        h_pneumatics.setShooterSolenoid(true);
+        h_pneumatics.setTiltSolenoid(true);
     }
 
     /**
@@ -30,7 +34,9 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void execute() {
-        s_Shooter.setSpeed(1);
+        s_Shooter.setSpeed(-0.5);
+        s_Intake.setSpeed(-0.5);
+        s_Roller.setSpeed(0.3);
     }
 
     /**
@@ -44,9 +50,10 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
         s_Shooter.setSpeed(0);
-        h_pneumatics.setTiltSolenoid(true);
+        s_Intake.setSpeed(0);
+        s_Roller.setSpeed(0);
+        h_pneumatics.setShooterSolenoid(false);
     }
 
     @Override

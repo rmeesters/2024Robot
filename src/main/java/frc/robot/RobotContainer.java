@@ -30,6 +30,7 @@ import frc.robot.commands.AngleShooterCommand;
 import frc.robot.commands.ArmShooterCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveClimberCommand;
+import frc.robot.commands.ReverseEverythingCommand;
 import frc.robot.commands.ReverseIntakeCommand;
 import frc.robot.commands.AutoPrepareAmpCommand;
 import frc.robot.commands.ShootCommand;
@@ -100,6 +101,9 @@ public class RobotContainer {
 
     // Spin the intake wheels and conveyer belt backward
     private final JoystickButton b_reverseIntake = new JoystickButton(driver, PS4Controller.Button.kL1.value);
+
+    // Spin the intake wheels and conveyer belt backward
+    private final JoystickButton b_reverseEverything = new JoystickButton(sideDriver, 3); // Square: 3
 
     /* Shooter Buttons */
 
@@ -210,6 +214,8 @@ public class RobotContainer {
         b_spinIntake.whileTrue(new IntakeCommand());
         b_reverseIntake.whileTrue(new ReverseIntakeCommand());
 
+        b_reverseEverything.whileTrue(new ReverseEverythingCommand());
+
         //// b_reverseIntake.whileTrue(new InstantCommand(() -> {
         ////     s_Shooter.setSpeed(-1);
         ////     s_Intake.setSpeed(-1);
@@ -232,11 +238,11 @@ public class RobotContainer {
         b_armShooter_sideDriver.whileTrue(new ArmShooterCommand());
 
         //// b_armShooter.whileTrue(new InstantCommand(() -> {
-        ////     s_Shooter.setShaftRotation(0);
+        ////     s_Shooter.setShaftRotation(Constants.Shooter.SHOOT_POSITION);
         ////     s_Shooter.setSpeed(1);
         //// }));
         //// b_armShooter.onFalse(new InstantCommand(() -> {
-        ////     s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
+        ////     s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
         ////     s_Shooter.setSpeed(0);
         //// }));
 
@@ -297,7 +303,7 @@ public class RobotContainer {
             // Toggling off
             ampAutoOn = false;
             prepareAmpAuto.cancel();
-            s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
+            s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
             h_pneumatics.setShooterSolenoid(false);
             s_Shooter.setSpeed(0);
             s_Intake.setSpeed(0);

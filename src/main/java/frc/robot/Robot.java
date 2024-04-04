@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     new InstantCommand(() -> {
-      s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
+      s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
       h_pneumatics.setTiltSolenoid(true);
     }).schedule();
     // This makes sure that the autonomous stops running when

@@ -1,15 +1,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 //import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter;
 
 public class IntakeCommand extends Command {
 
 
     private final Intake s_Intake = RobotContainer.s_Intake;
-    //private final Shooter s_Shooter = RobotContainer.s_Shooter;
+    private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
     /**
      * Intake note starts the intake motors, including the conveyer,
@@ -29,7 +31,7 @@ public class IntakeCommand extends Command {
             cancel();
             return;
         }
-        // s_Shooter.prepareIntake();
+        s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
     }
 
     /**
@@ -53,6 +55,7 @@ public class IntakeCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         s_Intake.setSpeed(0);
+        s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
     }
 
     @Override

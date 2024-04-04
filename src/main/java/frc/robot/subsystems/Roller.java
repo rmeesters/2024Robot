@@ -11,7 +11,7 @@ import frc.robot.Constants;
 public class Roller extends SubsystemBase {
     
 
-    private TalonFX fxClimberMotor;
+    private TalonFX fxRollerMotor;
     private TalonFXConfiguration fxConfig;
 
     /**
@@ -19,19 +19,19 @@ public class Roller extends SubsystemBase {
      * conveyer belt and the intake wheels.
      */
     public Roller() {
-        fxClimberMotor = new TalonFX(Constants.Roller.RollerMotor.MOTOR_ID);
+        fxRollerMotor = new TalonFX(Constants.Roller.RollerMotor.MOTOR_ID);
         fxConfig = new TalonFXConfiguration();
-        fxClimberMotor.getConfigurator().apply(fxConfig);
+        fxRollerMotor.getConfigurator().apply(fxConfig);
 
-        //sfxClimberMotor.setNeutralMode(NeutralModeValue.Brake);
+        fxRollerMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 
     public void setSpeed(double speedPercent) {
-        fxClimberMotor.set(speedPercent);
+        fxRollerMotor.set(speedPercent);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Roller Motor Angle", fxClimberMotor.getPosition().getValue());
+        SmartDashboard.putNumber("Roller Motor Angle", fxRollerMotor.getPosition().getValue());
     }
 }
