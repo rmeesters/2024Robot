@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.5,
-        "y": 7.45
+        "x": 8.574738290703399,
+        "y": 5.7617315805245015
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.5,
-        "y": 7.45
+        "x": 6.574738290703399,
+        "y": 5.7617315805245015
       },
       "isLocked": false,
       "linkedName": "Wall Side Auto Dest 3"

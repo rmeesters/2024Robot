@@ -140,7 +140,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getRPS() {
-        return fxLeftMotor.getVelocity().getValue();
+        return fxRightMotor.getVelocity().getValue();
     }
 
     public double getCanCoderPosition() {
@@ -166,7 +166,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Angle CanCoder Angle", angleCanCoder.getPosition().getValue());
         SmartDashboard.putNumber("Left Shooter Velocity", fxLeftMotor.getVelocity().getValue());
         SmartDashboard.putNumber("Right Shooter Velocity", fxRightMotor.getVelocity().getValue());
-        SmartDashboard.putNumber("Right Shooter Velocity", fxAngleMotor.getVelocity().getValue());
     }
 
 }

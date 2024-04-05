@@ -36,9 +36,10 @@ public class ShootCommand extends Command {
     @Override
     public void execute() {
         s_Shooter.setSpeed(1);
-        if (Math.abs(s_Shooter.getCanCoderPosition()) < 1
-                && (s_Shooter.getRPS() < -Constants.Shooter.TARGET_SHOOTER_SPEED
-                        || timer.hasElapsed(Constants.Shooter.SHOOT_DELAY))) {
+        if (Math.abs(s_Shooter.getCanCoderPosition()) < 2
+                // && (s_Shooter.getRPS() > Constants.Shooter.TARGET_SHOOTER_SPEED
+                //         || timer.hasElapsed(Constants.Shooter.SHOOT_DELAY))
+                        ) {
             s_Intake.setSpeed(1);
             h_pneumatics.setShooterSolenoid(true);
         }
