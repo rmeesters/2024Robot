@@ -35,6 +35,10 @@ public class PrepareAmpCommand extends Command {
      */
     @Override
     public void execute() {
+        // Immediate
+        s_Roller.setSpeed(-0.3);
+        s_Shooter.setSpeed(0.1);
+
         // Delayed
         if (Math.abs(s_Shooter.getCanCoderPosition() - Constants.Shooter.VERTICAL_POSITION) < 5) {
             s_Intake.setSpeed(1);
@@ -42,9 +46,7 @@ public class PrepareAmpCommand extends Command {
             return;
         }
 
-        // Immediate
-        s_Roller.setSpeed(-0.3);
-        s_Shooter.setSpeed(0.1);
+        // Exclusively Immediate
         s_Intake.setSpeed(0.2);
     }
 
