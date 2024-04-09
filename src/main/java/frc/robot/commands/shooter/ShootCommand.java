@@ -61,13 +61,12 @@ public class ShootCommand extends Command {
         s_Intake.setSpeed(0);
         s_Shooter.setSpeed(0);
         h_pneumatics.setShooterSolenoid(false);
-        
+
         timer.stop();
     }
 
     @Override
     public boolean isFinished() {
-       // return timer.hasElapsed(1);
-       return false;
+        return false;
     }
 }

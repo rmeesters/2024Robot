@@ -67,7 +67,6 @@ public class PrepareAmpCommand extends Command {
 
     @Override
     public boolean isFinished() {
-       // return timer.hasElapsed(1);
-       return false;
+        return false;
     }
 }

@@ -12,7 +12,7 @@ public class ArmShooterCommand extends Command {
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
     public ArmShooterCommand() {
-        
+
     }
 
     /**
@@ -49,12 +49,12 @@ public class ArmShooterCommand extends Command {
         s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
         s_Shooter.setSpeed(0);
         h_pneumatics.setTiltSolenoid(true);
-        
+
         RobotContainer.shooterTimer.stop();
     }
 
     @Override
     public boolean isFinished() {
-       return false;
+        return false;
     }
 }

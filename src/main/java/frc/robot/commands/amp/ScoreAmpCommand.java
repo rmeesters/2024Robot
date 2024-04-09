@@ -9,7 +9,6 @@ import frc.robot.subsystems.Roller;
 public class ScoreAmpCommand extends Command {
 
     private final Roller s_Roller = RobotContainer.s_Roller;
-
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
     private final Timer timer = new Timer();
@@ -61,7 +60,7 @@ public class ScoreAmpCommand extends Command {
 
     @Override
     public boolean isFinished() {
-       // return timer.hasElapsed(1);
-       return false;
+        // return timer.hasElapsed(1);
+        return false;
     }
 }

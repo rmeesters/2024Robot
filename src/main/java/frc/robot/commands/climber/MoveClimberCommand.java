@@ -40,5 +40,5 @@ public class MoveClimberCommand extends Command {
         h_pneumatics.setClimberSolenoid(true);
         timer.stop();
     }
-    
+
 }

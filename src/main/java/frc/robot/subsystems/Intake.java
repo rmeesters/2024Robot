@@ -19,14 +19,15 @@ public class Intake extends SubsystemBase {
     private static final String highAccuracy = "High Accuracy";
     private static final String longRange = "Long Range";
     private final SendableChooser<String> profileChooser = new SendableChooser<>();
-    
+
     private TalonFX fxIntakeMotor;
     private TalonFXConfiguration fxConfig;
 
     private Rev2mDistanceSensor distanceSensor;
 
     /**
-     * Intake consists of 1 falcon500 motor to move the conveyer belt and the intake wheels.
+     * Intake consists of 1 falcon500 motor to move the conveyer belt and the intake
+     * wheels.
      */
     public Intake() {
         fxIntakeMotor = new TalonFX(Constants.Intake.ConveyerMotor.MOTOR_ID);
@@ -50,7 +51,7 @@ public class Intake extends SubsystemBase {
 
         distanceSensor.setAutomaticMode(true);
         distanceSensor.setEnabled(true);
-        
+
         switch (profileChooser.getSelected()) {
             case highSpeed -> distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
             case highAccuracy -> distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
@@ -72,5 +73,5 @@ public class Intake extends SubsystemBase {
     public boolean inRange(double distance) {
         return distanceSensor.isRangeValid() && distanceSensor.getRange() < distance;
     }
-    
+
 }

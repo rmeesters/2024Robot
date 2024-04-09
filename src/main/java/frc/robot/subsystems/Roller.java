@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Roller extends SubsystemBase {
-    
 
     private TalonFX fxRollerMotor;
     private TalonFXConfiguration fxConfig;

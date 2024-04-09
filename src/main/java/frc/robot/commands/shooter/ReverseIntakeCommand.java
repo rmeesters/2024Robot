@@ -17,7 +17,7 @@ public class ReverseIntakeCommand extends Command {
     private final Timer timer = new Timer();
 
     public ReverseIntakeCommand() {
-        
+
     }
 
     /**
@@ -62,6 +62,6 @@ public class ReverseIntakeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-       return false;
+        return false;
     }
 }

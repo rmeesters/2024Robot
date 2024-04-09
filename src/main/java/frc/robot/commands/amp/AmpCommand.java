@@ -15,9 +15,9 @@ public class AmpCommand extends Command {
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
-    
+
     private final boolean b_reversed;
-    
+
     private final Timer timer = new Timer();
 
     private final double SHOOTER_SPEED = 0.1;
@@ -38,7 +38,7 @@ public class AmpCommand extends Command {
     @Override
     public void initialize() {
         timer.restart();
-        
+
         h_pneumatics.setTiltSolenoid(true);
     }
 
@@ -50,7 +50,8 @@ public class AmpCommand extends Command {
         if (!b_reversed || timer.hasElapsed(ROLLER_DELAY))
             s_Roller.setSpeed(b_reversed ? ROLLER_REVERSED_SPEED : ROLLER_SPEED);
 
-        if (b_reversed) return;
+        if (b_reversed)
+            return;
 
         s_Shooter.setSpeed(SHOOTER_SPEED);
         if (timer.hasElapsed(SHOOTER_DELAY)) {
@@ -79,6 +80,6 @@ public class AmpCommand extends Command {
 
     @Override
     public boolean isFinished() {
-       return false;
+        return false;
     }
 }

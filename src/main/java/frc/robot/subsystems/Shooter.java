@@ -109,7 +109,7 @@ public class Shooter extends SubsystemBase {
      * @param degrees
      */
     public void setAngle(double degrees) {
-        double targetEncoderValue = (55-degrees)*0.78;
+        double targetEncoderValue = (55 - degrees) * 0.78;
 
         if (targetEncoderValue < Constants.Shooter.CANCODER_MIN)
             targetEncoderValue = Constants.Shooter.CANCODER_MIN;
@@ -119,17 +119,6 @@ public class Shooter extends SubsystemBase {
 
         setShaftRotation(targetEncoderValue);
     }
-
-    // public void angleToSpeaker() {
-    //     double TY = Math.toRadians(
-    //             Constants.Limelight.Back.ANGLE + LimelightHelpers.getTY(Constants.Limelight.Back.NAME));
-
-    //     double dy = -(Constants.Map.Speaker.APRILTAG_HEIGHT - Constants.Limelight.Back.HEIGHT);
-    //     double dx = dy / Math.tan(TY);
-
-    //     double angle = Math.atan((dy + 0.6) / (dx + 0.5));
-    //     setAngle(angle);
-    // }
 
     /** Set the current position of the shooter to be the new zero */
     public void setZero() {

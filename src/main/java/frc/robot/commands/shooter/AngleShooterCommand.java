@@ -26,7 +26,7 @@ public class AngleShooterCommand extends Command {
         double distance;
 
         // Min and max
-        if (speed < 0) 
+        if (speed < 0)
             distance = s_Shooter.getCanCoderPosition() - Constants.Shooter.CANCODER_MIN;
         else
             distance = Constants.Shooter.CANCODER_MAX - s_Shooter.getCanCoderPosition();
@@ -43,5 +43,5 @@ public class AngleShooterCommand extends Command {
     public void end(boolean interrupted) {
         s_Shooter.setShaftSpeed(0);
     }
-    
+
 }

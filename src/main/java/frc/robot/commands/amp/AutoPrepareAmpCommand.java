@@ -19,7 +19,9 @@ public class AutoPrepareAmpCommand extends Command {
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
     private static Command command;
-    
+
+    private final double STOP_DELAY = 0.9;
+
     public AutoPrepareAmpCommand() {
         command = new SequentialCommandGroup(
                 // Angle and Prepare
@@ -29,15 +31,15 @@ public class AutoPrepareAmpCommand extends Command {
                     h_pneumatics.setTiltSolenoid(true);
                 }),
                 new WaitCommand(2),
-                //  Load Rollers
+                // Load Rollers
                 new InstantCommand(() -> {
                     h_pneumatics.setShooterSolenoid(true);
                     s_Shooter.setSpeed(0.3);
                     s_Intake.setSpeed(0.3);
                     s_Roller.setSpeed(-0.5);
                 }),
-                new WaitCommand(0.9),
-                //  Stop
+                new WaitCommand(STOP_DELAY),
+                // Stop
                 new InstantCommand(() -> {
                     s_Shooter.setSpeed(0);
                     s_Intake.setSpeed(0);
@@ -55,7 +57,6 @@ public class AutoPrepareAmpCommand extends Command {
     public void execute() {
         command.execute();
     }
-
 
     @Override
     public void end(boolean interrupted) {

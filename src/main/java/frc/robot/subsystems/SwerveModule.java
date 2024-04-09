@@ -93,7 +93,8 @@ public class SwerveModule {
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-                Conversions.rotationsToMeters(mDriveMotor.getPosition().getValue(), Constants.Swerve.WHEEL_CIRCUMFERENCE),
+                Conversions.rotationsToMeters(mDriveMotor.getPosition().getValue(),
+                        Constants.Swerve.WHEEL_CIRCUMFERENCE),
                 Rotation2d.fromRotations(mAngleMotor.getPosition().getValue()));
     }
 }

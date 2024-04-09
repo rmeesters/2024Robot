@@ -16,7 +16,7 @@ public class ReverseEverythingCommand extends Command {
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
     public ReverseEverythingCommand() {
-        
+
     }
 
     /**
@@ -58,6 +58,6 @@ public class ReverseEverythingCommand extends Command {
 
     @Override
     public boolean isFinished() {
-       return false;
+        return false;
     }
 }
