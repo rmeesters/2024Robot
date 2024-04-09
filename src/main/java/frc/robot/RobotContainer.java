@@ -4,7 +4,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -15,25 +14,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AngleShooterCommand;
-import frc.robot.commands.ArmShooterCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.MoveClimberCommand;
-import frc.robot.commands.PrepareAmpCommand;
-import frc.robot.commands.ReverseEverythingCommand;
-import frc.robot.commands.ReverseIntakeCommand;
-import frc.robot.commands.ScoreAmpCommand;
-import frc.robot.commands.AutoPrepareAmpCommand;
-import frc.robot.commands.ShootCommand;
-import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.amp.AutoPrepareAmpCommand;
+import frc.robot.commands.amp.ScoreAmpCommand;
+import frc.robot.commands.climber.MoveClimberCommand;
+import frc.robot.commands.shooter.AngleShooterCommand;
+import frc.robot.commands.shooter.ArmShooterCommand;
+import frc.robot.commands.shooter.IntakeCommand;
+import frc.robot.commands.shooter.PrepareAmpCommand;
+import frc.robot.commands.shooter.ReverseEverythingCommand;
+import frc.robot.commands.shooter.ReverseIntakeCommand;
+import frc.robot.commands.shooter.ShootCommand;
+import frc.robot.commands.shooter.SwerveCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.PneumaticsHandler;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
@@ -167,7 +163,7 @@ public class RobotContainer {
     }
 
     private void setUpSwerveController() {
-        s_Swerve.setDefaultCommand(new TeleopSwerve(
+        s_Swerve.setDefaultCommand(new SwerveCommand(
                 s_Swerve,
                 () -> -driver.getRawAxis(translationAxis),
                 () -> -driver.getRawAxis(strafeAxis),
@@ -225,7 +221,7 @@ public class RobotContainer {
         /* Amp */
 
         b_autoPrepareAmp.toggleOnTrue(new AutoPrepareAmpCommand());
-        
+
         b_prepareAmp.whileTrue(new PrepareAmpCommand());
         b_scoreAmp.whileTrue(new ScoreAmpCommand());
 

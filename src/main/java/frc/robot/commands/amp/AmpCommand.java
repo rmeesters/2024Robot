@@ -1,23 +1,34 @@
-package frc.robot.commands;
+package frc.robot.commands.amp;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.PneumaticsHandler;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.PneumaticsHandler;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Shooter;
 
-public class ScoreAmpCommand extends Command {
+public class AmpCommand extends Command {
 
+    private final Intake s_Intake = RobotContainer.s_Intake;
     private final Roller s_Roller = RobotContainer.s_Roller;
+    private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
-
+    
+    private final boolean b_reversed;
+    
     private final Timer timer = new Timer();
 
+    private final double SHOOTER_SPEED = 0.1;
+    private final double ROLLER_SPEED = -0.3;
+    private final double ROLLER_REVERSED_SPEED = 0.6;
+    private final double INTAKE_SPEED = 0.2;
     private final double ROLLER_DELAY = 0.2;
+    private final double SHOOTER_DELAY = 3;
 
-    public ScoreAmpCommand() {
-
+    public AmpCommand(boolean reversed) {
+        b_reversed = reversed;
     }
 
     /**
@@ -26,9 +37,9 @@ public class ScoreAmpCommand extends Command {
      */
     @Override
     public void initialize() {
-        h_pneumatics.setTiltSolenoid(false);
-
         timer.restart();
+        
+        h_pneumatics.setTiltSolenoid(true);
     }
 
     /**
@@ -36,9 +47,15 @@ public class ScoreAmpCommand extends Command {
      */
     @Override
     public void execute() {
-        // Delayed
-        if (timer.hasElapsed(ROLLER_DELAY)) {
-            s_Roller.setSpeed(1);
+        if (!b_reversed || timer.hasElapsed(ROLLER_DELAY))
+            s_Roller.setSpeed(b_reversed ? ROLLER_REVERSED_SPEED : ROLLER_SPEED);
+
+        if (b_reversed) return;
+
+        s_Shooter.setSpeed(SHOOTER_SPEED);
+        if (timer.hasElapsed(SHOOTER_DELAY)) {
+            s_Intake.setSpeed(INTAKE_SPEED);
+            h_pneumatics.setShooterSolenoid(true);
         }
     }
 
@@ -54,14 +71,14 @@ public class ScoreAmpCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         s_Roller.setSpeed(0);
-        h_pneumatics.setTiltSolenoid(true);
-
+        s_Intake.setSpeed(0);
+        s_Shooter.setSpeed(0);
+        h_pneumatics.setShooterSolenoid(false);
         timer.stop();
     }
 
     @Override
     public boolean isFinished() {
-       // return timer.hasElapsed(1);
        return false;
     }
 }

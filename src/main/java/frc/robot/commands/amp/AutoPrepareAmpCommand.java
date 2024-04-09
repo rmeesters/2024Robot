@@ -1,13 +1,13 @@
-package frc.robot.commands;
+package frc.robot.commands.amp;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.PneumaticsHandler;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.PneumaticsHandler;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shooter;
 

@@ -1,23 +1,24 @@
-package frc.robot.commands;
+package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.PneumaticsHandler;
+//import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter;
 
-public class ReverseIntakeCommand extends Command {
+public class IntakeCommand extends Command {
+
 
     private final Intake s_Intake = RobotContainer.s_Intake;
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
-    private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
-    private final Timer timer = new Timer();
+    /**
+     * Intake note starts the intake motors, including the conveyer,
+     * until a note is detected in the shooter.
+     */
+    public IntakeCommand() {
 
-    public ReverseIntakeCommand() {
-        
     }
 
     /**
@@ -26,9 +27,11 @@ public class ReverseIntakeCommand extends Command {
      */
     @Override
     public void initialize() {
-        h_pneumatics.setShooterSolenoid(true);
+        if (isFinished()) {
+            cancel();
+            return;
+        }
         s_Shooter.setShaftRotation(Constants.Shooter.SHOOT_POSITION);
-        timer.restart();
     }
 
     /**
@@ -36,10 +39,8 @@ public class ReverseIntakeCommand extends Command {
      */
     @Override
     public void execute() {
-        if (timer.hasElapsed(0.5)) {
-            s_Shooter.setSpeed(-1);
-            s_Intake.setSpeed(-1);
-        }
+        //if (s_Intake.inRange(2)) RobotContainer.noteLoaded = true;
+        s_Intake.setSpeed(1);
     }
 
     /**
@@ -53,15 +54,13 @@ public class ReverseIntakeCommand extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        s_Shooter.setSpeed(0);
         s_Intake.setSpeed(0);
-        h_pneumatics.setShooterSolenoid(false);
         s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
-        timer.stop();
     }
 
     @Override
     public boolean isFinished() {
-       return false;
+        // Return true if note is visible
+        return s_Intake.inRange(2);
     }
 }

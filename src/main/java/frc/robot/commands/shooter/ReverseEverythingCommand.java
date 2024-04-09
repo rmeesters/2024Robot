@@ -1,23 +1,22 @@
-package frc.robot.commands;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.PneumaticsHandler;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.PneumaticsHandler;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shooter;
 
-public class PrepareAmpCommand extends Command {
+public class ReverseEverythingCommand extends Command {
 
     private final Intake s_Intake = RobotContainer.s_Intake;
-    private final Shooter s_Shooter = RobotContainer.s_Shooter;
     private final Roller s_Roller = RobotContainer.s_Roller;
+    private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
-    public PrepareAmpCommand() {
-
+    public ReverseEverythingCommand() {
+        
     }
 
     /**
@@ -26,7 +25,7 @@ public class PrepareAmpCommand extends Command {
      */
     @Override
     public void initialize() {
-        s_Shooter.setShaftRotation(Constants.Shooter.VERTICAL_POSITION);
+        h_pneumatics.setShooterSolenoid(true);
         h_pneumatics.setTiltSolenoid(true);
     }
 
@@ -35,17 +34,9 @@ public class PrepareAmpCommand extends Command {
      */
     @Override
     public void execute() {
-        // Delayed
-        if (Math.abs(s_Shooter.getCanCoderPosition() - Constants.Shooter.VERTICAL_POSITION) < 5) {
-            s_Intake.setSpeed(1);
-            h_pneumatics.setShooterSolenoid(true);
-            return;
-        }
-
-        // Immediate
-        s_Roller.setSpeed(-0.3);
-        s_Shooter.setSpeed(0.1);
-        s_Intake.setSpeed(0.2);
+        s_Shooter.setSpeed(-0.5);
+        s_Intake.setSpeed(-0.5);
+        s_Roller.setSpeed(0.3);
     }
 
     /**
@@ -59,15 +50,14 @@ public class PrepareAmpCommand extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        s_Intake.setSpeed(0);
         s_Shooter.setSpeed(0);
+        s_Intake.setSpeed(0);
         s_Roller.setSpeed(0);
         h_pneumatics.setShooterSolenoid(false);
     }
 
     @Override
     public boolean isFinished() {
-       // return timer.hasElapsed(1);
        return false;
     }
 }

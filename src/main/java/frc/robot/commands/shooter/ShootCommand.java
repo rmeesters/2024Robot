@@ -1,18 +1,24 @@
-package frc.robot.commands;
+package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.PneumaticsHandler;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.PneumaticsHandler;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
-public class ArmShooterCommand extends Command {
+public class ShootCommand extends Command {
 
+    private final Intake s_Intake = RobotContainer.s_Intake;
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
+
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
-    public ArmShooterCommand() {
-        
+    private final Timer timer = new Timer();
+
+    public ShootCommand() {
+
     }
 
     /**
@@ -21,10 +27,7 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void initialize() {
-        s_Shooter.setShaftRotation(Constants.Shooter.SHOOT_POSITION);
-        h_pneumatics.setTiltSolenoid(false);
-
-        RobotContainer.shooterTimer.restart();
+        timer.restart();
     }
 
     /**
@@ -32,6 +35,15 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void execute() {
+        // Run if angle is reached and velocity is met or timer has elapsed
+        if (Math.abs(s_Shooter.getCanCoderPosition()) < 1
+                && (s_Shooter.getRPS() > Constants.Shooter.TARGET_SHOOTER_SPEED
+                        || RobotContainer.shooterTimer.hasElapsed(Constants.Shooter.SHOOT_DELAY))) {
+            s_Intake.setSpeed(1);
+            h_pneumatics.setShooterSolenoid(true);
+        }
+
+        // Immediate
         s_Shooter.setSpeed(1);
     }
 
@@ -46,15 +58,16 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
+        s_Intake.setSpeed(0);
         s_Shooter.setSpeed(0);
-        h_pneumatics.setTiltSolenoid(true);
+        h_pneumatics.setShooterSolenoid(false);
         
-        RobotContainer.shooterTimer.stop();
+        timer.stop();
     }
 
     @Override
     public boolean isFinished() {
+       // return timer.hasElapsed(1);
        return false;
     }
 }
