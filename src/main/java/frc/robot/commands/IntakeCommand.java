@@ -31,7 +31,7 @@ public class IntakeCommand extends Command {
             cancel();
             return;
         }
-        s_Shooter.setShaftRotation(Constants.Shooter.PICKUP_POSITION);
+        s_Shooter.setShaftRotation(Constants.Shooter.SHOOT_POSITION);
     }
 
     /**

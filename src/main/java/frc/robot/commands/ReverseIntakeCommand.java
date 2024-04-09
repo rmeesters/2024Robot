@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PneumaticsHandler;
@@ -12,6 +14,7 @@ public class ReverseIntakeCommand extends Command {
     private final Shooter s_Shooter = RobotContainer.s_Shooter;
 
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
+    private final Timer timer = new Timer();
 
     public ReverseIntakeCommand() {
         
@@ -24,6 +27,8 @@ public class ReverseIntakeCommand extends Command {
     @Override
     public void initialize() {
         h_pneumatics.setShooterSolenoid(true);
+        s_Shooter.setShaftRotation(Constants.Shooter.SHOOT_POSITION);
+        timer.restart();
     }
 
     /**
@@ -31,8 +36,10 @@ public class ReverseIntakeCommand extends Command {
      */
     @Override
     public void execute() {
-        s_Shooter.setSpeed(-1);
-        s_Intake.setSpeed(-1);
+        if (timer.hasElapsed(0.5)) {
+            s_Shooter.setSpeed(-1);
+            s_Intake.setSpeed(-1);
+        }
     }
 
     /**
@@ -49,6 +56,8 @@ public class ReverseIntakeCommand extends Command {
         s_Shooter.setSpeed(0);
         s_Intake.setSpeed(0);
         h_pneumatics.setShooterSolenoid(false);
+        s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
+        timer.stop();
     }
 
     @Override

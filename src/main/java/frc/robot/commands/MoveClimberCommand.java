@@ -40,10 +40,8 @@ public class MoveClimberCommand extends Command {
     public void end(boolean interrupted) {
         // Stop climber
         s_Climber.setSpeed(0);
+        h_pneumatics.setClimberSolenoid(true);
         timer.stop();
-
-        // Lock climber
-        new InstantCommand(() -> h_pneumatics.setClimberSolenoid(true));
     }
     
 }
