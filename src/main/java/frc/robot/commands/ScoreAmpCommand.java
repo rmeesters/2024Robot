@@ -1,18 +1,23 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.PneumaticsHandler;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Roller;
 
-public class ArmShooterCommand extends Command {
+public class ScoreAmpCommand extends Command {
 
-    private final Shooter s_Shooter = RobotContainer.s_Shooter;
+    private final Roller s_Roller = RobotContainer.s_Roller;
+
     private final PneumaticsHandler h_pneumatics = RobotContainer.h_pneumatics;
 
-    public ArmShooterCommand() {
-        
+    private final Timer timer = new Timer();
+
+    private final double ROLLER_DELAY = 0.2;
+
+    public ScoreAmpCommand() {
+
     }
 
     /**
@@ -21,10 +26,9 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void initialize() {
-        s_Shooter.setShaftRotation(Constants.Shooter.SHOOT_POSITION);
         h_pneumatics.setTiltSolenoid(false);
 
-        RobotContainer.shooterTimer.restart();
+        timer.restart();
     }
 
     /**
@@ -32,7 +36,10 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void execute() {
-        s_Shooter.setSpeed(1);
+        // Delayed
+        if (timer.hasElapsed(ROLLER_DELAY)) {
+            s_Roller.setSpeed(1);
+        }
     }
 
     /**
@@ -46,15 +53,15 @@ public class ArmShooterCommand extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        s_Shooter.setShaftRotation(Constants.Shooter.MOVE_POSITION);
-        s_Shooter.setSpeed(0);
+        s_Roller.setSpeed(0);
         h_pneumatics.setTiltSolenoid(true);
-        
-        RobotContainer.shooterTimer.stop();
+
+        timer.stop();
     }
 
     @Override
     public boolean isFinished() {
+       // return timer.hasElapsed(1);
        return false;
     }
 }

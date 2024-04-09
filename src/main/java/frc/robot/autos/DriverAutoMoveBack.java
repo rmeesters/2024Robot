@@ -29,7 +29,7 @@ public class DriverAutoMoveBack extends SequentialCommandGroup {
     public DriverAutoMoveBack() {
         addCommands(
                 // Loaded note
-                new InstantCommand(() -> RobotContainer.gyro_temp = s_Swerve.getGyroYaw()),
+                //// new InstantCommand(() -> RobotContainer.gyro_temp = s_Swerve.getGyroYaw()),
                 new InstantCommand(() -> s_Shooter.setSpeed(1)),
                 // new InstantCommand(() -> s_Shooter.setShaftRotation(6.52)),
                 new WaitCommand(0.5),
@@ -44,7 +44,7 @@ public class DriverAutoMoveBack extends SequentialCommandGroup {
                                         new Pose2d(0, 0, new Rotation2d(0)),
                                         new Pose2d(0.5, 0, new Rotation2d(0))), false),
                 // Disable auto
-                new InstantCommand(() -> s_Swerve.setHeading(RobotContainer.gyro_temp)),
+                //// new InstantCommand(() -> s_Swerve.setHeading(RobotContainer.gyro_temp)),
                 new InstantCommand(() -> h_pneumatics.setShooterSolenoid(false)),
                 new InstantCommand(() -> s_Shooter.setSpeed(0)),
                 new InstantCommand(() -> s_Shooter.setShaftRotation(0)),

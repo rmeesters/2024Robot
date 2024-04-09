@@ -35,14 +35,16 @@ public class ShootCommand extends Command {
      */
     @Override
     public void execute() {
-        s_Shooter.setSpeed(1);
-        if (Math.abs(s_Shooter.getCanCoderPosition()) < 2
-                // && (s_Shooter.getRPS() > Constants.Shooter.TARGET_SHOOTER_SPEED
-                //         || timer.hasElapsed(Constants.Shooter.SHOOT_DELAY))
-                        ) {
+        // Run if angle is reached and velocity is met or timer has elapsed
+        if (Math.abs(s_Shooter.getCanCoderPosition()) < 1
+                && (s_Shooter.getRPS() > Constants.Shooter.TARGET_SHOOTER_SPEED
+                        || RobotContainer.shooterTimer.hasElapsed(Constants.Shooter.SHOOT_DELAY))) {
             s_Intake.setSpeed(1);
             h_pneumatics.setShooterSolenoid(true);
         }
+
+        // Immediate
+        s_Shooter.setSpeed(1);
     }
 
     /**
@@ -59,6 +61,7 @@ public class ShootCommand extends Command {
         s_Intake.setSpeed(0);
         s_Shooter.setSpeed(0);
         h_pneumatics.setShooterSolenoid(false);
+        
         timer.stop();
     }
 

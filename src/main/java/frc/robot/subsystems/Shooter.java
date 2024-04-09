@@ -26,7 +26,6 @@ public class Shooter extends SubsystemBase {
     private TalonFXConfiguration fxAngleConfig;
 
     private CANcoder angleCanCoder;
-    private double ANGLE_OFFSET = 0;
 
     /**
      * Shooter consists of 3 falcon500 motors, 2 to accellerate the projectile, and
@@ -100,8 +99,6 @@ public class Shooter extends SubsystemBase {
             System.err.println(rotation + " is not a valid shaft rotation (max: 11, min: -32)");
             return;
         }
-        rotation += ANGLE_OFFSET;
-        System.err.println("rotation:" + rotation);
         fxAngleMotor.setControl(m_mmReq.withPosition(rotation).withSlot(0));
     }
 
@@ -134,7 +131,7 @@ public class Shooter extends SubsystemBase {
     //     setAngle(angle);
     // }
 
-    /** Set position of shooter to initialized position (zero on cancoder) */
+    /** Set the current position of the shooter to be the new zero */
     public void setZero() {
         angleCanCoder.setPosition(0);
     }
@@ -144,15 +141,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getCanCoderPosition() {
-        return angleCanCoder.getPosition().getValue() - ANGLE_OFFSET;
-    }
-
-    public void resetOffset() {
-        ANGLE_OFFSET = 0;
-    }
-
-    public void setZeroByOffset() {
-        ANGLE_OFFSET = angleCanCoder.getPosition().getValue();
+        return angleCanCoder.getPosition().getValue();
     }
 
     /**
